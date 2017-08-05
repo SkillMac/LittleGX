@@ -250,9 +250,7 @@ MonoBehaviour:
   offsetx: 1.5
   offsetY: 1.8
   background: {fileID: 1160995286803278, guid: 9ed25ffe57ee51545ab626968d42cf81, type: 2}
-  Current: {fileID: 0}
-  IsMove: 0
-  movespeed: 4
+  movespeed: 5
   gpobj: {fileID: 114365916387465948, guid: 8fb3b692397e731429698f7e3f3ff374, type: 2}
 --- !u!4 &418877604
 Transform:
