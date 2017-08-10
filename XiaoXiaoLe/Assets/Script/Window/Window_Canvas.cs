@@ -17,16 +17,21 @@ public class Window_Canvas : MonoBehaviour ,IMessageHandler{
 
     public GameObject preGold;
 
+    private Vector3 m_Size;
+
     private void Awake()
     {
         MessageCenter.Registed(this.GetHashCode(), this);
         
-        m_Highscore.text = PlayerPrefs.GetInt("Highscore").ToString();
+        m_Highscore.text = FormatNum(PlayerPrefs.GetInt("Highscore"));
 
         m_gold.text = PlayerPrefs.GetInt("Gold").ToString();
+
+        m_Size = m_Currentscore.transform.localScale;
     }
     // Use this for initialization
     void Start () {
+        
         
     }
 	
@@ -42,6 +47,8 @@ public class Window_Canvas : MonoBehaviour ,IMessageHandler{
     public void AddScores(int num)
     {
         StartCoroutine(AddScore(num));
+
+        StartCoroutine(Cut());
     }
 
 
@@ -54,13 +61,16 @@ public class Window_Canvas : MonoBehaviour ,IMessageHandler{
 
         number += num;
 
-        for(int i =0;i < 10;i++)
+        Vector3 off = Vector3.one * 0.1f;
+
+        for(int i =0;i < 10; i++)
         {
             temp += num/10;
-
+            
             str = FormatNum(temp);
             
             m_Currentscore.text = str;
+            m_Currentscore.transform.localScale += off;
 
             yield return new WaitForEndOfFrame();
         }
@@ -70,6 +80,20 @@ public class Window_Canvas : MonoBehaviour ,IMessageHandler{
         PlayerPrefs.SetInt("CurrentScore", number);
     }
 
+    IEnumerator Cut()
+    {
+        Vector3 off = Vector3.one * 0.05f;
+
+        for (int i = 0; i < 20; i++)
+        {
+            str = FormatNum(temp);
+
+            m_Currentscore.text = str;
+            m_Currentscore.transform.localScale -= off;
+
+            yield return new WaitForEndOfFrame();
+        }
+    }
     //根据数字每三位添加一个逗号
     private string FormatNum(int num)
     {
@@ -78,46 +102,7 @@ public class Window_Canvas : MonoBehaviour ,IMessageHandler{
         string[] temp = str.Split("."[0]);
 
         return temp[0];
-
-        //if (num < 0)
-        //{
-        //    return "";
-        //}
-
-        //string str = "";
-        //string strnum;
-
-
-        //while (num > 0)
-        //{
-
-        //    int numA = num % 1000;
-        //    num /= 1000;
-
-        //    strnum = numA.ToString();
-
-        //    string temp = strnum;
-
-        //    if (numA == 0) temp = strnum = "000";
-        //    if (strnum.Length != 3)
-        //    {
-        //        for (int i = 0; i < 3 - strnum.Length; i++)
-        //        {
-        //            temp = "0" + strnum;
-        //        }
-        //    }
-
-        //    if (str == "")
-        //    {
-        //        str = temp;
-        //    }
-        //    else
-        //    {
-
-        //        str = temp + "," + str;
-        //    }
-        //}
-        //return str;
+        
     }
 
     public void MassageHandler(uint type, object data)

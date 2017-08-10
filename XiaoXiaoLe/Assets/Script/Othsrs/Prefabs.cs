@@ -1,4 +1,4 @@
-﻿using System;
+﻿//using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -31,13 +31,17 @@ public class Prefabs : MonoBehaviour,IMessageHandler {
     public float offsetY = 0.2f;//Y轴坐标的偏移量
 
     public GameObject window_gv;
-    
+
+    private bool IsActive;
+    private float timer;
+
     private void Awake()
     {
         MessageCenter.Registed(this.GetHashCode(), this);
 
         type = (PrefabsType)index;
 
+        
         PrefabsDic = new Dictionary<PrefabsType, GameObject>();
 
         for(int i =0;i < Allprefabs.Length;i++)
@@ -48,19 +52,26 @@ public class Prefabs : MonoBehaviour,IMessageHandler {
             }
         }
 
-
-        for(int i =0;i < Roots.Length;i++)
-        {
-            GameObject obj = Instantiate(PrefabsDic[(PrefabsType)i], transform);
-            obj.transform.position = Roots[i];
-            index++;
-            
-        }
     }
     // Use this for initialization
     void Start () {
-		
-	}
+
+
+        Tables prefabsTab = DataManager.tables[TableName.prefabtype];
+
+        for (int i = 0; i < Roots.Length; i++)
+        {
+            int id = Random.Range(0, 99);
+
+            int enumtype = prefabsTab.GetDataWithIDAndIndex<int>(id.ToString(), 1);
+
+            GameObject obj = Instantiate(PrefabsDic[(PrefabsType)enumtype], transform);
+            obj.transform.position = Roots[i];
+
+            index++;
+        }
+
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -77,12 +88,11 @@ public class Prefabs : MonoBehaviour,IMessageHandler {
 
                 transform.GetChild(i).GetComponent<TestDraw>().enabled = false;
 
-                if (Mathf.Abs(Vector3.Distance(Roots[i] + new Vector3(0,0.5f,0), MousePos)) < 1.0f)
+                if (Mathf.Abs(Vector3.Distance(Roots[i], MousePos)) < 1.2f)
                 {
                     transform.GetChild(i).GetComponent<TestDraw>().enabled = true;
                 }
             }
-            
         }
         
         if(IsMove)
@@ -98,6 +108,15 @@ public class Prefabs : MonoBehaviour,IMessageHandler {
             }
         }
         
+        if(IsActive)
+        {
+            if (Time.realtimeSinceStartup - timer > 1.0f)
+            {
+                window_gv.SetActive(true);
+                IsActive = false;
+            }
+        }
+
     }
     
     void MoveWithIndex(Transform trans,int index)
@@ -121,9 +140,30 @@ public class Prefabs : MonoBehaviour,IMessageHandler {
     {
         if(type == MessageType.MOUSE_UP_CREAT)
         {
-            if(data is int )
+            
+            if (data is int )
             {
-                int id = (int)data;
+                index++;
+                int id = 0;
+
+
+                if (index<30)
+                {
+                    id = Random.Range(0, 99);
+                }
+                if (index >= 30 && index<50)
+                {
+                    id = Random.Range(100, 199);
+                }
+                if (index >= 50 &&index<80)
+                {
+                    id = Random.Range(200,299);
+                }
+                if (index >=80)
+                {
+                    id = Random.Range(300,399);
+                }
+
 
                 Tables prefabsTab = DataManager.tables[TableName.prefabtype];
 
@@ -137,7 +177,7 @@ public class Prefabs : MonoBehaviour,IMessageHandler {
 
                 }
             }
-
+            
             if(data is Transform)
             {
                 Transform tf = (Transform)data;
@@ -148,9 +188,11 @@ public class Prefabs : MonoBehaviour,IMessageHandler {
 
                 if (!CanContinue())
                 {
-                    window_gv.SetActive(true);
-                    //SceneManager.LoadScene("GameOver");
-                    Debug.Log("GameOver!!");
+                    //window_gv.SetActive(true);
+
+                    //Debug.Log("GameOver!!");
+                    IsActive = true;
+                    timer = Time.realtimeSinceStartup;
                 }
 
                 GameObject obj = Instantiate(PrefabsDic[creattype], transform);
@@ -163,13 +205,14 @@ public class Prefabs : MonoBehaviour,IMessageHandler {
     Vector3[] posPre;
     Vector3[] DicPos;
 
+
     bool CanContinue()
     {
-        for(int a =0;a< transform.childCount; a++)
+        for (int a = 0; a < transform.childCount; a++)
         {
             Debug.Log(transform.childCount);
             //包含了想要删除的物体
-            if(transform.GetChild(a).GetHashCode() != dexcode)
+            if (transform.GetChild(a).GetHashCode() != dexcode)
             {
                 posPre = transform.GetChild(a).GetComponent<TestDraw>().GetAbsPos();
 
@@ -204,12 +247,14 @@ public class Prefabs : MonoBehaviour,IMessageHandler {
 
     bool HasType(Transform[] trans)
     {
+        if (trans == null) return false;
+
         if (trans != null)
         {
             for (int j = 0; j < trans.Length; j++)
             {
                 if (trans[j] == null) return false;
-                    
+
                 if (trans[j] != null)
                 {
                     Debug.Log(trans[j].GetComponent<Element>().Color);

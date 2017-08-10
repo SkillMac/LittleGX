@@ -3,20 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Effects : MonoBehaviour {
-
-    Color colorA;
-
+    
     float timer;
 
-    public  float dex;
-
-    private Animator m_anima;
-
+    public  int dex = 1;
+    
 	// Use this for initialization
 	void Start () {
-
-        m_anima = GetComponent<Animator>();
-
+        
     }
 	
 	// Update is called once per frame
@@ -24,11 +18,7 @@ public class Effects : MonoBehaviour {
 
         wait();
 
-        if (dex <= 1.0f)
-        {
-            m_anima.SetBool("IsEffect", true);
-        }
-        if (dex < 0f)
+        if (dex <=0)
         {
             Dis();
         }
@@ -41,13 +31,13 @@ public class Effects : MonoBehaviour {
 
     private void OnEnable()
     {
-        colorA = new Color(1, 1, 1, 1);
+        dex = 1;
         timer = Time.realtimeSinceStartup;
     }
     
     void wait()
     {
-        if(Time.realtimeSinceStartup - timer > 0.5f)
+        if(Time.realtimeSinceStartup - timer > 1.0f)
         {
             timer = Time.realtimeSinceStartup;
             dex--;

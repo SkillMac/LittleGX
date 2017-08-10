@@ -6,12 +6,7 @@ using System;
 using UnityEngine.UI;
 
 public class Element : MonoBehaviour,IPointerClickHandler {
-
-    public bool IsEmpty;
-    public float dex;
-    float timer;
-
-
+    
     [System.Serializable]
     public struct Elemen
     {
@@ -78,16 +73,6 @@ public class Element : MonoBehaviour,IPointerClickHandler {
 	// Update is called once per frame
 	void Update () {
 		
-        if(IsEmpty)
-        {
-            wait();
-
-            if(dex <= 0.5f)
-            {
-                Color = ElementType.Empty;
-                IsEmpty = false;
-            }
-        }
 	}
 
 
@@ -105,17 +90,6 @@ public class Element : MonoBehaviour,IPointerClickHandler {
     {
         Debug.Log(eventData.pointerEnter.name);
     }
-
-    void wait()
-    {
-        if (Time.realtimeSinceStartup - timer > 0.5f)
-        {
-            timer = Time.realtimeSinceStartup;
-            dex--;
-            Debug.Log(dex);
-        }
-    }
-
 }
 //元素的颜色类型
 public enum ElementType
@@ -135,4 +109,5 @@ public enum ElementType
     Darkyy,
     
     white =100,
+    Wait = 200,
 }

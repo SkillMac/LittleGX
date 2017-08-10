@@ -106,7 +106,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1524731722369804}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.83, z: 0}
+  m_LocalPosition: {x: -0.6, y: 0.83, z: 0}
   m_LocalScale: {x: 0.15, y: 0.15, z: 1}
   m_Children: []
   m_Father: {fileID: 4471084583460742}
@@ -119,7 +119,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1896381786178360}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.6, y: -0.17, z: 0}
+  m_LocalPosition: {x: 0, y: -0.17, z: 0}
   m_LocalScale: {x: 0.14999999, y: 0.14999999, z: 1}
   m_Children: []
   m_Father: {fileID: 4471084583460742}
@@ -149,7 +149,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1796264663479050}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.9, y: -0.67, z: 0}
+  m_LocalPosition: {x: 0.3, y: -0.67, z: 0}
   m_LocalScale: {x: 0.14999999, y: 0.14999999, z: 1}
   m_Children: []
   m_Father: {fileID: 4471084583460742}
@@ -162,7 +162,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1014562672753180}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.3, y: 0.33, z: 0}
+  m_LocalPosition: {x: -0.3, y: 0.33, z: 0}
   m_LocalScale: {x: 0.14999999, y: 0.14999999, z: 1}
   m_Children: []
   m_Father: {fileID: 4471084583460742}
@@ -328,6 +328,8 @@ MonoBehaviour:
     image: {fileID: 21300000, guid: 063604e214e4e0e4e8af4dc7e7e92fb0, type: 3}
   - type: 100
     image: {fileID: 21300000, guid: a3104b1248d6ce548844df493caff26e, type: 3}
+  - type: 200
+    image: {fileID: 21300000, guid: 792134a02ae469347bda859e5cba7fa0, type: 3}
   m_type: 1
 --- !u!114 &114394941321923710
 MonoBehaviour:
@@ -386,6 +388,8 @@ MonoBehaviour:
     image: {fileID: 21300000, guid: 063604e214e4e0e4e8af4dc7e7e92fb0, type: 3}
   - type: 100
     image: {fileID: 21300000, guid: a3104b1248d6ce548844df493caff26e, type: 3}
+  - type: 200
+    image: {fileID: 21300000, guid: 792134a02ae469347bda859e5cba7fa0, type: 3}
   m_type: 1
 --- !u!114 &114889857803699658
 MonoBehaviour:
@@ -427,6 +431,8 @@ MonoBehaviour:
     image: {fileID: 21300000, guid: 063604e214e4e0e4e8af4dc7e7e92fb0, type: 3}
   - type: 100
     image: {fileID: 21300000, guid: a3104b1248d6ce548844df493caff26e, type: 3}
+  - type: 200
+    image: {fileID: 21300000, guid: 792134a02ae469347bda859e5cba7fa0, type: 3}
   m_type: 1
 --- !u!114 &114958891348638488
 MonoBehaviour:
@@ -468,6 +474,8 @@ MonoBehaviour:
     image: {fileID: 21300000, guid: 063604e214e4e0e4e8af4dc7e7e92fb0, type: 3}
   - type: 100
     image: {fileID: 21300000, guid: a3104b1248d6ce548844df493caff26e, type: 3}
+  - type: 200
+    image: {fileID: 21300000, guid: 792134a02ae469347bda859e5cba7fa0, type: 3}
   m_type: 1
 --- !u!212 &212395729138474946
 SpriteRenderer:

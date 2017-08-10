@@ -13,31 +13,38 @@ public class Window_Over : MonoBehaviour {
     public Button m_RePlay;
 
     int number , tempnum;
+    
 
     string str;
 
 
     private void Awake()
     {
+        int hight;
+
         if (PlayerPrefs.GetInt("CurrentScore") > PlayerPrefs.GetInt("Highscore"))
         {
-            m_Hight.text = (PlayerPrefs.GetInt("CurrentScore")).ToString();
+            hight = PlayerPrefs.GetInt("CurrentScore");
+            m_Hight.text = FormatNum(hight);
         }
         else
         {
-            m_Hight.text = PlayerPrefs.GetInt("Highscore").ToString();
+            hight = PlayerPrefs.GetInt("Highscore");
+            m_Hight.text = FormatNum(hight);
         }
 
-        PlayerPrefs.SetInt("Highscore", int.Parse(m_Hight.text));
+        PlayerPrefs.SetInt("Highscore", hight);
 
         AddScores(PlayerPrefs.GetInt("CurrentScore"));
+        
     }
     // Use this for initialization
     void Start () {
 
         m_Share.onClick.AddListener(ClickShare);
         m_RePlay.onClick.AddListener(ClickPlay);
-        
+
+
     }
 	
     void ClickShare()
@@ -52,6 +59,7 @@ public class Window_Over : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		
+       
 	}
 
     public void AddScores(int num)
@@ -74,7 +82,7 @@ public class Window_Over : MonoBehaviour {
             yield return new WaitForEndOfFrame();
         }
 
-        m_Current.text = number.ToString();
+        m_Current.text = FormatNum(number);
     }
     //根据数字每三位添加一个逗号
     private string FormatNum(int num)

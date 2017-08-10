@@ -135,7 +135,7 @@ MonoBehaviour:
   yoffset: -3
   IsMoved: 0
   speed: 0
-  target: {x: 3.1, y: 5.7, z: 0}
+  target: {x: 3.04, y: 5.323, z: 0}
   startAni: 3
   Disable: 8
 --- !u!114 &114908365347898562

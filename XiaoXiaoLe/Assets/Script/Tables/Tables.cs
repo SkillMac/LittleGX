@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System;
 
 
@@ -15,9 +14,9 @@ public class Tables
     }
     void Load(string path)
     {
-        if (!File.Exists(path)) return;
+        TextAsset ta = Resources.Load<TextAsset>(path);
 
-        string[] buff = File.ReadAllLines(path);
+        string[] buff = ta.text.Split("\n"[0]);
 
         for (int i = 0; i < buff.Length; i++)
         {

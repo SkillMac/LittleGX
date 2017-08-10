@@ -18,7 +18,6 @@ public class Window_Creat : MonoBehaviour,IMessageHandler {
     private List<Transform> OldElement = new List<Transform>();
 
     private object old;
-    private  int index;
 
     public Transform[,] ArraryEle;
 
@@ -26,11 +25,11 @@ public class Window_Creat : MonoBehaviour,IMessageHandler {
 
     public Window_Canvas m_canvas;
 
-    public GameObject m_gold;
+    
 
     public GameObject m_Effect;
 
-    private List<Transform> m_Delete;
+    public static List<Transform[]> m_AllDelete;
     
     private void Awake()
     {
@@ -143,56 +142,41 @@ public class Window_Creat : MonoBehaviour,IMessageHandler {
         return target;
     }
 
-    //删除该行的列，把该行的元素改为空的
-    public void DeleLine(Transform target,float count,int cc)
+    //删除该行的列
+    public void DeleLine(Transform target)
     {
         Vector2 pos = target.GetComponent<Element>().GetPosition;
-
-        int dex = 0;
-
+        
         List<Transform> CanDelete = new List<Transform>();
 
         for (int aa = 0; aa < yDim; aa++)
         {
             if (ArraryEle[(int)pos.x, aa] != null)
             {
-                ArraryEle[(int)pos.x, aa].GetComponent<Element>().dex = count + 1;
-                ArraryEle[(int)pos.x, aa].GetComponent<Element>().IsEmpty = true;
-
-                ArraryEle[(int)pos.x, aa].GetChild(1).gameObject.SetActive(true);
-                ArraryEle[(int)pos.x, aa].GetChild(1).GetComponent<Effects>().dex = count;
-
                 if(!CanDelete.Contains(ArraryEle[(int)pos.x, aa]))
                     CanDelete.Add(ArraryEle[(int)pos.x, aa]);
-
-                dex++;
             }
         }
-        
-        
 
-        if(OldElement.Count >0)
+        Transform[] tf = new Transform[CanDelete.Count];
+
+        for(int i =0;i<tf.Length;i++)
         {
-            for(int i =0;i< OldElement.Count;i++)
-            {
-                for(int j =0;j<CanDelete.Count;j++)
-                {
-                    if(OldElement[i] == CanDelete[j] && OldElement[i] != target && !m_Delete.Contains(OldElement[i]))
-                    {
-                        m_Delete.Add(OldElement[i]);
-                    }
-                }
-            }
+            tf[i] = CanDelete[i];
         }
-        GetScoreWithNum(dex, target.position, cc, count);
+
+        if (!HasArray(m_AllDelete, tf))
+        {
+            m_AllDelete.Add(tf);
+        }
     }
     //删除该行的列，把该行的元素改为空的
-    public void DeleLeft(Transform target, float count,int cc)
+    public void DeleLeft(Transform target)
     {
         Vector2 pos = target.GetComponent<Element>().GetPosition;
 
         int ii = 0;
-        int dex = 0;
+
         List<Transform> CanDelete = new List<Transform>();
 
         for (int aa = 0; aa < xDim; aa++)
@@ -203,42 +187,28 @@ public class Window_Creat : MonoBehaviour,IMessageHandler {
             {
                 if (ArraryEle[aa, ii] != null)
                 {
-                    ArraryEle[aa, ii].GetComponent<Element>().dex = count + 1;
-                    ArraryEle[aa, ii].GetComponent<Element>().IsEmpty = true;
-
-                    ArraryEle[aa, ii].GetChild(1).gameObject.SetActive(true);
-                    ArraryEle[aa, ii].GetChild(1).GetComponent<Effects>().dex = count;
-
                     if(!CanDelete.Contains(ArraryEle[aa, ii]))
                         CanDelete.Add(ArraryEle[aa, ii]);
-                    dex++;
                 }
             }
         }
+        Transform[] tf = new Transform[CanDelete.Count];
 
-        if (OldElement.Count > 0)
+        for (int i = 0; i < tf.Length; i++)
         {
-            for (int i = 0; i < OldElement.Count; i++)
-            {
-                for (int j = 0; j < CanDelete.Count; j++)
-                {
-                    if (OldElement[i] == CanDelete[j] && OldElement[i] != target && !m_Delete.Contains(OldElement[i]))
-                    {
-                        m_Delete.Add(OldElement[i]);
-                    }
-                }
-            }
+            tf[i] = CanDelete[i];
         }
 
-        GetScoreWithNum(dex, target.position, cc, count);
+        if (!HasArray(m_AllDelete, tf))
+        {
+            m_AllDelete.Add(tf);
+        }
     }
     //删除该行的列，把该行的元素改为空的
-    public void DeleRight(Transform target, float count,int cc)
+    public void DeleRight(Transform target)
     {
         Vector2 pos = target.GetComponent<Element>().GetPosition;
         int ii = 0;
-        int dex = 0;
-
         List<Transform> CanDelete = new List<Transform>();
 
         for (int aa = 0; aa < xDim; aa++)
@@ -248,37 +218,54 @@ public class Window_Creat : MonoBehaviour,IMessageHandler {
             {
                 if (ArraryEle[aa, ii] != null)
                 {
-                    ArraryEle[aa, ii].GetComponent<Element>().dex = count+1;
-                    ArraryEle[aa, ii].GetComponent<Element>().IsEmpty = true;
-
-                    ArraryEle[aa, ii].GetChild(1).gameObject.SetActive(true);
-                    ArraryEle[aa, ii].GetChild(1).GetComponent<Effects>().dex = count;
-
                     if (!CanDelete.Contains(ArraryEle[aa, ii]))
                         CanDelete.Add(ArraryEle[aa, ii]);
-                    dex++;
                 }
             }
         }
 
-        if (OldElement.Count > 0)
+        Transform[] tf = new Transform[CanDelete.Count];
+
+        for (int i = 0; i < tf.Length; i++)
         {
-            for (int i = 0; i < OldElement.Count; i++)
-            {
-                for (int j = 0; j < CanDelete.Count; j++)
-                {
-                    if (OldElement[i] == CanDelete[j] && OldElement[i] != target && !m_Delete.Contains(OldElement[i]))
-                    {
-                        m_Delete.Add(OldElement[i]);
-                    }
-                }
-            }
+            tf[i] = CanDelete[i];
         }
-
-        GetScoreWithNum(dex, target.position, cc, count);
+        
+        if (!HasArray(m_AllDelete,tf))
+        {
+            m_AllDelete.Add(tf);
+        }
     }
 
+    bool HasArray(List<Transform[]> all,Transform[] tt)
+    {
+        if (all.Count == 0) return false;
+        
+        for (int j = 0; j < all.Count; j++)
+        {
+            if(IsEqu(all[j],tt))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 
+    bool IsEqu(Transform[]a, Transform[] b)
+    {
+        if (a.Length != b.Length) return false;
+
+        if (a.Length == b.Length)
+        {
+            for (int i = 0; i < a.Length; i++)
+            {
+                if (a[i] != b[i])
+                    return false;
+            }
+        }
+        return true;
+    }
+    
     Vector2  GetWorldPos(int x,int y)
     {
         return new Vector2( (y - (yDim-1)/ 2.0f)*offsetx  + transform.position.x,
@@ -336,11 +323,6 @@ public class Window_Creat : MonoBehaviour,IMessageHandler {
 
         if (type == MessageType.MOUSE_UP)
         {
-
-            int index_Line = 0;
-            int index_Left = 0;
-            int index_Right = 0;
-
             if (data is Transform[])
             {
                 Transform[] tran = (Transform[])data;
@@ -371,16 +353,14 @@ public class Window_Creat : MonoBehaviour,IMessageHandler {
                     
                     Destroy(tran[0].parent.gameObject);
 
-                    MessageCenter.ReceiveMassage(new MessageData(MessageType.MOUSE_UP_CREAT, tran[0].parent));
-
-                    index++;
-
-
-                    MessageCenter.ReceiveMassage(new MessageData(MessageType.MOUSE_UP_CREAT, index));
+                    MessageCenter.ReceiveMassage(new MessageData(MessageType.MOUSE_UP_DELETE, tran[0].parent));
+                    
+                    MessageCenter.ReceiveMassage(new MessageData(MessageType.MOUSE_UP_CREAT, 1));
                 }
 
-                m_Delete = new List<Transform>();
-
+                m_AllDelete = new List<Transform[]>();
+                Transform[] tf = new Transform[OldElement.Count];
+                
                 for (int i = 0; i < OldElement.Count; i++)
                 {
                     if (OldElement.Count == 0) return;
@@ -391,176 +371,71 @@ public class Window_Creat : MonoBehaviour,IMessageHandler {
                     
                     if (CanDeletLine(OldElement[i]) != null && CanDeletLeft(OldElement[i]) == null && CanDeletRight(OldElement[i]) == null)
                     {
-                        if (index_Line == 0 )
-                        {
-                            DeleLine(OldElement[i], 0,1);
-                        }
-                        
-                        if (index_Line == 1)
-                        {
-                            DeleLine(OldElement[i], 1.0f,2);
-                        }
-                        else if (index_Line == 2)
-                        {
-                            DeleLine(OldElement[i], 1.2f, 2);
-                        }
-                        //else if (index_Line == 3)
-                        //{
-                        //    DeleLine(OldElement[i], 1.4f,3);
-                        //}
-
-                        if (m_Delete.Count > 0)
-                        {
-                            for (int a = 0; a < m_Delete.Count; a++)
-                            {
-                                if (OldElement[i] == m_Delete[a])
-                                    index_Line--;
-                            }
-                        }
-
-                        index_Line++;
+                         DeleLine(OldElement[i]);
                     }
 
                     if (CanDeletLine(OldElement[i]) != null && CanDeletLeft(OldElement[i]) != null && CanDeletRight(OldElement[i]) == null)
                     {
-                        DeleLine(OldElement[i],1,1);
-                        StartCoroutine(WaitSeconds());
-
-                        DeleLeft(OldElement[i], 1.2f,2);
-
-                        CreatGold(OldElement[i]);
+                        DeleLine(OldElement[i]);
+                        
+                        DeleLeft(OldElement[i]);
                     }
 
                     if (CanDeletLine(OldElement[i]) != null && CanDeletLeft(OldElement[i]) == null && CanDeletRight(OldElement[i]) != null)
                     {
-                        DeleLine(OldElement[i],1,1);
-
-                        StartCoroutine(WaitSeconds());
-
-                        DeleRight(OldElement[i],1.2f,2);
-
-                        CreatGold(OldElement[i]);
+                        DeleLine(OldElement[i]);
+                        
+                        DeleRight(OldElement[i]);
                     }
 
                     if (CanDeletLine(OldElement[i]) == null && CanDeletLeft(OldElement[i]) != null && CanDeletRight(OldElement[i]) == null)
                     {
-                        if (index_Left == 0)
-                        {
-                            DeleLeft(OldElement[i], 0,1);
-                        }
-                        
-                        if (index_Left == 1)
-                        {
-                            DeleLeft(OldElement[i], 1.0f,2);
-                        }
-                        else if (index_Left == 2)
-                        {
-                            DeleLeft(OldElement[i], 1.2f,2);
-                        }
-                        else if (index_Left == 3)
-                        {
-                            DeleLeft(OldElement[i], 1.4f,3);
-                        }
-
-                        if (m_Delete.Count > 0)
-                        {
-                            for (int a = 0; a < m_Delete.Count; a++)
-                            {
-                                if (OldElement[i] == m_Delete[a])
-                                    index_Left--;
-                            }
-                        }
-                        index_Left++;
+                        DeleLeft(OldElement[i]);
                     }
 
                     if (CanDeletLine(OldElement[i]) == null && CanDeletLeft(OldElement[i]) != null && CanDeletRight(OldElement[i]) != null)
                     {
-                        DeleRight(OldElement[i],1,1);
-
-                        StartCoroutine(WaitSeconds());
-
-                        DeleLeft(OldElement[i], 1.2f,2);
-
-                        CreatGold(OldElement[i]);
+                        DeleRight(OldElement[i]);
+                        
+                        DeleLeft(OldElement[i]);
+                        
                     }
 
                     if (CanDeletLine(OldElement[i]) == null && CanDeletLeft(OldElement[i]) == null && CanDeletRight(OldElement[i]) != null)
                     {
-                        if (index_Right == 0)
-                        {
-                            DeleRight(OldElement[i], 0,1);
-                        }
-
-                       
-                        if (index_Right == 1)
-                        {
-                            DeleRight(OldElement[i], 1.0f,2);
-                        }
-                        else if (index_Right == 2)
-                        {
-                            DeleRight(OldElement[i], 1.2f,2);
-                        }
-                        else if (index_Right == 3)
-                        {
-                            DeleRight(OldElement[i], 1.4f,3);
-                        }
-
-                        if (m_Delete.Count > 0)
-                        {
-                            for (int a = 0; a < m_Delete.Count; a++)
-                            {
-                                if (OldElement[i] == m_Delete[a])
-                                    index_Right--;
-                            }
-                        }
-
-                        index_Right++;
+                        DeleRight(OldElement[i]);
                     }
 
                     if (CanDeletLine(OldElement[i]) != null && CanDeletLeft(OldElement[i]) != null && CanDeletRight(OldElement[i]) != null)
                     {
-                        DeleRight(OldElement[i],1,1);
+                        DeleRight(OldElement[i]);
+                        
+                        DeleLeft(OldElement[i]);
 
-                        StartCoroutine(WaitSeconds());
-
-                        DeleLeft(OldElement[i], 1.2f,2);
-
-                        StartCoroutine(WaitSeconds());
-
-                        DeleLine(OldElement[i], 1.4f,3);
-
-                        CreatGold(OldElement[i]);
+                        DeleLine(OldElement[i]);
                     }
-                    
+                    tf[i] = OldElement[i];
                 }
 
-                m_Delete.Clear();
+                //List<Transform[]> CanDele = new List<Transform[]>();
+                //CanDele = m_AllDelete;
 
-                if (index_Line >= 2 || index_Left >= 2 || index_Right >= 2)
+                if (m_AllDelete.Count == 0)
                 {
-                    CreatGold(OldElement[0]);
+                    m_AllDelete.Add(tf);
                 }
 
-                if (index_Line == 0 && index_Left == 0 && index_Right == 0)
-                {
-                    GetScoreWithNum(0, OldElement[0].position, 0, 0);
-                }
+                DeleteList.GetList = m_AllDelete;
 
+                MessageCenter.ReceiveMassage(new MessageData(MessageType.UI_DELETE_ELE, null));
+                
                 OldElement.Clear();
                 
-                Debug.Log(index);
             }
         }
     }
 
-    //创建小金币
-    void CreatGold(Transform pos)
-    {
-        GameObject obj = Instantiate(m_gold);
-        obj.transform.position = pos.position;
-
-
-    }
+    
     //判断是否可以放进去
     bool IsVer(Transform[] current,ElementType et)
     {
@@ -601,39 +476,7 @@ public class Window_Creat : MonoBehaviour,IMessageHandler {
         return null;
     }
 
-
-    //根据消除数量获得分数并且获取当前分数的Sprite
-    void GetScoreWithNum(int num,Vector3 pos,int indexs,float count)
-    {
-        if (indexs < 0) return;
-
-        if (window_score[indexs] == null) return;
-
-        window_score[indexs].position = pos ;
-
-        window_score[indexs].gameObject.SetActive(true);
-        window_score[indexs].GetComponent<Window_Score>().dex = count;
-
-        Tables scoreTab = DataManager.tables[TableName.Score];
-
-        int scorenum = scoreTab.GetDataWithIDAndIndex<int>(num.ToString(), 1);
-
-        string path = scoreTab.GetDataWithIDAndIndex<string>(num.ToString(), 2);
-        
-        window_score[indexs].GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Num/" + path); ;
-        window_score[indexs].GetComponent<SpriteRenderer>().color = new Color(1, 1, 1.0f, 0);
-
-        m_canvas.AddScores(scorenum);
-    }
     
-    IEnumerator WaitSeconds()
-    {
-        //for(int i =0; i < 100;i++)
-        //{
-        yield return new WaitForEndOfFrame();
-        //}
-    }
-
     private void OnDestroy()
     {
         MessageCenter.Cancel(this.GetHashCode());

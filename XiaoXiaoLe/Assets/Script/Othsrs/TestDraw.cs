@@ -14,6 +14,7 @@ public class TestDraw : MonoBehaviour {
 
     public PrefabsType typp;
 
+
     // Use this for initialization
     void Start()
     {
@@ -29,13 +30,14 @@ public class TestDraw : MonoBehaviour {
 
         //if (Input.GetMouseButtonDown(0))
         //{
-        //    oldPos = Input.mousePosition;
-        //    startpos = Input.mousePosition;
+        //    transform.position += new Vector3(0.8f,0.8f, 0);
         //}
         if (Input.GetMouseButton(0))
         {
-            transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+            Vector3 offset = new Vector3(0, 1.0f, 0);
 
+            transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+            
             for (int i = 0; i < transform.childCount; i++)
             {
                 transform.GetChild(i).localScale = new Vector3(1.0f, 1.0f, 1.0f) * 0.12f;
@@ -50,11 +52,8 @@ public class TestDraw : MonoBehaviour {
 
             oldPos = Input.mousePosition;
 
-            if(Mathf.Abs( Vector3.Distance(transform.position * 100 + new Vector3(Screen.width / 2.0f, Screen.height / 2.0f, 0),Input.mousePosition)) >1.0f)
-            {
-                transform.position = (Input.mousePosition - new Vector3(Screen.width / 2.0f, Screen.height / 2.0f, 0)) /100.0f;
-            }
-
+            transform.position = (Input.mousePosition - new Vector3(Screen.width / 2.0f, Screen.height / 2.0f, 0)) / 100.0f + offset;
+           
             MessageCenter.ReceiveMassage(new MessageData(MessageType.MOUSE_DOWN, GetChilds()));
 
         }

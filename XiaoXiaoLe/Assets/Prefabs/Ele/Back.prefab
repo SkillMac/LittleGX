@@ -141,7 +141,9 @@ MonoBehaviour:
     image: {fileID: 21300000, guid: 063604e214e4e0e4e8af4dc7e7e92fb0, type: 3}
   - type: 100
     image: {fileID: 21300000, guid: a3104b1248d6ce548844df493caff26e, type: 3}
-  m_type: 1
+  - type: 200
+    image: {fileID: 21300000, guid: 792134a02ae469347bda859e5cba7fa0, type: 3}
+  m_type: 0
 --- !u!212 &212087472240882948
 SpriteRenderer:
   m_ObjectHideFlags: 1

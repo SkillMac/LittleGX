@@ -73,8 +73,8 @@ public class Gold : MonoBehaviour {
             }
             count++;
 
-            transform.localScale = new Vector3(1.5f, 1.5f, 1.0f);
-            gold.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.4f);
+            ani.SetTrigger("IsColor");
+
             Destroy(gameObject, 0.2f);
         }
 
