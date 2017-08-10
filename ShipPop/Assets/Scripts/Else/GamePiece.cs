@@ -93,7 +93,29 @@ public class GamePiece : MonoBehaviour {
         X = _x;
         Y = _y;
     }
+    private void OnMouseDrag()
+    {
+        Vector3 dir = Input.mousePosition - oldPos;
 
+        if (m_Anim == null) return;
+
+        if (Mathf.Abs(dir.normalized.x) > Mathf.Abs(dir.normalized.y) && dir.x < 0)
+        {
+              m_Anim.SetBool("IsLeft",true);
+        }
+        if (Mathf.Abs(dir.normalized.x) > Mathf.Abs(dir.normalized.y) && dir.x > 0)
+        {
+              m_Anim.SetBool("IsRight", true);
+        }
+        if (Mathf.Abs(dir.normalized.x) <= Mathf.Abs(dir.normalized.y) && dir.y < 0)
+        {
+              m_Anim.SetBool("IsDown", true);
+        }
+        if (Mathf.Abs(dir.normalized.x) <= Mathf.Abs(dir.normalized.y) && dir.y > 0)
+        {
+              m_Anim.SetBool("IsUp", true);
+        }
+    }
 
     private void OnMouseDown()
     {
@@ -102,34 +124,57 @@ public class GamePiece : MonoBehaviour {
 
     private void OnMouseUp()
     {
-        Vector3 dir = Input.mousePosition - oldPos;
-        
         if (m_Anim == null) return;
+
+        m_Anim.SetBool("IsLeft", false);
+        m_Anim.SetBool("IsRight", false);
+        m_Anim.SetBool("IsDown", false);
+        m_Anim.SetBool("IsUp", false);
+
+        Vector3 dir = Input.mousePosition - oldPos;
         
         if (Mathf.Abs(dir.normalized.x) > Mathf.Abs(dir.normalized.y) && dir.x < 0)
         {
-            if (y == 0 || !grid.CanDelete(this, grid.GetTransWithXY(y - 1, x), new Vector3(5.0f, transform.position.y, 0)))
-                m_Anim.SetTrigger("IsLeft");
+            if(y >0)
+            {
+                grid.CanDelete(this, grid.GetTransWithXY(y - 1, x), new Vector3(5.0f, transform.position.y, 0));
+            }
+            //if (y == 0 || !grid.CanDelete(this, grid.GetTransWithXY(y - 1, x), new Vector3(5.0f, transform.position.y, 0)))
+            //    m_Anim.SetTrigger("IsLeft");
         }
         if (Mathf.Abs(dir.normalized.x) > Mathf.Abs(dir.normalized.y) && dir.x > 0)
         {
-            if (y == 4 || !grid.CanDelete(this, grid.GetTransWithXY(y + 1, x), new Vector3(-5.0f, transform.position.y, 0)))
-                m_Anim.SetTrigger("IsRight");
+            if( y < 4)
+            {
+                grid.CanDelete(this, grid.GetTransWithXY(y + 1, x), new Vector3(-5.0f, transform.position.y, 0));
+            }
+            //if (y == 4 || !grid.CanDelete(this, grid.GetTransWithXY(y + 1, x), new Vector3(-5.0f, transform.position.y, 0)))
+            //    m_Anim.SetTrigger("IsRight");
         }
         if (Mathf.Abs(dir.normalized.x) <= Mathf.Abs(dir.normalized.y) && dir.y < 0)
         {
-            if (x == 4 || !grid.CanDelete(this, grid.GetTransWithXY(y, x + 1), new Vector3( transform.position.x,4.0f, 0)))
-                m_Anim.SetTrigger("IsDown");
+            if(x<4)
+            {
+                grid.CanDelete(this, grid.GetTransWithXY(y, x + 1), new Vector3(transform.position.x, 5.0f, 0));
+            }
+            //if (x == 4 || !grid.CanDelete(this, grid.GetTransWithXY(y, x + 1), new Vector3( transform.position.x,5.0f, 0)))
+            //    m_Anim.SetTrigger("IsDown");
         }
         if (Mathf.Abs(dir.normalized.x) <= Mathf.Abs(dir.normalized.y) && dir.y > 0)
         {
-            if (x == 0 || !grid.CanDelete(this, grid.GetTransWithXY(y, x - 1), new Vector3(transform.position.x, -4.0f, 0)))
-                m_Anim.SetTrigger("IsUp");
+            if(x>0)
+            {
+                grid.CanDelete(this, grid.GetTransWithXY(y, x - 1), new Vector3(transform.position.x, -5.8f, 0));
+            }
+            //if (x == 0 || !grid.CanDelete(this, grid.GetTransWithXY(y, x - 1), new Vector3(transform.position.x, -5.8f, 0)))
+            //    m_Anim.SetTrigger("IsUp");
         }
     }
 
     public void PlayAnim()
     {
+        if (m_Anim == null) return;
+
         m_Anim.SetTrigger("AddScale");
 
         NumType nt = numComponent.GetnewType;
@@ -137,6 +182,14 @@ public class GamePiece : MonoBehaviour {
         numComponent.Setsprite(nt + 1);
     }
     
+    //public void SetTrue()
+    //{
+    //    m_Anim.SetBool("SetColor", true);
+    //}
+    //public void SetFalse()
+    //{
+    //    m_Anim.SetBool("SetColor", false);
+    //}
     public bool IsMovable()
     {
         return movableComponent != null;

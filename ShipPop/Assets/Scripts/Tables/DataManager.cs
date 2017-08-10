@@ -11,11 +11,12 @@ public class DataManager : MonoBehaviour
     void Awake()
     {
         //设置固定分辨率
-        Screen.SetResolution(725, 1280, true);
-        Screen.fullScreen = true;
+        //Screen.SetResolution(800, 1280, true);
+        //Screen.fullScreen = true;
 
         tables = new Dictionary<TableName, Tables>();
 
         tables.Add(TableName.begin, new Tables("Tab/Begin"));
+        tables.Add(TableName.creat, new Tables("Tab/Creat"));
     }
 }
