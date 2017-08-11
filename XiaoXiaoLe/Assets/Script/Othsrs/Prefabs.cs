@@ -34,6 +34,10 @@ public class Prefabs : MonoBehaviour,IMessageHandler {
 
     private bool IsActive;
     private float timer;
+    //存储随机数的列表
+    List<int> AllNums;
+    //随机数列的列数
+    private int ListDex;
 
     private void Awake()
     {
@@ -55,17 +59,17 @@ public class Prefabs : MonoBehaviour,IMessageHandler {
     }
     // Use this for initialization
     void Start () {
-
-
-        Tables prefabsTab = DataManager.tables[TableName.prefabtype];
+        
+        SetList(1);
 
         for (int i = 0; i < Roots.Length; i++)
         {
-            int id = Random.Range(0, 99);
+            int id = Random.Range(0, 999);
 
-            int enumtype = prefabsTab.GetDataWithIDAndIndex<int>(id.ToString(), 1);
+            int enumtype = AllNums[id];
 
             GameObject obj = Instantiate(PrefabsDic[(PrefabsType)enumtype], transform);
+
             obj.transform.position = Roots[i];
 
             index++;
@@ -118,7 +122,25 @@ public class Prefabs : MonoBehaviour,IMessageHandler {
         }
 
     }
-    
+    //设置随机数的列表
+    void SetList(int dexd)
+    {
+        ListDex = dexd;
+
+        Tables tab = DataManager.tables[TableName.prefabtype];
+        AllNums = new List<int>();
+
+        for (int i = 0; i < 25; i++)
+        {
+            int Count = tab.GetDataWithIDAndIndex<int>(i.ToString(), dexd);
+
+            for (int j = 0; j < Count; j++)
+            {
+                AllNums.Add(i);
+            }
+        }
+    }
+
     void MoveWithIndex(Transform trans,int index)
     {
         if(index >=0 && index < Roots.Length)
@@ -146,35 +168,26 @@ public class Prefabs : MonoBehaviour,IMessageHandler {
                 index++;
                 int id = 0;
 
+                id = Random.Range(0, 999);
 
-                if (index<30)
+                if (index >= 30 && index<60)
                 {
-                    id = Random.Range(0, 99);
+                    if (ListDex != 2)
+                        SetList(2);
                 }
-                if (index >= 30 && index<50)
+                if (index >=60)
                 {
-                    id = Random.Range(100, 199);
-                }
-                if (index >= 50 &&index<80)
-                {
-                    id = Random.Range(200,299);
-                }
-                if (index >=80)
-                {
-                    id = Random.Range(300,399);
+                    if (ListDex != 3)
+                        SetList(3);
                 }
 
-
-                Tables prefabsTab = DataManager.tables[TableName.prefabtype];
-
-                int enumtype = prefabsTab.GetDataWithIDAndIndex<int>(id.ToString(), 1);
+                int enumtype = AllNums[id];
 
                 if(PrefabsDic.ContainsKey((PrefabsType)enumtype))
                 {
                     IsMove = true;
                     creattype = (PrefabsType)enumtype;
                     
-
                 }
             }
             
