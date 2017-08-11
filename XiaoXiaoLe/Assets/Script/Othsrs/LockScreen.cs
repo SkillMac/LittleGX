@@ -12,7 +12,7 @@ public class LockScreen : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        Screen.SetResolution(800, 1280, true);
+        Screen.SetResolution(800, 1280, false);
         
 	}
 }

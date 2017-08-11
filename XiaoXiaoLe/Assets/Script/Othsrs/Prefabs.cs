@@ -39,13 +39,15 @@ public class Prefabs : MonoBehaviour,IMessageHandler {
     //随机数列的列数
     private int ListDex;
 
+    int old;
+
     private void Awake()
     {
         MessageCenter.Registed(this.GetHashCode(), this);
 
         type = (PrefabsType)index;
 
-        
+
         PrefabsDic = new Dictionary<PrefabsType, GameObject>();
 
         for(int i =0;i < Allprefabs.Length;i++)
@@ -64,10 +66,20 @@ public class Prefabs : MonoBehaviour,IMessageHandler {
 
         for (int i = 0; i < Roots.Length; i++)
         {
-            int id = Random.Range(0, 999);
+            int enumtype;
 
-            int enumtype = AllNums[id];
+            if (i == 0)
+            {
+                int id = Random.Range(0, 999);
+                enumtype = AllNums[id];
 
+                old = enumtype;
+            }
+            else
+            {
+                enumtype = Get(old);
+            }
+            
             GameObject obj = Instantiate(PrefabsDic[(PrefabsType)enumtype], transform);
 
             obj.transform.position = Roots[i];
@@ -88,6 +100,8 @@ public class Prefabs : MonoBehaviour,IMessageHandler {
             
             for (int i = 0; i < Roots.Length; i++)
             {
+                if (i > transform.childCount -1) return;
+
                 if (transform.GetChild(i) == null) return;
 
                 transform.GetChild(i).GetComponent<TestDraw>().enabled = false;
@@ -126,8 +140,9 @@ public class Prefabs : MonoBehaviour,IMessageHandler {
     void SetList(int dexd)
     {
         ListDex = dexd;
-
+        
         Tables tab = DataManager.tables[TableName.prefabtype];
+
         AllNums = new List<int>();
 
         for (int i = 0; i < 25; i++)
@@ -139,6 +154,55 @@ public class Prefabs : MonoBehaviour,IMessageHandler {
                 AllNums.Add(i);
             }
         }
+    }
+
+    int Get(int dex)
+    {
+        int id = Random.Range(0, 999);
+
+        int xx = AllNums[id];
+
+        if (dex == 0 || xx == 0)
+            return xx;
+        if (dex >= 1 && dex <= 6)
+        {
+            if (xx >= 1 && xx <= 6)
+            {
+                xx = Get(dex);
+            }
+        }
+        if (dex >= 7 && dex <= 12)
+        {
+            if (xx >= 7 && xx <= 12)
+            {
+                xx = Get(dex);
+            }
+        }
+        if (dex >= 13 && dex <= 18)
+        {
+            if (xx >= 13 && xx <= 18)
+            {
+                xx = Get(dex);
+            }
+        }
+        if (dex >= 19 && dex <= 21)
+        {
+            if (xx >= 19 && xx <= 21)
+            {
+                xx = Get(dex);
+            }
+        }
+        if (dex >= 22 && dex <= 24)
+        {
+            if (xx >= 22 && xx <= 24)
+            {
+                xx = Get(dex);
+            }
+        }
+
+        old = xx;
+
+        return xx;
     }
 
     void MoveWithIndex(Transform trans,int index)
@@ -166,9 +230,6 @@ public class Prefabs : MonoBehaviour,IMessageHandler {
             if (data is int )
             {
                 index++;
-                int id = 0;
-
-                id = Random.Range(0, 999);
 
                 if (index >= 30 && index<60)
                 {
@@ -181,7 +242,7 @@ public class Prefabs : MonoBehaviour,IMessageHandler {
                         SetList(3);
                 }
 
-                int enumtype = AllNums[id];
+                int enumtype = Get(old);
 
                 if(PrefabsDic.ContainsKey((PrefabsType)enumtype))
                 {
