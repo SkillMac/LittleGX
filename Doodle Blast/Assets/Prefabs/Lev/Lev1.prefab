@@ -557,9 +557,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4574085868956586}
   - component: {fileID: 212915890246689094}
-  - component: {fileID: 114298661168861116}
   - component: {fileID: 61275661871039652}
-  - component: {fileID: 61921862173227660}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -1182,31 +1180,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.3029163, y: 1.2613235}
   m_EdgeRadius: 0
---- !u!61 &61921862173227660
-BoxCollider2D:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1842127848108902}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: -0.0010076165, y: -0.010414198}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.28, y: 0.73}
-    newSize: {x: 1.28, y: 0.73}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 1.1834878, y: 0.26518142}
-  m_EdgeRadius: 0
 --- !u!95 &95476145603978484
 Animator:
   serializedVersion: 3
@@ -1578,18 +1551,6 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
---- !u!114 &114298661168861116
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1842127848108902}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bb6a4e2dceb805d449da478f0d6003c5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  obj: {fileID: 1483103464709116}
 --- !u!114 &114316171928015870
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1842,7 +1803,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e69d0fa95735944dbc65909c07337e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneName: 
 --- !u!114 &114533350501332956
 MonoBehaviour:
   m_ObjectHideFlags: 1
