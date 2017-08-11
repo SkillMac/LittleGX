@@ -250,7 +250,7 @@ MonoBehaviour:
   offsetx: 1.4
   offsetY: 1.8
   background: {fileID: 1160995286803278, guid: 9ed25ffe57ee51545ab626968d42cf81, type: 2}
-  movespeed: 10
+  movespeed: 20
   text_Score: {fileID: 1533111766}
   window_over: {fileID: 1289269263}
   GoldEffect: {fileID: 1230047927574776, guid: 2abf59fa1dbca6740b9df9312d5ae4cb, type: 2}
