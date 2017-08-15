@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Window_Canvas : MonoBehaviour ,IMessageHandler{
+public class Window_Canvas : MonoBehaviour {
 
     public Text m_Currentscore;
     public Text m_Highscore;
@@ -17,17 +15,13 @@ public class Window_Canvas : MonoBehaviour ,IMessageHandler{
 
     public GameObject preGold;
 
-    private Vector3 m_Size;
-
     private void Awake()
     {
-        MessageCenter.Registed(this.GetHashCode(), this);
-        
-        m_Highscore.text = FormatNum(PlayerPrefs.GetInt("Highscore"));
+		EventMgr.AddScoreEvent += OnAddScore;
+		EventMgr.AddGoldEvent += OnAddGold;
+		m_Highscore.text = FormatNum(PlayerPrefs.GetInt("Highscore"));
 
         m_gold.text = PlayerPrefs.GetInt("Gold").ToString();
-
-        m_Size = m_Currentscore.transform.localScale;
     }
     // Use this for initialization
     void Start () {
@@ -104,37 +98,21 @@ public class Window_Canvas : MonoBehaviour ,IMessageHandler{
         return temp[0];
         
     }
+	
+	private void OnAddGold() {
+		int dex = PlayerPrefs.GetInt("Gold") + 1;
+		PlayerPrefs.SetInt("Gold", dex);
+		m_gold.text = dex.ToString();
+	}
 
-    public void MassageHandler(uint type, object data)
-    {
-        if(type == MessageType.UI_ADDGOLD)
-        {
-            int dex = PlayerPrefs.GetInt("Gold") + 1;
+	private void OnAddScore(Vector3 pp) {
+		AddScores(goldScore);
+		preGold.transform.position = pp + new Vector3(-1.0f, 0, 0);
+		preGold.SetActive(true);
+	}
 
-            PlayerPrefs.SetInt("Gold",  dex);
-
-            m_gold.text = dex.ToString();
-            
-        }
-
-        if(type == MessageType.UI_ADDSCORE)
-        {
-            if(data is Vector3)
-            {
-                Vector3 pp = (Vector3)data;
-
-                AddScores(goldScore);
-
-                preGold.transform.position = pp + new Vector3(-1.0f, 0, 0);
-
-                preGold.SetActive(true);
-            }
-           
-        }
-    }
-
-    private void OnDestroy()
-    {
-        MessageCenter.Cancel(this.GetHashCode());
-    }
+    private void OnDestroy() {
+		EventMgr.AddScoreEvent -= OnAddScore;
+		EventMgr.AddGoldEvent -= OnAddGold;
+	}
 }

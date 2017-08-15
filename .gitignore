@@ -19,7 +19,9 @@
 *.exe
 *.out
 *.app
-ShipPop/.vs/ShipPop/v15/.suo
-/ShipPop/Library
-/XiaoXiaoLe/Library
-/Doodle Blast/Library
+*/.vs
+*/Library
+*/Temp
+*/obj
+*.csproj
+*.sln

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class Prefabs : MonoBehaviour,IMessageHandler {
+public class Prefabs : MonoBehaviour {
     
     public int index;
     
@@ -41,10 +41,9 @@ public class Prefabs : MonoBehaviour,IMessageHandler {
 
     int old;
 
-    private void Awake()
-    {
-        MessageCenter.Registed(this.GetHashCode(), this);
-
+    private void Awake() {
+		EventMgr.MouseUpCreateByIndexEvent += OnMouseUpCreateByIndex;
+		EventMgr.MouseUpCreateByTransEvent += OnMouseUpCreateByTrans;
         type = (PrefabsType)index;
 
 
@@ -221,60 +220,34 @@ public class Prefabs : MonoBehaviour,IMessageHandler {
     }
     PrefabsType creattype;
     int dexcode;
+	
+	private void OnMouseUpCreateByTrans(Transform tf) {
+		dexcode = tf.GetHashCode();
+		//根据类型判断是否游戏可以继续
+		if (!CanContinue()) {
+			IsActive = true;
+			timer = Time.realtimeSinceStartup;
+		}
+		GameObject obj = Instantiate(PrefabsDic[creattype], transform);
+		obj.transform.position = Roots[Roots.Length - 1];
+	}
 
-    public void MassageHandler(uint type, object data)
-    {
-        if(type == MessageType.MOUSE_UP_CREAT)
-        {
-            
-            if (data is int )
-            {
-                index++;
-
-                if (index >= 30 && index<60)
-                {
-                    if (ListDex != 2)
-                        SetList(2);
-                }
-                if (index >=60)
-                {
-                    if (ListDex != 3)
-                        SetList(3);
-                }
-
-                int enumtype = Get(old);
-
-                if(PrefabsDic.ContainsKey((PrefabsType)enumtype))
-                {
-                    IsMove = true;
-                    creattype = (PrefabsType)enumtype;
-                    
-                }
-            }
-            
-            if(data is Transform)
-            {
-                Transform tf = (Transform)data;
-
-                dexcode = tf.GetHashCode();
-
-                //根据类型判断是否游戏可以继续
-
-                if (!CanContinue())
-                {
-                    //window_gv.SetActive(true);
-
-                    //Debug.Log("GameOver!!");
-                    IsActive = true;
-                    timer = Time.realtimeSinceStartup;
-                }
-
-                GameObject obj = Instantiate(PrefabsDic[creattype], transform);
-
-                obj.transform.position = Roots[Roots.Length - 1];
-            }
-        }
-    }
+	private void OnMouseUpCreateByIndex() {
+		index++;
+		if (index >= 30 && index < 60) {
+			if (ListDex != 2)
+				SetList(2);
+		}
+		if (index >= 60) {
+			if (ListDex != 3)
+				SetList(3);
+		}
+		int enumtype = Get(old);
+		if (PrefabsDic.ContainsKey((PrefabsType)enumtype)) {
+			IsMove = true;
+			creattype = (PrefabsType)enumtype;
+		}
+	}
 
     Vector3[] posPre;
     Vector3[] DicPos;
@@ -341,10 +314,10 @@ public class Prefabs : MonoBehaviour,IMessageHandler {
         return true;
     }
 
-    private void OnDestroy()
-    {
-        MessageCenter.Cancel(this.GetHashCode());
-    }
+    private void OnDestroy() {
+		EventMgr.MouseUpCreateByIndexEvent -= OnMouseUpCreateByIndex;
+		EventMgr.MouseUpCreateByTransEvent -= OnMouseUpCreateByTrans;
+	}
 
     IEnumerator wait()
     {

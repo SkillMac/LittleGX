@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.EventSystems;
+﻿using UnityEngine;
 
 public class TestDraw : MonoBehaviour {
     
@@ -53,14 +48,10 @@ public class TestDraw : MonoBehaviour {
             oldPos = Input.mousePosition;
 
             transform.position = (Input.mousePosition - new Vector3(Screen.width / 2.0f, Screen.height / 2.0f, 0)) / 100.0f + offset;
-           
-            MessageCenter.ReceiveMassage(new MessageData(MessageType.MOUSE_DOWN, GetChilds()));
-
+			EventMgr.MouseDown(GetChilds());
         }
-        if (Input.GetMouseButtonUp(0))
-        {
-            MessageCenter.ReceiveMassage(new MessageData(MessageType.MOUSE_UP, GetChilds()));
-            
+        if (Input.GetMouseButtonUp(0)) {
+			EventMgr.MouseUp(GetChilds());
         }
     }
 

@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Window_Creat : MonoBehaviour,IMessageHandler {
+public class Window_Creat : MonoBehaviour {
     
-    public int xDim, yDim;
+    private int xDim, yDim;
 
     public float offsetx, offsetY;
 
@@ -17,7 +16,7 @@ public class Window_Creat : MonoBehaviour,IMessageHandler {
 
     private List<Transform> OldElement = new List<Transform>();
 
-    private object old;
+    private Transform[] old;
 
     public Transform[,] ArraryEle;
 
@@ -31,12 +30,10 @@ public class Window_Creat : MonoBehaviour,IMessageHandler {
 
     public static List<Transform[]> m_AllDelete;
     
-    private void Awake()
-    {
-        MessageCenter.Registed(this.GetHashCode(), this);
-
-        //Vector3 transpos = new Vector3()
-        AllElement = new List<Transform>();
+    private void Awake() {
+		EventMgr.MouseUpEvent += OnMouseUp;
+		EventMgr.MouseDownEvent += OnMouseDown;
+		AllElement = new List<Transform>();
     }
 
 
@@ -271,170 +268,97 @@ public class Window_Creat : MonoBehaviour,IMessageHandler {
         return new Vector2( (y - (yDim-1)/ 2.0f)*offsetx  + transform.position.x,
              ((xDim-1) / 2.0f - x)* offsetY + transform.position.y) ;
     }
+	
+	private void OnMouseDown(Transform[] tran) {
+		if (tran == null || tran == old)
+			return;
+		Vector3[] pos = new Vector3[tran.Length];
+		ElementType currenttype;
+		currenttype = tran[0].GetComponent<Element>().Color;
+		for (int i = 0; i < tran.Length; i++) {
+			pos[i] = tran[i].position;
+		}
+		for (int i = 0; i < OldElement.Count; i++) {
+			if (OldElement.Count == 0)
+				return;
+			OldElement[i].GetComponent<Element>().Color = ElementType.Empty;
+		}
+		Transform[] current = ComPos(pos);
+		if (current != null && IsVer(current, currenttype)) {
+			OldElement.Clear();
+			for (int i = 0; i < current.Length; i++) {
+				current[i].GetComponent<Element>().Color = currenttype + 1;
 
-    public void MassageHandler(uint type, object data)
-    {
-        if (type == MessageType.MOUSE_DOWN)
-        {
-            if (data is Transform[])
-            {
-                if (data == old) return;
+				old = tran;
+				OldElement.Add(current[i]);
+			}
+		} else {
+			//2017.7.26 9:00不添加拖动一直出
+			OldElement.Clear();
+		}
+	}
 
-                Transform[] tran = (Transform[])data;
-                if (tran == null) return;
-
-                Vector3[] pos = new Vector3[tran.Length];
-
-                ElementType currenttype;
-                
-                currenttype = tran[0].GetComponent<Element>().Color ;
-
-                for (int i = 0; i < tran.Length; i++)
-                {
-                    pos[i] = tran[i].position;
-                }
-
-                for (int i = 0; i < OldElement.Count; i++)
-                {
-                    if (OldElement.Count == 0) return;
-                    OldElement[i].GetComponent<Element>().Color = ElementType.Empty;
-                }
-
-                Transform[] current = ComPos(pos);
-
-                if (current != null && IsVer(current,currenttype))
-                {
-                    OldElement.Clear();
-                    for (int i = 0; i < current.Length; i++)
-                    {
-                        current[i].GetComponent<Element>().Color = currenttype +1;
-
-                        old = data;
-                        OldElement.Add(current[i]);
-                    }
-                }
-                else
-                {
-                    //2017.7.26 9:00不添加拖动一直出
-                    OldElement.Clear();
-                }
-            }
-        }
-
-        if (type == MessageType.MOUSE_UP)
-        {
-            if (data is Transform[])
-            {
-                Transform[] tran = (Transform[])data;
-                if (tran[0] == null) return;
-
-                ElementType currenttype;
-
-                currenttype = tran[0].GetComponent<Element>().Color;
-                
-                Vector3[] poss = new Vector3[tran.Length];
-                
-                for (int i = 0; i < tran.Length; i++)
-                {
-                    poss[i] = tran[i].position;
-                }
-                
-                Transform[] current = ComPos(poss);
-
-                if (current == null || !IsVer(current, currenttype))
-                {
-                    tran[0].parent.GetComponent<TestDraw>().ReturnStart();
-
-                    OldElement.Clear();
-                    return;
-                }
-                else if(current !=null && IsVer(current, currenttype))
-                {
-                    
-                    Destroy(tran[0].parent.gameObject);
-
-                    MessageCenter.ReceiveMassage(new MessageData(MessageType.MOUSE_UP_DELETE, tran[0].parent));
-                    
-                    MessageCenter.ReceiveMassage(new MessageData(MessageType.MOUSE_UP_CREAT, 1));
-                }
-
-                m_AllDelete = new List<Transform[]>();
-                Transform[] tf = new Transform[OldElement.Count];
-                
-                for (int i = 0; i < OldElement.Count; i++)
-                {
-                    if (OldElement.Count == 0) return;
-
-                    OldElement[i].GetComponent<Element>().Color -= 1;
-                    
-                    Vector2 pos = OldElement[i].GetComponent<Element>().GetPosition;
-                    
-                    if (CanDeletLine(OldElement[i]) != null && CanDeletLeft(OldElement[i]) == null && CanDeletRight(OldElement[i]) == null)
-                    {
-                         DeleLine(OldElement[i]);
-                    }
-
-                    if (CanDeletLine(OldElement[i]) != null && CanDeletLeft(OldElement[i]) != null && CanDeletRight(OldElement[i]) == null)
-                    {
-                        DeleLine(OldElement[i]);
-                        
-                        DeleLeft(OldElement[i]);
-                    }
-
-                    if (CanDeletLine(OldElement[i]) != null && CanDeletLeft(OldElement[i]) == null && CanDeletRight(OldElement[i]) != null)
-                    {
-                        DeleLine(OldElement[i]);
-                        
-                        DeleRight(OldElement[i]);
-                    }
-
-                    if (CanDeletLine(OldElement[i]) == null && CanDeletLeft(OldElement[i]) != null && CanDeletRight(OldElement[i]) == null)
-                    {
-                        DeleLeft(OldElement[i]);
-                    }
-
-                    if (CanDeletLine(OldElement[i]) == null && CanDeletLeft(OldElement[i]) != null && CanDeletRight(OldElement[i]) != null)
-                    {
-                        DeleRight(OldElement[i]);
-                        
-                        DeleLeft(OldElement[i]);
-                        
-                    }
-
-                    if (CanDeletLine(OldElement[i]) == null && CanDeletLeft(OldElement[i]) == null && CanDeletRight(OldElement[i]) != null)
-                    {
-                        DeleRight(OldElement[i]);
-                    }
-
-                    if (CanDeletLine(OldElement[i]) != null && CanDeletLeft(OldElement[i]) != null && CanDeletRight(OldElement[i]) != null)
-                    {
-                        DeleRight(OldElement[i]);
-                        
-                        DeleLeft(OldElement[i]);
-
-                        DeleLine(OldElement[i]);
-                    }
-                    tf[i] = OldElement[i];
-                }
-
-                //List<Transform[]> CanDele = new List<Transform[]>();
-                //CanDele = m_AllDelete;
-
-                if (m_AllDelete.Count == 0)
-                {
-                    m_AllDelete.Add(tf);
-                }
-
-                DeleteList.GetList = m_AllDelete;
-
-                MessageCenter.ReceiveMassage(new MessageData(MessageType.UI_DELETE_ELE, null));
-                
-                OldElement.Clear();
-                
-            }
-        }
-    }
-
+	private void OnMouseUp(Transform[] tran) {
+		if (tran[0] == null)
+			return;
+		ElementType currenttype;
+		currenttype = tran[0].GetComponent<Element>().Color;
+		Vector3[] poss = new Vector3[tran.Length];
+		for (int i = 0; i < tran.Length; i++) {
+			poss[i] = tran[i].position;
+		}
+		Transform[] current = ComPos(poss);
+		if (current == null || !IsVer(current, currenttype)) {
+			tran[0].parent.GetComponent<TestDraw>().ReturnStart();
+			OldElement.Clear();
+			return;
+		} else if (current != null && IsVer(current, currenttype)) {
+			Destroy(tran[0].parent.gameObject);
+			EventMgr.MouseUpDelete(tran[0].parent);
+			EventMgr.MouseUpCreateByIndex();
+		}
+		m_AllDelete = new List<Transform[]>();
+		Transform[] tf = new Transform[OldElement.Count];
+		for (int i = 0; i < OldElement.Count; i++) {
+			if (OldElement.Count == 0)
+				return;
+			OldElement[i].GetComponent<Element>().Color -= 1;
+			Vector2 pos = OldElement[i].GetComponent<Element>().GetPosition;
+			if (CanDeletLine(OldElement[i]) != null && CanDeletLeft(OldElement[i]) == null && CanDeletRight(OldElement[i]) == null) {
+				DeleLine(OldElement[i]);
+			}
+			if (CanDeletLine(OldElement[i]) != null && CanDeletLeft(OldElement[i]) != null && CanDeletRight(OldElement[i]) == null) {
+				DeleLine(OldElement[i]);
+				DeleLeft(OldElement[i]);
+			}
+			if (CanDeletLine(OldElement[i]) != null && CanDeletLeft(OldElement[i]) == null && CanDeletRight(OldElement[i]) != null) {
+				DeleLine(OldElement[i]);
+				DeleRight(OldElement[i]);
+			}
+			if (CanDeletLine(OldElement[i]) == null && CanDeletLeft(OldElement[i]) != null && CanDeletRight(OldElement[i]) == null) {
+				DeleLeft(OldElement[i]);
+			}
+			if (CanDeletLine(OldElement[i]) == null && CanDeletLeft(OldElement[i]) != null && CanDeletRight(OldElement[i]) != null) {
+				DeleRight(OldElement[i]);
+				DeleLeft(OldElement[i]);
+			}
+			if (CanDeletLine(OldElement[i]) == null && CanDeletLeft(OldElement[i]) == null && CanDeletRight(OldElement[i]) != null) {
+				DeleRight(OldElement[i]);
+			}
+			if (CanDeletLine(OldElement[i]) != null && CanDeletLeft(OldElement[i]) != null && CanDeletRight(OldElement[i]) != null) {
+				DeleRight(OldElement[i]);
+				DeleLeft(OldElement[i]);
+				DeleLine(OldElement[i]);
+			}
+			tf[i] = OldElement[i];
+		}
+		if (m_AllDelete.Count == 0) {
+			m_AllDelete.Add(tf);
+		}
+		DeleteList.GetList = m_AllDelete;
+		EventMgr.DoUIDeleteEvent();
+		OldElement.Clear();
+	}
     
     //判断是否可以放进去
     bool IsVer(Transform[] current,ElementType et)
@@ -477,9 +401,8 @@ public class Window_Creat : MonoBehaviour,IMessageHandler {
     }
 
     
-    private void OnDestroy()
-    {
-        MessageCenter.Cancel(this.GetHashCode());
-    }
-
+    private void OnDestroy() {
+		EventMgr.MouseUpEvent -= OnMouseUp;
+		EventMgr.MouseDownEvent -= OnMouseDown;
+	}
 }

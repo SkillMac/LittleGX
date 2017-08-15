@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Window_Delete : MonoBehaviour,IMessageHandler {
+public class Window_Delete : MonoBehaviour {
 
     private List<Transform[]> m_AllDelete;
     private bool BeginDelete;
@@ -20,10 +20,12 @@ public class Window_Delete : MonoBehaviour,IMessageHandler {
     private int dex, dex1,dex2,dex3,dex4, dex5, dex6, dex7, dex8;
 
     private bool IsScore, IsScore1, IsScore2, IsScore3, IsScore4, IsScore5, IsScore6, IsScore7, IsScore8;
-    private void Awake()
-    {
-        MessageCenter.Registed(this.GetHashCode(), this);
+
+    private void Awake() {
+		EventMgr.UIDeleteEvent += OnUIDelete;
+		EventMgr.MouseUpDeleteEvent += OnMouseUpDelete;
     }
+
     // Use this for initialization
     void Start () {
 		
@@ -54,9 +56,8 @@ public class Window_Delete : MonoBehaviour,IMessageHandler {
             //错点
             m_GoldMove.SetActive(true);
             BeginDelete = false;
-
-            MessageCenter.ReceiveMassage(new MessageData(MessageType.MOUSE_UP_CREAT, tf));
-        }
+			EventMgr.MouseUpCreateByTrans(tf);
+		}
     }
 
     void Effect(Transform[] trans,GameObject obj)
@@ -218,8 +219,8 @@ public class Window_Delete : MonoBehaviour,IMessageHandler {
                 SetSprite(0);
                 m_Gold.SetActive(false);
                 BeginDelete = false;
-                MessageCenter.ReceiveMassage(new MessageData(MessageType.MOUSE_UP_CREAT, tf));
-            }
+				EventMgr.MouseUpCreateByTrans(tf);
+			}
         }
         if (m_AllDelete.Count == 3)
         {
@@ -231,8 +232,8 @@ public class Window_Delete : MonoBehaviour,IMessageHandler {
                 SetSprite(1);
                 m_Gold.SetActive(false);
                 BeginDelete = false;
-                MessageCenter.ReceiveMassage(new MessageData(MessageType.MOUSE_UP_CREAT, tf));
-            }
+				EventMgr.MouseUpCreateByTrans(tf);
+			}
         }
 
         if (m_AllDelete.Count == 4)
@@ -246,8 +247,8 @@ public class Window_Delete : MonoBehaviour,IMessageHandler {
                 SetSprite(2);
                 m_Gold.SetActive(false);
                 BeginDelete = false;
-                MessageCenter.ReceiveMassage(new MessageData(MessageType.MOUSE_UP_CREAT, tf));
-            }
+				EventMgr.MouseUpCreateByTrans(tf);
+			}
         }
         if (m_AllDelete.Count == 5)
         {
@@ -261,8 +262,8 @@ public class Window_Delete : MonoBehaviour,IMessageHandler {
                 SetSprite(3);
                 m_Gold.SetActive(false);
                 BeginDelete = false;
-                MessageCenter.ReceiveMassage(new MessageData(MessageType.MOUSE_UP_CREAT, tf));
-            }
+				EventMgr.MouseUpCreateByTrans(tf);
+			}
         }
         if (m_AllDelete.Count == 6)
         {
@@ -277,8 +278,8 @@ public class Window_Delete : MonoBehaviour,IMessageHandler {
                 SetSprite(4);
                 m_Gold.SetActive(false);
                 BeginDelete = false;
-                MessageCenter.ReceiveMassage(new MessageData(MessageType.MOUSE_UP_CREAT, tf));
-            }
+				EventMgr.MouseUpCreateByTrans(tf);
+			}
         }
         if (m_AllDelete.Count == 7)
         {
@@ -294,8 +295,8 @@ public class Window_Delete : MonoBehaviour,IMessageHandler {
                 SetSprite(5);
                 m_Gold.SetActive(false);
                 BeginDelete = false;
-                MessageCenter.ReceiveMassage(new MessageData(MessageType.MOUSE_UP_CREAT, tf));
-            }
+				EventMgr.MouseUpCreateByTrans(tf);
+			}
         }
         if (m_AllDelete.Count == 8)
         {
@@ -312,8 +313,8 @@ public class Window_Delete : MonoBehaviour,IMessageHandler {
                 SetSprite(6);
                 m_Gold.SetActive(false);
                 BeginDelete = false;
-                MessageCenter.ReceiveMassage(new MessageData(MessageType.MOUSE_UP_CREAT, tf));
-            }
+				EventMgr.MouseUpCreateByTrans(tf);
+			}
         }
         if (m_AllDelete.Count == 9)
         {
@@ -331,55 +332,49 @@ public class Window_Delete : MonoBehaviour,IMessageHandler {
                 SetSprite(7);
                 m_Gold.SetActive(false);
                 BeginDelete = false;
-                MessageCenter.ReceiveMassage(new MessageData(MessageType.MOUSE_UP_CREAT, tf));
-            }
+				EventMgr.MouseUpCreateByTrans(tf);
+			}
         }
     }
 
     Transform tf;
 
-    public void MassageHandler(uint type, object data)
-    {
-        if (type == MessageType.UI_DELETE_ELE)
-        {
-            m_AllDelete = new List<Transform[]>();
+    private void OnUIDelete() {
+        m_AllDelete = new List<Transform[]>();
 
-            m_AllDelete = DeleteList.GetList;
+        m_AllDelete = DeleteList.GetList;
 
-            m_AllDelete = Sort<Transform>(m_AllDelete);
+        m_AllDelete = Sort<Transform>(m_AllDelete);
 
-            BeginDelete = true;
+        BeginDelete = true;
 
-            dex = 0;
-            dex1 = dex + 1;
-            dex2 = dex + 2;
-            dex3 = dex + 3;
-            dex4 = dex + 4;
-            dex5 = dex + 5;
-            dex6 = dex + 6;
-            dex7 = dex + 7;
-            dex8 = dex + 8;
+        dex = 0;
+        dex1 = dex + 1;
+        dex2 = dex + 2;
+        dex3 = dex + 3;
+        dex4 = dex + 4;
+        dex5 = dex + 5;
+        dex6 = dex + 6;
+        dex7 = dex + 7;
+        dex8 = dex + 8;
 
-            timer = Time.realtimeSinceStartup;
-            timer1 = Time.realtimeSinceStartup;
-            timer2 = Time.realtimeSinceStartup;
-            timer3 = Time.realtimeSinceStartup;
-            timer4 = Time.realtimeSinceStartup;
-            timer5 = Time.realtimeSinceStartup;
-            timer6 = Time.realtimeSinceStartup;
-            timer7 = Time.realtimeSinceStartup;
-            timer8 = Time.realtimeSinceStartup;
-
-
-            IsScore = IsScore1 = IsScore2 = IsScore3 = IsScore4 = IsScore5 = IsScore6 = IsScore7 = IsScore8 = true;
-        }
-
-        if (data is Transform)
-        {
-            tf = (Transform)data;
-        }
+        timer = Time.realtimeSinceStartup;
+        timer1 = Time.realtimeSinceStartup;
+        timer2 = Time.realtimeSinceStartup;
+        timer3 = Time.realtimeSinceStartup;
+        timer4 = Time.realtimeSinceStartup;
+        timer5 = Time.realtimeSinceStartup;
+        timer6 = Time.realtimeSinceStartup;
+        timer7 = Time.realtimeSinceStartup;
+        timer8 = Time.realtimeSinceStartup;
+        
+        IsScore = IsScore1 = IsScore2 = IsScore3 = IsScore4 = IsScore5 = IsScore6 = IsScore7 = IsScore8 = true;
     }
 
+	private void OnMouseUpDelete(Transform trans) {
+		tf = trans;
+	}
+	
     void SetSprite(int dx)
     {
         m_Sprite.SetActive(true);
@@ -508,8 +503,8 @@ public class Window_Delete : MonoBehaviour,IMessageHandler {
             dex8--;
         }
     }
-    private void OnDestroy()
-    {
-        MessageCenter.Cancel(this.GetHashCode());
-    }
+    private void OnDestroy() {
+		EventMgr.UIDeleteEvent -= OnUIDelete;
+		EventMgr.MouseUpDeleteEvent -= OnMouseUpDelete;
+	}
 }

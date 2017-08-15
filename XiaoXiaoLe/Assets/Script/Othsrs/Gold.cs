@@ -69,7 +69,7 @@ public class Gold : MonoBehaviour {
         {
             if(count == 0)
             {
-                MessageCenter.ReceiveMassage(new MessageData(MessageType.UI_ADDGOLD, null));
+				EventMgr.AddGold();
             }
             count++;
 
@@ -82,11 +82,11 @@ public class Gold : MonoBehaviour {
         {
             MousePos = (Input.mousePosition - new Vector3(Screen.width / 2.0f, Screen.height / 2.0f, 0)) / 100.0f;
             
-                if (Mathf.Abs(Vector3.Distance(transform.position, MousePos)) < 1.0f)
-                {
-                    IsMoved = true;
-                    MessageCenter.ReceiveMassage(new MessageData(MessageType.UI_ADDSCORE, transform.position));
-                }
+            if (Mathf.Abs(Vector3.Distance(transform.position, MousePos)) < 1.0f)
+            {
+                IsMoved = true;
+				EventMgr.AddScore(transform.position);
+			}
         }
     }
 
