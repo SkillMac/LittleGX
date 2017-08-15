@@ -139,16 +139,11 @@ public class Prefabs : MonoBehaviour {
     void SetList(int dexd)
     {
         ListDex = dexd;
-        
-        Tables tab = DataManager.tables[TableName.prefabtype];
-
         AllNums = new List<int>();
 
-        for (int i = 0; i < 25; i++)
-        {
-            int Count = tab.GetDataWithIDAndIndex<int>(i.ToString(), dexd);
-
-            for (int j = 0; j < Count; j++)
+        for (int i = 0; i < 25; i++) {
+			int Count = ConfigPrefabsMgr.instance.GetData(i.ToString(), dexd - 1);
+			for (int j = 0; j < Count; j++)
             {
                 AllNums.Add(i);
             }

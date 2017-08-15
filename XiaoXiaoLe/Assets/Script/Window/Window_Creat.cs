@@ -39,11 +39,10 @@ public class Window_Creat : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+		int[,] mapTab = ConfigMapsMgr.instance.GetMapsData();
 
-        Tables mapTab  = DataManager.tables[TableName.maps];
-
-        xDim = mapTab.GetLineData();
-        yDim = mapTab.GetLenghtData();
+		xDim = mapTab.GetLength(0);
+        yDim = mapTab.GetLength(1);
 
         ArraryEle = new Transform[xDim, yDim];
 
@@ -52,8 +51,7 @@ public class Window_Creat : MonoBehaviour {
         {
             for (int y = 0; y < yDim; y++)
             {
-                if (int.Parse( mapTab.datas[x, y] ) != 0)
-                {
+                if (mapTab[x, y] != 0) {
                     GameObject background = Instantiate(prefabBG, GetWorldPos(x, y), Quaternion.identity);
                     background.transform.parent = transform;
                     AllElement.Add(background.transform);

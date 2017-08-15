@@ -411,14 +411,9 @@ public class Window_Delete : MonoBehaviour {
             obj.transform.position = pos;
         else
             obj.transform.parent.position = pos;
-        
-        Tables scoreTab = DataManager.tables[TableName.Score];
-
-        int scorenum = scoreTab.GetDataWithIDAndIndex<int>(num.ToString(), 1);
-
-        int path = scoreTab.GetDataWithIDAndIndex<int>(num.ToString(), 2);
-
-        obj.transform.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Num/" + path); 
+		int scorenum = ConfigScoreMgr.instance.GetScoreNum(num.ToString());
+		int path = ConfigScoreMgr.instance.GetPathNum(num.ToString());
+		obj.transform.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Num/" + path); 
 
         m_canvas.AddScores(scorenum);
     }
