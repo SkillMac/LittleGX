@@ -14,9 +14,9 @@ public class ConfigMgr {
 	private static string[,] Load(string path) {
 		TextAsset ta = Resources.Load<TextAsset>(path);
 		string[,] datas = new string[1, 1];
-		string[] buff = ta.text.Split("\n"[0]);
+		string[] buff = ta.text.Split('\n');
 		for (int i = 0; i < buff.Length; i++) {
-			string[] temp = buff[i].Split("\t"[0]);
+			string[] temp = buff[i].Split('\t');
 			if (i == 0) {
 				datas = new string[buff.Length, temp.Length];
 			}
