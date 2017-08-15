@@ -138,13 +138,6 @@ MonoBehaviour:
   offsetx: 0.3
   offsetY: 0.5
   prefabBG: {fileID: 1735125321338284, guid: 0d4092ed27c03dd4b92a16c26a1de2eb, type: 2}
-  datas: 
-  window_score:
-  - {fileID: 598699485}
-  - {fileID: 504763970}
-  - {fileID: 1528476376}
-  - {fileID: 1919515944}
-  m_canvas: {fileID: 97272659}
   m_Effect: {fileID: 1710101200153216, guid: 47f72b75c43724b4c9f00a5e34b6e1c5, type: 2}
 --- !u!4 &21215584
 Transform:
@@ -963,7 +956,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 889250934}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e7df7cdf0bc822e41a13e0605bc92461, type: 3}
+  m_Script: {fileID: 11500000, guid: 88ad2dff860865c4aa357d2cd3530a8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!4 &889250936
