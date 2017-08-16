@@ -237,8 +237,7 @@ public class Window_Creat : MonoBehaviour {
 		if (m_AllDelete.Count == 0) {
 			m_AllDelete.Add(tf);
 		}
-		DeleteList.GetList = m_AllDelete;
-		EventMgr.DoUIDeleteEvent();
+		EventMgr.Delete(m_AllDelete);
 		OldElement.Clear();
 	}
     

@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class EventMgr {
-    public static event Action UIDeleteEvent;
+	public static event Action<List<Transform[]>> DeleteEvent;
 	public static event Action<Vector3> AddScoreEvent;
 	public static event Action AddGoldEvent;
 	public static event Action<Transform> MouseUpDeleteEvent;
@@ -11,9 +12,9 @@ public class EventMgr {
 	public static event Action<Transform[]> MouseUpEvent;
 	public static event Action<Transform[]> MouseDownEvent;
 
-    public static void DoUIDeleteEvent() {
-        if (UIDeleteEvent != null) {
-            UIDeleteEvent();
+	public static void Delete(List<Transform[]> list) {
+		if (DeleteEvent != null) {
+			DeleteEvent(list);
         }
     }
 

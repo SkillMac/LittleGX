@@ -14,7 +14,7 @@ public class Window_Delete : MonoBehaviour {
 	private int rewardIndex = 0;
 
 	private void Awake() {
-		EventMgr.UIDeleteEvent += OnUIDelete;
+		EventMgr.DeleteEvent += OnDelete;
 		EventMgr.MouseUpDeleteEvent += OnMouseUpDelete;
     }
 	
@@ -76,9 +76,8 @@ public class Window_Delete : MonoBehaviour {
 		}
     }
 
-	private void OnUIDelete() {
-        m_AllDelete = DeleteList.GetList;
-        m_AllDelete = Sort<Transform>(m_AllDelete);
+	private void OnDelete(List<Transform[]> list) {
+		m_AllDelete = Sort(list);
 		deleteTime = 0f;
 		BeginDelete = true;
 		rewardIndex = 0;
@@ -131,7 +130,7 @@ public class Window_Delete : MonoBehaviour {
     }
 	
     private void OnDestroy() {
-		EventMgr.UIDeleteEvent -= OnUIDelete;
+		EventMgr.DeleteEvent -= OnDelete;
 		EventMgr.MouseUpDeleteEvent -= OnMouseUpDelete;
 	}
 }
