@@ -13,7 +13,7 @@ public class Window_Canvas : MonoBehaviour {
 	void Awake() {
 		EventMgr.AddScoreEvent += OnAddScore;
 		EventMgr.AddGoldEvent += OnAddGold;
-		m_Highscore.text = FormatNum(PlayerPrefs.GetInt("Highscore"));
+		m_Highscore.text = HummerString.FormatNum(PlayerPrefs.GetInt("Highscore"));
         m_gold.text = PlayerPrefs.GetInt("Gold").ToString();
     }
 
@@ -35,11 +35,11 @@ public class Window_Canvas : MonoBehaviour {
         Vector3 off = Vector3.one * 0.1f;
 		for (int i = 0; i < 10; i++) {
 			temp += num / 10;
-			m_Currentscore.text = FormatNum(temp);
+			m_Currentscore.text = HummerString.FormatNum(temp);
 			m_Currentscore.transform.localScale += off;
             yield return new WaitForEndOfFrame();
         }
-        m_Currentscore.text = FormatNum(number);
+        m_Currentscore.text = HummerString.FormatNum(number);
         PlayerPrefs.SetInt("CurrentScore", number);
     }
 
@@ -49,13 +49,6 @@ public class Window_Canvas : MonoBehaviour {
 			m_Currentscore.transform.localScale -= off;
             yield return new WaitForEndOfFrame();
         }
-    }
-
-    //根据数字每三位添加一个逗号
-	private string FormatNum(int num) {
-		string str = string.Format("{0:N}", num);
-		string[] temp = str.Split('.');
-        return temp[0];
     }
 	
 	private void OnAddGold() {
