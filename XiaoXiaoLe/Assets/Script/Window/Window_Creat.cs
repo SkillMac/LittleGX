@@ -3,17 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Window_Creat : MonoBehaviour {
-	public static List<Transform> AllElement;//所有元素的集合
-	public static List<Transform[]> m_AllDelete;
     public float offsetx, offsetY;
     public GameObject prefabBG;
     public GameObject m_Effect;
+	private static Window_Creat _instance;
+	private List<Transform> AllElement;//所有元素的集合
+	private List<Transform[]> m_AllDelete;
 	private Transform[,] ArraryEle;
 	private int xDim, yDim;
 	private List<Transform> OldElement = new List<Transform>();
 	private Transform[] old;
 
 	void Awake() {
+		_instance = this;
 		EventMgr.MouseUpEvent += OnMouseUp;
 		EventMgr.MouseDownEvent += OnMouseDown;
 		AllElement = new List<Transform>();
@@ -254,7 +256,7 @@ public class Window_Creat : MonoBehaviour {
     }
 
     //根据坐标获取当前的元素
-    public static Transform[] ComPos(Vector3[] pos) {
+	private Transform[] ComPos(Vector3[] pos) {
         Transform[] current = new Transform[pos.Length];
         if (AllElement != null) {
             for (int a = 0; a < pos.Length; a++) {
@@ -269,9 +271,51 @@ public class Window_Creat : MonoBehaviour {
         }
         return null;
     }
-	
-    private void OnDestroy() {
+
+	public bool CheckCanContinue(Vector3[] posPre) {
+		if (posPre == null)
+			return true;
+		if (posPre.Length > 1) {
+			for (int i = 0; i < AllElement.Count; i++) {
+				if (AllElement[i].GetComponent<Element>().Color == ElementType.Empty) {
+					Vector3[] DicPos = new Vector3[posPre.Length];
+					for (int j = 0; j < posPre.Length; j++) {
+						DicPos[j] = AllElement[i].position + posPre[j];
+					}
+					Transform[] trans = ComPos(DicPos);
+					if (HasType(trans)) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+
+	private bool HasType(Transform[] trans) {
+		if (trans == null)
+			return false;
+		if (trans != null) {
+			for (int j = 0; j < trans.Length; j++) {
+				if (trans[j] == null)
+					return false;
+				if (trans[j] != null) {
+					if (trans[j].GetComponent<Element>().Color != ElementType.Empty)
+						return false;
+				}
+			}
+		}
+		return true;
+	}
+
+	void OnDestroy() {
 		EventMgr.MouseUpEvent -= OnMouseUp;
 		EventMgr.MouseDownEvent -= OnMouseDown;
+	}
+
+	public static Window_Creat instance {
+		get {
+			return _instance;
+		}
 	}
 }

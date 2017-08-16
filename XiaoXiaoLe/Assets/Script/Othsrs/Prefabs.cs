@@ -27,8 +27,6 @@ public class Prefabs : MonoBehaviour {
 	private int old;
 	private PrefabsType creattype;
 	private int dexcode;
-	private Vector3[] posPre;
-	private Vector3[] DicPos;
 
 	void Awake() {
 		EventMgr.MouseUpCreateByIndexEvent += OnMouseUpCreateByIndex;
@@ -176,45 +174,17 @@ public class Prefabs : MonoBehaviour {
 	
 	private bool CanContinue() {
 		for (int a = 0; a < transform.childCount; a++) {
-            //包含了想要删除的物体
-			if (transform.GetChild(a).GetHashCode() != dexcode) {
-                posPre = transform.GetChild(a).GetComponent<TestDraw>().GetAbsPos();
-				if (posPre == null)
+			Transform childTrans = transform.GetChild(a);
+			//包含了想要删除的物体
+			if (childTrans.GetHashCode() != dexcode) {
+				Vector3[] posPre = childTrans.GetComponent<TestDraw>().GetAbsPos();
+				if (Window_Creat.instance.CheckCanContinue(posPre)) {
 					return true;
-				if (posPre.Length > 1) {
-					for (int i = 0; i < Window_Creat.AllElement.Count; i++) {
-						if (Window_Creat.AllElement[i].GetComponent<Element>().Color == ElementType.Empty) {
-                            DicPos = new Vector3[posPre.Length];
-							for (int j = 0; j < posPre.Length; j++) {
-                                DicPos[j] = Window_Creat.AllElement[i].position + posPre[j];
-                            }
-                            Transform[] trans = Window_Creat.ComPos(DicPos);
-							if (HasType(trans)) {
-                                return true;
-                            }
-                        }
-                    }
-                }
+				}
             }
         }
         return false;
     }
-
-	private bool HasType(Transform[] trans) {
-		if (trans == null)
-			return false;
-		if (trans != null) {
-			for (int j = 0; j < trans.Length; j++) {
-				if (trans[j] == null)
-					return false;
-				if (trans[j] != null) {
-                    if (trans[j].GetComponent<Element>().Color != ElementType.Empty)
-                        return false;
-                }
-            }
-        }
-        return true;
-	}
 
 	private IEnumerator wait() {
 		yield return new WaitForEndOfFrame();
