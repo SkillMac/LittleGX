@@ -34,7 +34,7 @@ public class Window_Creat : MonoBehaviour {
                     background.transform.parent = transform;
 					Element ele = background.GetComponent<Element>();
 					ele.ResetColor();
-					ele.pos = new Vector2(x, y);
+					ele.pos = new Pos2Int(x, y);
                     GameObject effect = Instantiate(m_Effect, GetWorldPos(x, y), Quaternion.identity);
                     effect.transform.parent = background.transform;
                     effect.SetActive(false);
@@ -49,78 +49,96 @@ public class Window_Creat : MonoBehaviour {
 
 	//可以删除左边的列，返回可以删除的该行的元素
 	private bool CanDeletLeft(Element target) {
+		bool bFlag = false;
         int i = 0;
-        Vector2 pos = target.pos;
+		Pos2Int pos = target.pos;
         for (int aa = 0; aa < xDim; aa++) {
-            i = (int)(pos.y - pos.x) + aa;
+            i = pos.y - pos.x + aa;
             if (i >= 0 && i < yDim) {
-                if (ArraryEle[aa, i] != null) {
-					if (ArraryEle[aa, i].CheckIsEmpty())
-                        return false;
+				Element element = ArraryEle[aa, i];
+				if (element != null) {
+					if (element.CheckIsEmpty()) {
+						return false;
+					}
+					if (!element.IsInDeleteList()) {
+						bFlag = true;
+					}
                 }
             }
         }
-        return true;
+        return bFlag;
     }
 
 	//可以删除右边的列，返回可以删除的该行的元素
 	private bool CanDeletRight(Element target) {
-        int i = 0;
-        Vector2 pos = target.pos;
+		bool bFlag = false;
+		int i = 0;
+		Pos2Int pos = target.pos;
         for (int aa = 0; aa < xDim; aa++) {
-            i = (int)(pos.y + pos.x) - aa;
+            i = pos.y + pos.x - aa;
             if (i >= 0 && i < yDim) {
-                if (ArraryEle[aa, i] != null) {
-					if (ArraryEle[aa, i].CheckIsEmpty())
-                        return false;
-                }
+				Element element = ArraryEle[aa, i];
+				if (element != null) {
+					if (element.CheckIsEmpty()) {
+						return false;
+					}
+					if (!element.IsInDeleteList()) {
+						bFlag = true;
+					}
+				}
             }
         }
-        return true;
+        return bFlag;
     }
 
 	//可以删除该行的列，返回可以删除的该行的元素
 	private bool CanDeletLine(Element target) {
-        Vector2 pos = target.pos;
+		bool bFlag = false;
+		Pos2Int pos = target.pos;
         for (int aa = 0; aa < yDim; aa++) {
-            if (ArraryEle[(int)pos.x, aa] != null) {
-				if (ArraryEle[(int)pos.x, aa].CheckIsEmpty())
-                    return false;
-            }
+			Element element = ArraryEle[pos.x, aa];
+			if (element != null) {
+				if (element.CheckIsEmpty()) {
+					return false;
+				}
+				if (!element.IsInDeleteList()) {
+					bFlag = true;
+				}
+			}
         }
-        return true;
+        return bFlag;
     }
 
 	//删除该行的列
 	private void DeleLine(Element target) {
-        Vector2 pos = target.pos;
+		Pos2Int pos = target.pos;
         List<Element> CanDelete = new List<Element>();
         for (int aa = 0; aa < yDim; aa++) {
-            if (ArraryEle[(int)pos.x, aa] != null) {
-                if(!CanDelete.Contains(ArraryEle[(int)pos.x, aa]))
-                    CanDelete.Add(ArraryEle[(int)pos.x, aa]);
+			Element element = ArraryEle[pos.x, aa];
+			if (element != null) {
+				element.SetInDeleteList();
+				CanDelete.Add(element);
             }
         }
 		Element[] tf = new Element[CanDelete.Count];
         for (int i = 0; i < tf.Length; i++) {
             tf[i] = CanDelete[i];
         }
-        if (!HasArray(m_AllDelete, tf)) {
-            m_AllDelete.Add(tf);
-        }
-    }
+		m_AllDelete.Add(tf);
+	}
 
 	//删除该行的列，把该行的元素改为空的
 	private void DeleLeft(Element target) {
-        Vector2 pos = target.pos;
+		Pos2Int pos = target.pos;
         int ii = 0;
         List<Element> CanDelete = new List<Element>();
         for (int aa = 0; aa < xDim; aa++) {
-            ii = (int)(pos.y - pos.x) + aa;
+            ii = pos.y - pos.x + aa;
             if (ii >= 0 && ii < yDim) {
-                if (ArraryEle[aa, ii] != null) {
-                    if(!CanDelete.Contains(ArraryEle[aa, ii]))
-                        CanDelete.Add(ArraryEle[aa, ii]);
+				Element element = ArraryEle[aa, ii];
+				if (element != null) {
+					element.SetInDeleteList();
+					CanDelete.Add(element);
                 }
             }
         }
@@ -128,58 +146,32 @@ public class Window_Creat : MonoBehaviour {
         for (int i = 0; i < tf.Length; i++) {
             tf[i] = CanDelete[i];
         }
-        if (!HasArray(m_AllDelete, tf)) {
-            m_AllDelete.Add(tf);
-        }
-    }
+		m_AllDelete.Add(tf);
+	}
 
 	//删除该行的列，把该行的元素改为空的
 	private void DeleRight(Element target) {
-        Vector2 pos = target.pos;
+		Pos2Int pos = target.pos;
         int ii = 0;
         List<Element> CanDelete = new List<Element>();
         for (int aa = 0; aa < xDim; aa++) {
-            ii = (int)(pos.y + pos.x) - aa;
+            ii = pos.y + pos.x - aa;
             if (ii >= 0 && ii < yDim) {
-                if (ArraryEle[aa, ii] != null) {
-                    if (!CanDelete.Contains(ArraryEle[aa, ii]))
-                        CanDelete.Add(ArraryEle[aa, ii]);
-                }
+				Element element = ArraryEle[aa, ii];
+				if (element != null) {
+					element.SetInDeleteList();
+					CanDelete.Add(ArraryEle[aa, ii]);
+				}
             }
         }
 		Element[] tf = new Element[CanDelete.Count];
         for (int i = 0; i < tf.Length; i++) {
             tf[i] = CanDelete[i];
         }
-        if (!HasArray(m_AllDelete,tf)) {
-            m_AllDelete.Add(tf);
-        }
-    }
-
-	private bool HasArray(List<Element[]> all, Element[] tt) {
-        if (all.Count == 0)
-			return false;
-        for (int j = 0; j < all.Count; j++) {
-            if(IsEqu(all[j], tt)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-	private bool IsEqu(Element[]a, Element[] b) {
-        if (a.Length != b.Length)
-			return false;
-        if (a.Length == b.Length) {
-            for (int i = 0; i < a.Length; i++) {
-                if (a[i] != b[i])
-                    return false;
-            }
-        }
-        return true;
-    }
-    
-    private Vector2  GetWorldPos(int x, int y) {
+		m_AllDelete.Add(tf);
+	}
+	
+    private Vector2 GetWorldPos(int x, int y) {
         return new Vector2((y - (yDim - 1) / 2.0f) * offsetx + transform.position.x, ((xDim - 1) / 2.0f - x) * offsetY + transform.position.y);
     }
 	
@@ -246,8 +238,9 @@ public class Window_Creat : MonoBehaviour {
     //判断是否可以放进去
 	private bool IsVer(Element[] current, ElementType et) {
         for (int i = 0; i < current.Length; i++) {
-            if (current[i] == null)
+            if (current[i] == null) {
 				return false;
+			}
 			if (!current[i].CheckIsEmpty() && current[i].colorType != et + 1) {
                 return false;
             }
@@ -288,13 +281,10 @@ public class Window_Creat : MonoBehaviour {
 	}
 
 	private bool HasType(Element[] trans) {
-		if (trans == null)
-			return false;
 		for (int j = 0; j < trans.Length; j++) {
-			if (trans[j] == null)
+			if (trans[j] == null || !trans[j].CheckIsEmpty()) {
 				return false;
-			if (!trans[j].CheckIsEmpty())
-				return false;
+			}
 		}
 		return true;
 	}

@@ -2,8 +2,9 @@
 
 public class Element : MonoBehaviour {
 	public ElementType m_type;
-	private Vector2 vec2Pos;
+	private Pos2Int vec2Pos;
 	private SpriteRenderer m_image;
+	private bool isInDeleteList = false;
 
 	void Awake() {
         m_image = transform.GetComponentInChildren<SpriteRenderer>();
@@ -11,13 +12,22 @@ public class Element : MonoBehaviour {
 
 	public void ResetColor() {
 		colorType = ElementType.Empty;
+		isInDeleteList = false;
 	}
 
 	public bool CheckIsEmpty() {
 		return m_type == ElementType.Empty;
 	}
+
+	public void SetInDeleteList() {
+		isInDeleteList = true;
+	}
+
+	public bool IsInDeleteList() {
+		return isInDeleteList;
+	}
 	
-	public Vector2 pos {
+	public Pos2Int pos {
 		set {
 			vec2Pos = value;
 		}
