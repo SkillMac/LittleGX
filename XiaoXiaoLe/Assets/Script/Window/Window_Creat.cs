@@ -275,17 +275,15 @@ public class Window_Creat : MonoBehaviour {
 	public bool CheckCanContinue(Vector3[] posPre) {
 		if (posPre == null)
 			return true;
-		if (posPre.Length > 1) {
-			for (int i = 0; i < AllElement.Count; i++) {
-				if (AllElement[i].GetComponent<Element>().Color == ElementType.Empty) {
-					Vector3[] DicPos = new Vector3[posPre.Length];
-					for (int j = 0; j < posPre.Length; j++) {
-						DicPos[j] = AllElement[i].position + posPre[j];
-					}
-					Transform[] trans = ComPos(DicPos);
-					if (HasType(trans)) {
-						return true;
-					}
+		for (int i = 0; i < AllElement.Count; i++) {
+			if (AllElement[i].GetComponent<Element>().Color == ElementType.Empty) {
+				Vector3[] DicPos = new Vector3[posPre.Length];
+				for (int j = 0; j < posPre.Length; j++) {
+					DicPos[j] = AllElement[i].position + posPre[j];
+				}
+				Transform[] trans = ComPos(DicPos);
+				if (HasType(trans)) {
+					return true;
 				}
 			}
 		}
@@ -295,15 +293,11 @@ public class Window_Creat : MonoBehaviour {
 	private bool HasType(Transform[] trans) {
 		if (trans == null)
 			return false;
-		if (trans != null) {
-			for (int j = 0; j < trans.Length; j++) {
-				if (trans[j] == null)
-					return false;
-				if (trans[j] != null) {
-					if (trans[j].GetComponent<Element>().Color != ElementType.Empty)
-						return false;
-				}
-			}
+		for (int j = 0; j < trans.Length; j++) {
+			if (trans[j] == null)
+				return false;
+			if (trans[j].GetComponent<Element>().Color != ElementType.Empty)
+				return false;
 		}
 		return true;
 	}

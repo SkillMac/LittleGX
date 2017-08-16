@@ -57,12 +57,10 @@ public class TestDraw : MonoBehaviour {
 	public Vector3[] GetAbsPos() {
 		if (transform.childCount == 1)
 			return null;
-		else {
-			Vector3[] AbsPos = new Vector3[transform.childCount - 1];
-			for (int i = 1; i < transform.childCount; i++) {
-				AbsPos[i - 1] = (transform.GetChild(i).localPosition - transform.GetChild(0).localPosition);
-            }
-            return AbsPos;
-        }
-    }
+		Vector3[] AbsPos = new Vector3[transform.childCount - 1];
+		for (int i = 1; i < transform.childCount; i++) {
+			AbsPos[i - 1] = (transform.GetChild(i).localPosition - transform.GetChild(0).localPosition);
+		}
+		return AbsPos;
+	}
 }
