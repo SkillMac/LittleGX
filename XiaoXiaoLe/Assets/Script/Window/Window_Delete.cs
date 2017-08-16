@@ -7,7 +7,7 @@ public class Window_Delete : MonoBehaviour {
     public Window_Canvas m_canvas;
     public GameObject m_gold;//小金币
     public GameObject m_Sprite;
-	private List<Transform[]> m_AllDelete;
+	private List<Element[]> m_AllDelete;
 	private bool BeginDelete;
 	private Transform tf;
 	private float deleteTime = 0f;
@@ -40,15 +40,16 @@ public class Window_Delete : MonoBehaviour {
 		}
     }
 
-	private void Effect(Transform[] trans, GameObject obj) {
-        GetScoreWithNum(trans.Length, trans[trans.Length / 2].position, obj);
-        for (int i = 0; i < trans.Length; i++) {
-			trans[i].GetComponent<Element>().ResetColor();
-            if (trans[i].GetChild(1).gameObject.activeSelf) {
-                trans[i].GetChild(1).gameObject.SetActive(false);
+	private void Effect(Element[] element, GameObject obj) {
+        GetScoreWithNum(element.Length, element[element.Length / 2].position, obj);
+        for (int i = 0; i < element.Length; i++) {
+			element[i].ResetColor();
+			GameObject child = element[i].transform.GetChild(1).gameObject;
+			if (child.activeSelf) {
+				child.SetActive(false);
             }
-            trans[i].GetChild(1).gameObject.SetActive(true);
-            trans[i].GetChild(1).transform.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1.0f);
+			child.SetActive(true);
+			child.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1.0f);
         }
     }
 	
@@ -76,7 +77,7 @@ public class Window_Delete : MonoBehaviour {
 		}
     }
 
-	private void OnDelete(List<Transform[]> list) {
+	private void OnDelete(List<Element[]> list) {
 		m_AllDelete = Sort(list);
 		deleteTime = 0f;
 		BeginDelete = true;
@@ -124,7 +125,7 @@ public class Window_Delete : MonoBehaviour {
     }
 	
 	//创建小金币
-	private void CreatGold(Transform pos) {
+	private void CreatGold(Element pos) {
         GameObject obj = Instantiate(m_gold);
         obj.transform.position = pos.position;
     }

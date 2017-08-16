@@ -2,7 +2,7 @@
 
 public class Element : MonoBehaviour {
 	public ElementType m_type;
-	private Vector2 position;
+	private Vector2 vec2Pos;
 	private SpriteRenderer m_image;
 
 	void Awake() {
@@ -17,12 +17,18 @@ public class Element : MonoBehaviour {
 		return m_type == ElementType.Empty;
 	}
 	
-	public Vector2 GetPosition {
+	public Vector2 pos {
 		set {
-			position = value;
+			vec2Pos = value;
 		}
 		get {
-			return position;
+			return vec2Pos;
+		}
+	}
+
+	public Vector3 position {
+		get {
+			return transform.position;
 		}
 	}
 	

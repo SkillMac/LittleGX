@@ -7,38 +7,39 @@ public class Window_Creat : MonoBehaviour {
     public GameObject prefabBG;
     public GameObject m_Effect;
 	private static Window_Creat _instance;
-	private List<Transform> AllElement;//所有元素的集合
-	private List<Transform[]> m_AllDelete;
-	private Transform[,] ArraryEle;
+	private List<Element> AllElement;//所有元素的集合
+	private List<Element[]> m_AllDelete;
+	private Element[,] ArraryEle;
 	private int xDim, yDim;
-	private List<Transform> OldElement = new List<Transform>();
+	private List<Element> OldElement = new List<Element>();
 	private Transform[] old;
 
 	void Awake() {
 		_instance = this;
 		EventMgr.MouseUpEvent += OnMouseUp;
 		EventMgr.MouseDownEvent += OnMouseDown;
-		AllElement = new List<Transform>();
+		AllElement = new List<Element>();
     }
 	
     void Start() {
 		int[,] mapTab = ConfigMapsMgr.instance.GetMapsData();
 		xDim = mapTab.GetLength(0);
         yDim = mapTab.GetLength(1);
-        ArraryEle = new Transform[xDim, yDim];
+        ArraryEle = new Element[xDim, yDim];
         //根据列表实例化出来棋盘
         for (int x = 0; x < xDim; x++) {
             for (int y = 0; y < yDim; y++) {
                 if (mapTab[x, y] != 0) {
                     GameObject background = Instantiate(prefabBG, GetWorldPos(x, y), Quaternion.identity);
                     background.transform.parent = transform;
-					background.transform.GetComponent<Element>().ResetColor();
-                    background.GetComponent<Element>().GetPosition = new Vector2(x, y);
+					Element ele = background.GetComponent<Element>();
+					ele.ResetColor();
+					ele.pos = new Vector2(x, y);
                     GameObject effect = Instantiate(m_Effect, GetWorldPos(x, y), Quaternion.identity);
                     effect.transform.parent = background.transform;
                     effect.SetActive(false);
-					AllElement.Add(background.transform);
-					ArraryEle[x, y] = background.transform;
+					AllElement.Add(ele);
+					ArraryEle[x, y] = ele;
 				} else {
                     ArraryEle[x, y] = null;
                 }
@@ -47,14 +48,14 @@ public class Window_Creat : MonoBehaviour {
     }
 
 	//可以删除左边的列，返回可以删除的该行的元素
-	private bool CanDeletLeft(Transform target) {
+	private bool CanDeletLeft(Element target) {
         int i = 0;
-        Vector2 pos = target.GetComponent<Element>().GetPosition;
+        Vector2 pos = target.pos;
         for (int aa = 0; aa < xDim; aa++) {
             i = (int)(pos.y - pos.x) + aa;
             if (i >= 0 && i < yDim) {
                 if (ArraryEle[aa, i] != null) {
-					if (ArraryEle[aa, i].GetComponent<Element>().CheckIsEmpty())
+					if (ArraryEle[aa, i].CheckIsEmpty())
                         return false;
                 }
             }
@@ -63,14 +64,14 @@ public class Window_Creat : MonoBehaviour {
     }
 
 	//可以删除右边的列，返回可以删除的该行的元素
-	private bool CanDeletRight(Transform target) {
+	private bool CanDeletRight(Element target) {
         int i = 0;
-        Vector2 pos = target.GetComponent<Element>().GetPosition;
+        Vector2 pos = target.pos;
         for (int aa = 0; aa < xDim; aa++) {
             i = (int)(pos.y + pos.x) - aa;
             if (i >= 0 && i < yDim) {
                 if (ArraryEle[aa, i] != null) {
-					if (ArraryEle[aa, i].GetComponent<Element>().CheckIsEmpty())
+					if (ArraryEle[aa, i].CheckIsEmpty())
                         return false;
                 }
             }
@@ -79,11 +80,11 @@ public class Window_Creat : MonoBehaviour {
     }
 
 	//可以删除该行的列，返回可以删除的该行的元素
-	private bool CanDeletLine(Transform target) {
-        Vector2 pos = target.GetComponent<Element>().GetPosition;
+	private bool CanDeletLine(Element target) {
+        Vector2 pos = target.pos;
         for (int aa = 0; aa < yDim; aa++) {
             if (ArraryEle[(int)pos.x, aa] != null) {
-				if (ArraryEle[(int)pos.x, aa].GetComponent<Element>().CheckIsEmpty())
+				if (ArraryEle[(int)pos.x, aa].CheckIsEmpty())
                     return false;
             }
         }
@@ -91,16 +92,16 @@ public class Window_Creat : MonoBehaviour {
     }
 
 	//删除该行的列
-	private void DeleLine(Transform target) {
-        Vector2 pos = target.GetComponent<Element>().GetPosition;
-        List<Transform> CanDelete = new List<Transform>();
+	private void DeleLine(Element target) {
+        Vector2 pos = target.pos;
+        List<Element> CanDelete = new List<Element>();
         for (int aa = 0; aa < yDim; aa++) {
             if (ArraryEle[(int)pos.x, aa] != null) {
                 if(!CanDelete.Contains(ArraryEle[(int)pos.x, aa]))
                     CanDelete.Add(ArraryEle[(int)pos.x, aa]);
             }
         }
-        Transform[] tf = new Transform[CanDelete.Count];
+		Element[] tf = new Element[CanDelete.Count];
         for (int i = 0; i < tf.Length; i++) {
             tf[i] = CanDelete[i];
         }
@@ -110,10 +111,10 @@ public class Window_Creat : MonoBehaviour {
     }
 
 	//删除该行的列，把该行的元素改为空的
-	private void DeleLeft(Transform target) {
-        Vector2 pos = target.GetComponent<Element>().GetPosition;
+	private void DeleLeft(Element target) {
+        Vector2 pos = target.pos;
         int ii = 0;
-        List<Transform> CanDelete = new List<Transform>();
+        List<Element> CanDelete = new List<Element>();
         for (int aa = 0; aa < xDim; aa++) {
             ii = (int)(pos.y - pos.x) + aa;
             if (ii >= 0 && ii < yDim) {
@@ -123,7 +124,7 @@ public class Window_Creat : MonoBehaviour {
                 }
             }
         }
-        Transform[] tf = new Transform[CanDelete.Count];
+		Element[] tf = new Element[CanDelete.Count];
         for (int i = 0; i < tf.Length; i++) {
             tf[i] = CanDelete[i];
         }
@@ -133,10 +134,10 @@ public class Window_Creat : MonoBehaviour {
     }
 
 	//删除该行的列，把该行的元素改为空的
-	private void DeleRight(Transform target) {
-        Vector2 pos = target.GetComponent<Element>().GetPosition;
+	private void DeleRight(Element target) {
+        Vector2 pos = target.pos;
         int ii = 0;
-        List<Transform> CanDelete = new List<Transform>();
+        List<Element> CanDelete = new List<Element>();
         for (int aa = 0; aa < xDim; aa++) {
             ii = (int)(pos.y + pos.x) - aa;
             if (ii >= 0 && ii < yDim) {
@@ -146,7 +147,7 @@ public class Window_Creat : MonoBehaviour {
                 }
             }
         }
-        Transform[] tf = new Transform[CanDelete.Count];
+		Element[] tf = new Element[CanDelete.Count];
         for (int i = 0; i < tf.Length; i++) {
             tf[i] = CanDelete[i];
         }
@@ -155,7 +156,7 @@ public class Window_Creat : MonoBehaviour {
         }
     }
 
-	private bool HasArray(List<Transform[]> all,Transform[] tt) {
+	private bool HasArray(List<Element[]> all, Element[] tt) {
         if (all.Count == 0)
 			return false;
         for (int j = 0; j < all.Count; j++) {
@@ -166,7 +167,7 @@ public class Window_Creat : MonoBehaviour {
         return false;
     }
 
-	private bool IsEqu(Transform[]a, Transform[] b) {
+	private bool IsEqu(Element[]a, Element[] b) {
         if (a.Length != b.Length)
 			return false;
         if (a.Length == b.Length) {
@@ -191,13 +192,13 @@ public class Window_Creat : MonoBehaviour {
 			pos[i] = tran[i].position;
 		}
 		for (int i = 0; i < OldElement.Count; i++) {
-			OldElement[i].GetComponent<Element>().ResetColor();
+			OldElement[i].ResetColor();
 		}
-		Transform[] current = ComPos(pos);
+		Element[] current = ComPos(pos);
 		OldElement.Clear();
 		if (current != null && IsVer(current, currenttype)) {
 			for (int i = 0; i < current.Length; i++) {
-				current[i].GetComponent<Element>().colorType = currenttype + 1;
+				current[i].colorType = currenttype + 1;
 				old = tran;
 				OldElement.Add(current[i]);
 			}
@@ -210,7 +211,7 @@ public class Window_Creat : MonoBehaviour {
 		for (int i = 0; i < tran.Length; i++) {
 			poss[i] = tran[i].position;
 		}
-		Transform[] current = ComPos(poss);
+		Element[] current = ComPos(poss);
 		if (current == null || !IsVer(current, currenttype)) {
 			tran[0].parent.GetComponent<TestDraw>().ReturnStart();
 			OldElement.Clear();
@@ -219,11 +220,11 @@ public class Window_Creat : MonoBehaviour {
 		Destroy(tran[0].parent.gameObject);
 		EventMgr.MouseUpDelete(tran[0].parent);
 		EventMgr.MouseUpCreateByIndex();
-		m_AllDelete = new List<Transform[]>();
-		Transform[] tf = new Transform[OldElement.Count];
+		m_AllDelete = new List<Element[]>();
+		Element[] tf = new Element[OldElement.Count];
 		for (int i = 0; i < OldElement.Count; i++) {
-			Transform trans = OldElement[i];
-			trans.GetComponent<Element>().colorType -= 1;
+			Element trans = OldElement[i];
+			trans.colorType -= 1;
 			if (CanDeletLine(trans)) {
 				DeleLine(trans);
 			}
@@ -243,11 +244,11 @@ public class Window_Creat : MonoBehaviour {
 	}
     
     //判断是否可以放进去
-	private bool IsVer(Transform[] current, ElementType et) {
+	private bool IsVer(Element[] current, ElementType et) {
         for (int i = 0; i < current.Length; i++) {
             if (current[i] == null)
 				return false;
-			if (!current[i].GetComponent<Element>().CheckIsEmpty() && current[i].GetComponent<Element>().colorType != et + 1) {
+			if (!current[i].CheckIsEmpty() && current[i].colorType != et + 1) {
                 return false;
             }
         }
@@ -255,32 +256,29 @@ public class Window_Creat : MonoBehaviour {
     }
 
     //根据坐标获取当前的元素
-	private Transform[] ComPos(Vector3[] pos) {
-        Transform[] current = new Transform[pos.Length];
-        if (AllElement != null) {
-            for (int a = 0; a < pos.Length; a++) {
-                for (int i = 0; i < AllElement.Count; i++) {
-                    float offset = Math.Abs(Vector3.Distance(AllElement[i].position, pos[a]));
-                    if (offset < 0.25f) {
-                        current[a] = AllElement[i];
-                    }
-                }
-            }
-            return current;
-        }
-        return null;
+	private Element[] ComPos(Vector3[] pos) {
+		Element[] current = new Element[pos.Length];
+		for (int a = 0; a < pos.Length; a++) {
+			for (int i = 0; i < AllElement.Count; i++) {
+				float offset = Math.Abs(Vector3.Distance(AllElement[i].position, pos[a]));
+				if (offset < 0.25f) {
+					current[a] = AllElement[i];
+				}
+			}
+		}
+		return current;
     }
 
 	public bool CheckCanContinue(Vector3[] posPre) {
 		if (posPre == null)
 			return true;
 		for (int i = 0; i < AllElement.Count; i++) {
-			if (AllElement[i].GetComponent<Element>().CheckIsEmpty()) {
+			if (AllElement[i].CheckIsEmpty()) {
 				Vector3[] DicPos = new Vector3[posPre.Length];
 				for (int j = 0; j < posPre.Length; j++) {
 					DicPos[j] = AllElement[i].position + posPre[j];
 				}
-				Transform[] trans = ComPos(DicPos);
+				Element[] trans = ComPos(DicPos);
 				if (HasType(trans)) {
 					return true;
 				}
@@ -289,13 +287,13 @@ public class Window_Creat : MonoBehaviour {
 		return false;
 	}
 
-	private bool HasType(Transform[] trans) {
+	private bool HasType(Element[] trans) {
 		if (trans == null)
 			return false;
 		for (int j = 0; j < trans.Length; j++) {
 			if (trans[j] == null)
 				return false;
-			if (!trans[j].GetComponent<Element>().CheckIsEmpty())
+			if (!trans[j].CheckIsEmpty())
 				return false;
 		}
 		return true;
