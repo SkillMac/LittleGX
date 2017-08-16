@@ -32,7 +32,7 @@ public class Window_Creat : MonoBehaviour {
                 if (mapTab[x, y] != 0) {
                     GameObject background = Instantiate(prefabBG, GetWorldPos(x, y), Quaternion.identity);
                     background.transform.parent = transform;
-                    background.transform.GetComponent<Element>().Color = ElementType.Empty;
+					background.transform.GetComponent<Element>().ResetColor();
                     background.GetComponent<Element>().GetPosition = new Vector2(x, y);
                     GameObject effect = Instantiate(m_Effect, GetWorldPos(x, y), Quaternion.identity);
                     effect.transform.parent = background.transform;
@@ -54,7 +54,7 @@ public class Window_Creat : MonoBehaviour {
             i = (int)(pos.y - pos.x) + aa;
             if (i >= 0 && i < yDim) {
                 if (ArraryEle[aa, i] != null) {
-                    if (ArraryEle[aa, i].GetComponent<Element>().Color == ElementType.Empty)
+					if (ArraryEle[aa, i].GetComponent<Element>().CheckIsEmpty())
                         return false;
                 }
             }
@@ -70,7 +70,7 @@ public class Window_Creat : MonoBehaviour {
             i = (int)(pos.y + pos.x) - aa;
             if (i >= 0 && i < yDim) {
                 if (ArraryEle[aa, i] != null) {
-                    if (ArraryEle[aa, i].GetComponent<Element>().Color == ElementType.Empty)
+					if (ArraryEle[aa, i].GetComponent<Element>().CheckIsEmpty())
                         return false;
                 }
             }
@@ -83,7 +83,7 @@ public class Window_Creat : MonoBehaviour {
         Vector2 pos = target.GetComponent<Element>().GetPosition;
         for (int aa = 0; aa < yDim; aa++) {
             if (ArraryEle[(int)pos.x, aa] != null) {
-                if (ArraryEle[(int)pos.x, aa].GetComponent<Element>().Color == ElementType.Empty)
+				if (ArraryEle[(int)pos.x, aa].GetComponent<Element>().CheckIsEmpty())
                     return false;
             }
         }
@@ -186,18 +186,18 @@ public class Window_Creat : MonoBehaviour {
 		if (tran == null || tran == old)
 			return;
 		Vector3[] pos = new Vector3[tran.Length];
-		ElementType currenttype = tran[0].GetComponent<Element>().Color;
+		ElementType currenttype = tran[0].GetComponent<Element>().colorType;
 		for (int i = 0; i < tran.Length; i++) {
 			pos[i] = tran[i].position;
 		}
 		for (int i = 0; i < OldElement.Count; i++) {
-			OldElement[i].GetComponent<Element>().Color = ElementType.Empty;
+			OldElement[i].GetComponent<Element>().ResetColor();
 		}
 		Transform[] current = ComPos(pos);
 		OldElement.Clear();
 		if (current != null && IsVer(current, currenttype)) {
 			for (int i = 0; i < current.Length; i++) {
-				current[i].GetComponent<Element>().Color = currenttype + 1;
+				current[i].GetComponent<Element>().colorType = currenttype + 1;
 				old = tran;
 				OldElement.Add(current[i]);
 			}
@@ -205,8 +205,7 @@ public class Window_Creat : MonoBehaviour {
 	}
 
 	private void OnMouseUp(Transform[] tran) {
-		ElementType currenttype;
-		currenttype = tran[0].GetComponent<Element>().Color;
+		ElementType currenttype = tran[0].GetComponent<Element>().colorType;
 		Vector3[] poss = new Vector3[tran.Length];
 		for (int i = 0; i < tran.Length; i++) {
 			poss[i] = tran[i].position;
@@ -224,7 +223,7 @@ public class Window_Creat : MonoBehaviour {
 		Transform[] tf = new Transform[OldElement.Count];
 		for (int i = 0; i < OldElement.Count; i++) {
 			Transform trans = OldElement[i];
-			trans.GetComponent<Element>().Color -= 1;
+			trans.GetComponent<Element>().colorType -= 1;
 			if (CanDeletLine(trans)) {
 				DeleLine(trans);
 			}
@@ -248,7 +247,7 @@ public class Window_Creat : MonoBehaviour {
         for (int i = 0; i < current.Length; i++) {
             if (current[i] == null)
 				return false;
-            if (current[i].GetComponent<Element>().Color > ElementType.Empty && current[i].GetComponent<Element>().Color != et + 1) {
+			if (!current[i].GetComponent<Element>().CheckIsEmpty() && current[i].GetComponent<Element>().colorType != et + 1) {
                 return false;
             }
         }
@@ -276,7 +275,7 @@ public class Window_Creat : MonoBehaviour {
 		if (posPre == null)
 			return true;
 		for (int i = 0; i < AllElement.Count; i++) {
-			if (AllElement[i].GetComponent<Element>().Color == ElementType.Empty) {
+			if (AllElement[i].GetComponent<Element>().CheckIsEmpty()) {
 				Vector3[] DicPos = new Vector3[posPre.Length];
 				for (int j = 0; j < posPre.Length; j++) {
 					DicPos[j] = AllElement[i].position + posPre[j];
@@ -296,7 +295,7 @@ public class Window_Creat : MonoBehaviour {
 		for (int j = 0; j < trans.Length; j++) {
 			if (trans[j] == null)
 				return false;
-			if (trans[j].GetComponent<Element>().Color != ElementType.Empty)
+			if (!trans[j].GetComponent<Element>().CheckIsEmpty())
 				return false;
 		}
 		return true;

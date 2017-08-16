@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Element : MonoBehaviour {
 	public ElementType m_type;
@@ -9,6 +8,14 @@ public class Element : MonoBehaviour {
 	void Awake() {
         m_image = transform.GetComponentInChildren<SpriteRenderer>();
     }
+
+	public void ResetColor() {
+		colorType = ElementType.Empty;
+	}
+
+	public bool CheckIsEmpty() {
+		return m_type == ElementType.Empty;
+	}
 	
 	public Vector2 GetPosition {
 		set {
@@ -19,7 +26,7 @@ public class Element : MonoBehaviour {
 		}
 	}
 	
-	public ElementType Color {
+	public ElementType colorType {
 		get {
 			return m_type;
 		}
@@ -44,8 +51,5 @@ public enum ElementType {
     yellow,
     Darkyellow,
     yy,
-    Darkyy,
-    
-    white =100,
-    Wait = 200,
+	Darkyy
 }

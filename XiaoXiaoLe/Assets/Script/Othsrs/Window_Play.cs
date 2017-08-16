@@ -19,7 +19,7 @@ public class Window_Play : MonoBehaviour {
 
 	void Start() {
 		for (int i = 0; i < AllElement.Count; i++) {
-			AllElement[i].GetComponent<Element>().Color = ElementType.Empty;
+			AllElement[i].GetComponent<Element>().ResetColor();
 		}
 	}
 
@@ -27,21 +27,20 @@ public class Window_Play : MonoBehaviour {
 		if (tran == null || tran == old)
 			return;
 		Vector3[] pos = new Vector3[tran.Length];
-		ElementType currenttype;
-		currenttype = tran[0].GetComponent<Element>().Color;
+		ElementType currenttype = tran[0].GetComponent<Element>().colorType;
 		for (int i = 0; i < tran.Length; i++) {
 			pos[i] = tran[i].position;
 		}
 		for (int i = 0; i < OldElement.Count; i++) {
 			if (OldElement.Count == 0)
 				return;
-			OldElement[i].GetComponent<Element>().Color = ElementType.Empty;
+			OldElement[i].GetComponent<Element>().ResetColor();
 		}
 		Transform[] current = ComPos(pos);
 		if (current != null && IsVer(current)) {
 			OldElement.Clear();
 			for (int i = 0; i < current.Length; i++) {
-				current[i].GetComponent<Element>().Color = currenttype;
+				current[i].GetComponent<Element>().colorType = currenttype;
 				old = tran;
 				OldElement.Add(current[i]);
 			}
@@ -63,7 +62,7 @@ public class Window_Play : MonoBehaviour {
 		for (int i = 0; i < current.Length; i++) {
 			if (current[i] == null)
 				return false;
-			if ((current[i].GetComponent<Element>().Color != ElementType.Empty) && OldElement.Contains(current[i])) {
+			if (!current[i].GetComponent<Element>().CheckIsEmpty() && OldElement.Contains(current[i])) {
                 return false;
             }
         }

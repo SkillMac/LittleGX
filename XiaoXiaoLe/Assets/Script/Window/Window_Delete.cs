@@ -43,7 +43,7 @@ public class Window_Delete : MonoBehaviour {
 	private void Effect(Transform[] trans, GameObject obj) {
         GetScoreWithNum(trans.Length, trans[trans.Length / 2].position, obj);
         for (int i = 0; i < trans.Length; i++) {
-            trans[i].GetComponent<Element>().Color = ElementType.Empty;
+			trans[i].GetComponent<Element>().ResetColor();
             if (trans[i].GetChild(1).gameObject.activeSelf) {
                 trans[i].GetChild(1).gameObject.SetActive(false);
             }
