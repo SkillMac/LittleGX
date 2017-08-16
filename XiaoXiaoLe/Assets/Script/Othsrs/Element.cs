@@ -1,99 +1,59 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using System;
-using UnityEngine.UI;
 
-public class Element : MonoBehaviour,IPointerClickHandler {
+public class Element : MonoBehaviour {
     
     [System.Serializable]
-    public struct Elemen
-    {
+	public struct Elemen {
         public ElementType type;
-        public Sprite  image;
+		public Sprite image;
     }
+
     //所有的元素
     public Elemen[] AllElement;
+	public ElementType m_type;
+	private Vector2 position;
+	private SpriteRenderer m_image;
+	private Dictionary<ElementType, Sprite> elementDic;
 
-    private Vector2 position;
-
-    public Vector2 GetPosition
-    {
-        set
-        {
-            position = value;
-        }
-        get
-        {
-            return position;
-        }
-    }
-
-    //返回当前所有元素的个数
-    public int NumEle
-    {
-        get
-        {
-            return AllElement.Length;
-        }
-    }
-
-    private SpriteRenderer m_image;
-    public ElementType m_type;
-
-    private Dictionary<ElementType, Sprite> elementDic;
-
-    public ElementType Color
-    {
-        get { return m_type; }
-        set { SetType(value); }
-    }
-
-    private void Awake()
-    {
+	void Awake() {
         m_image = transform.GetComponentInChildren<SpriteRenderer>();
-
         elementDic = new Dictionary<ElementType, Sprite>();
-
-        for(int i =0;i< NumEle;i++)
-        {
-            if(!elementDic.ContainsKey(AllElement[i].type))
-            {
+		for (int i = 0; i < AllElement.Length; i++) {
+			if (!elementDic.ContainsKey(AllElement[i].type)) {
                 elementDic.Add(AllElement[i].type, AllElement[i].image);
             }
         }
-        
     }
-    // Use this for initialization
-    void Start () {
 
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
-
-
-    public void SetType(ElementType newType)
-    {
+	private void SetType(ElementType newType) {
         m_type = newType;
-
-        if (elementDic.ContainsKey(newType))
-        {
+		if (elementDic.ContainsKey(newType)) {
             m_image.sprite = elementDic[newType];
         }
     }
-
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        Debug.Log(eventData.pointerEnter.name);
-    }
+	
+	public Vector2 GetPosition {
+		set {
+			position = value;
+		}
+		get {
+			return position;
+		}
+	}
+	
+	public ElementType Color {
+		get {
+			return m_type;
+		}
+		set {
+			SetType(value);
+		}
+	}
 }
+
 //元素的颜色类型
-public enum ElementType
-{
+public enum ElementType {
     Empty,
     Green,
     DarkGreen,
