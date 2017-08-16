@@ -2,35 +2,12 @@
 using UnityEngine;
 
 public class Element : MonoBehaviour {
-    
-    [System.Serializable]
-	public struct Elemen {
-        public ElementType type;
-		public Sprite image;
-    }
-
-    //所有的元素
-    public Elemen[] AllElement;
 	public ElementType m_type;
 	private Vector2 position;
 	private SpriteRenderer m_image;
-	private Dictionary<ElementType, Sprite> elementDic;
 
 	void Awake() {
         m_image = transform.GetComponentInChildren<SpriteRenderer>();
-        elementDic = new Dictionary<ElementType, Sprite>();
-		for (int i = 0; i < AllElement.Length; i++) {
-			if (!elementDic.ContainsKey(AllElement[i].type)) {
-                elementDic.Add(AllElement[i].type, AllElement[i].image);
-            }
-        }
-    }
-
-	private void SetType(ElementType newType) {
-        m_type = newType;
-		if (elementDic.ContainsKey(newType)) {
-            m_image.sprite = elementDic[newType];
-        }
     }
 	
 	public Vector2 GetPosition {
@@ -47,7 +24,8 @@ public class Element : MonoBehaviour {
 			return m_type;
 		}
 		set {
-			SetType(value);
+			m_type = value;
+			m_image.sprite = HummerRes.LoadElementSprite((int)m_type);
 		}
 	}
 }
