@@ -146,7 +146,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 21215582}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.4, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -586,7 +586,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b950c2d04eee80d499964870a4a2f3b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  index: 0
   Allprefabs:
   - type: 0
     prefab: {fileID: 1286852800321368, guid: e3d528b907420e7498250dcad0b7abb7, type: 2}
@@ -638,12 +637,11 @@ MonoBehaviour:
     prefab: {fileID: 1828171655811008, guid: 419008c9683d074459f18fd7410f9a78, type: 2}
   - type: 24
     prefab: {fileID: 1430890957931064, guid: 68a208af903fc384b8ef306a5264922a, type: 2}
-  type: 0
   Roots:
-  - {x: -2.4, y: -5.2, z: 0}
-  - {x: 0, y: -5.2, z: 0}
-  - {x: 2.4, y: -5.2, z: 0}
-  - {x: 6, y: -5.2, z: 0}
+  - {x: -2.4, y: -4, z: 0}
+  - {x: 0, y: -4, z: 0}
+  - {x: 2.4, y: -4, z: 0}
+  - {x: 6, y: -4, z: 0}
   offsetY: 0.1
   window_gv: {fileID: 842222417}
 --- !u!1 &583385906
