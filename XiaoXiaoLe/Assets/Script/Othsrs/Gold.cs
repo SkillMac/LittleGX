@@ -1,109 +1,73 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Gold : MonoBehaviour {
-
     public Transform sun;
     public Transform gold;
-
     public float yoffset;
-
-    public bool IsMoved;
-    private bool canmove;
-
-    public float speed;
-
     public Vector3 target;
-
-    private Vector3 MousePos;
-
-    int count;
-
-    public int startAni;//开始闪烁的时间
-    public int Disable;//物体消失的时间
-
-    float timer;
-    Vector3 firstPos;
-    Animator ani;
-
-    // Use this for initialization
-    void Start () {
-
+	public int startAni;//开始闪烁的时间
+	public int Disable;//物体消失的时间
+	private bool IsMoved = false;
+	private float speed;
+	private bool canmove = false;
+	private Vector3 MousePos;
+	private int count;
+	private float timer;
+	private Vector3 firstPos;
+	private Animator ani;
+	
+	void Start() {
         ani = GetComponent<Animator>();
         speed = 5.0f;
-        firstPos = new Vector3(transform.position.x, yoffset, 0);
+		firstPos = new Vector3(transform.position.x, yoffset, 0);
     }
 	
-	// Update is called once per frame
-	void Update () {
-
-        if(!canmove)
-        {
+	void Update() {
+		if (!canmove) {
             MoveToPos(firstPos);
         }
-       
-        if(transform.position == firstPos)
-        {
+		if (transform.position == firstPos) {
             waittime();
-            if(startAni == 0)
-            {
+			if (startAni == 0) {
                 ani.SetBool("BeginAni", true);
             }
-            if(Disable == 0)
-            {
+			if (Disable == 0) {
                 Destroy(gameObject);
             }
         }
-
-        if(IsMoved)
-        {
+		if (IsMoved) {
             sun.gameObject.SetActive(false);
             ani.SetBool("BeginAni", false);
             canmove = true;
-
             MoveToPos(target);
         }
-
-        if(transform.position == target)
-        {
-            if(count == 0)
-            {
+		if (transform.position == target) {
+			if (count == 0) {
 				EventMgr.AddGold();
             }
             count++;
-
             ani.SetTrigger("IsColor");
-
             Destroy(gameObject, 0.2f);
         }
-
-        if (Input.GetMouseButtonDown(0))
-        {
+		if (Input.GetMouseButtonDown(0)) {
             MousePos = (Input.mousePosition - new Vector3(Screen.width / 2.0f, Screen.height / 2.0f, 0)) / 100.0f;
-            
-            if (Mathf.Abs(Vector3.Distance(transform.position, MousePos)) < 1.0f)
-            {
+			if (Mathf.Abs(Vector3.Distance(transform.position, MousePos)) < 1.0f) {
                 IsMoved = true;
 				EventMgr.AddScore(transform.position);
 			}
         }
     }
 
-    void MoveToPos(Vector3 pos)
-    {
+	void MoveToPos(Vector3 pos) {
         transform.position = Vector3.MoveTowards(transform.position, pos, speed * Time.deltaTime);
     }
 
 
-    void waittime()
-    {
-        if(Time.realtimeSinceStartup - timer >1.0f)
-        {
+	void waittime() {
+		if(Time.realtimeSinceStartup - timer > 1.0f) {
             timer = Time.realtimeSinceStartup;
             startAni--;
             Disable--;
         }
     }
-
 }
