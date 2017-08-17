@@ -77,8 +77,19 @@ public class Window_Delete : MonoBehaviour {
 		}
     }
 
+	private int SortDelList(Element[] arrA, Element[] arrB) {
+		if (arrA.Length > arrB.Length) {
+			return -1;
+		}
+		if (arrA.Length < arrB.Length) {
+			return 1;
+		}
+		return 0;
+	}
+
 	private void OnDelete(List<Element[]> list) {
-		m_AllDelete = Sort(list);
+		list.Sort(SortDelList);
+		m_AllDelete = list;
 		deleteTime = 0f;
 		BeginDelete = true;
 		rewardIndex = 0;
@@ -92,24 +103,7 @@ public class Window_Delete : MonoBehaviour {
         m_Sprite.SetActive(true);
         m_Sprite.transform.GetComponent<Disapper>().Enable(dx);
     }
-
-	//按照元素长度升序排列冒泡排序
-	private List<T[]> Sort<T>(List<T[]> temp) {
-        if (temp.Count <= 1)
-			return temp;
-        for (int i = 0; i < temp.Count; i++) {
-            for (int j = 0; j < temp.Count - i - 1; j++) {
-                if (temp[j].Length > temp[j + 1].Length) {
-                    T[] tp = new T[temp[j].Length];
-                    tp = temp[j];
-                    temp[j] = temp[j + 1];
-                    temp[j + 1] = tp;
-                }
-            }
-        }
-        return temp;
-    }
-
+	
 	//根据消除数量获得分数并且获取当前分数的Sprite
 	private void GetScoreWithNum(int num, Vector3 pos, GameObject obj) {
         if (obj == null)
