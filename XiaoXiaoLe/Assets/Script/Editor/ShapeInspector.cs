@@ -101,8 +101,8 @@ public class ShapeInspector : Editor {
 				bottom = pos.y;
 			}
 		}
-		float posX = ((right - left) * 0.5f + left) * 0.3f;
-		float posY = ((bottom - top) * 0.5f + top) * 0.5f;
+		float posX = ((right - left) * 0.5f + left) * Element.ELEMENT_WIDTH / 2;
+		float posY = ((bottom - top) * 0.5f + top) * Element.ELEMENT_HEIGHT;
 		Vector3 vec3Pos = new Vector3(-posX, posY);
 		return vec3Pos;
 	}

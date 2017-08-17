@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 
 public class Element : MonoBehaviour {
+	public const float ELEMENT_WIDTH = 0.6f;
+	public const float ELEMENT_HEIGHT = 0.5f;
 	public ElementType m_type;
 	private Pos2Int vec2Pos;
 	private SpriteRenderer m_image;
@@ -13,23 +15,17 @@ public class Element : MonoBehaviour {
 
 	public void Init(int row, int col, ElementType color) {
 		m_image = transform.GetComponentInChildren<SpriteRenderer>();
-		float offset = 0f;
-		if (row % 2 == 0) {
-			offset = 0.3f;
-		}
 		m_row = row;
 		m_col = col;
-		Vector3 vec3Pos = new Vector3(col * 0.6f + offset, -row * 0.5f);
-		transform.localPosition = vec3Pos;
-		colorType = color;
+		ResetPosition(Vector3.zero);
 	}
 
 	public void ResetPosition(Vector3 offsetPos) {
 		float offset = 0f;
 		if (m_row % 2 == 0) {
-			offset = 0.3f;
+			offset = ELEMENT_WIDTH / 2;
 		}
-		Vector3 vec3Pos = new Vector3(m_col * 0.6f + offset, -m_row * 0.5f) + offsetPos;
+		Vector3 vec3Pos = new Vector3(m_col * ELEMENT_WIDTH + offset, -m_row * ELEMENT_HEIGHT) + offsetPos;
 		transform.localPosition = vec3Pos;
 	}
 
