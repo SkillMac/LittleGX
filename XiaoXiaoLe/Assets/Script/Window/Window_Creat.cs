@@ -8,7 +8,7 @@ public class Window_Creat : MonoBehaviour {
     public GameObject m_Effect;
 	private static Window_Creat _instance;
 	private List<Element> m_lstBackElement;//所有元素的集合
-	private List<Element[]> m_lstDelLine;
+	private List<List<Element>> m_lstDelLine;
 	private Element[,] m_arrElement;
 	private int m_xDim, m_yDim;
 	private List<Element> m_lstOldElement = new List<Element>();
@@ -120,11 +120,7 @@ public class Window_Creat : MonoBehaviour {
 				CanDelete.Add(element);
             }
         }
-		Element[] tf = new Element[CanDelete.Count];
-        for (int i = 0; i < tf.Length; i++) {
-            tf[i] = CanDelete[i];
-        }
-		m_lstDelLine.Add(tf);
+		m_lstDelLine.Add(CanDelete);
 	}
 
 	//删除该行的列，把该行的元素改为空的
@@ -142,11 +138,7 @@ public class Window_Creat : MonoBehaviour {
                 }
             }
         }
-		Element[] tf = new Element[CanDelete.Count];
-        for (int i = 0; i < tf.Length; i++) {
-            tf[i] = CanDelete[i];
-        }
-		m_lstDelLine.Add(tf);
+		m_lstDelLine.Add(CanDelete);
 	}
 
 	//删除该行的列，把该行的元素改为空的
@@ -164,11 +156,7 @@ public class Window_Creat : MonoBehaviour {
 				}
             }
         }
-		Element[] tf = new Element[CanDelete.Count];
-        for (int i = 0; i < tf.Length; i++) {
-            tf[i] = CanDelete[i];
-        }
-		m_lstDelLine.Add(tf);
+		m_lstDelLine.Add(CanDelete);
 	}
 	
     private Vector2 GetWorldPos(int x, int y) {
@@ -212,8 +200,8 @@ public class Window_Creat : MonoBehaviour {
 		Destroy(tran[0].parent.gameObject);
 		EventMgr.MouseUpDelete(tran[0].parent);
 		EventMgr.MouseUpCreateByIndex();
-		m_lstDelLine = new List<Element[]>();
-		Element[] tf = new Element[m_lstOldElement.Count];
+		m_lstDelLine = new List<List<Element>>();
+		List<Element> tf = new List<Element>();
 		for (int i = 0; i < m_lstOldElement.Count; i++) {
 			Element trans = m_lstOldElement[i];
 			trans.colorType -= 1;
@@ -226,7 +214,7 @@ public class Window_Creat : MonoBehaviour {
 			if (CanDeletRight(trans)) {
 				DeleRight(trans);
 			}
-			tf[i] = trans;
+			tf.Add(trans);
 		}
 		if (m_lstDelLine.Count == 0) {
 			m_lstDelLine.Add(tf);
