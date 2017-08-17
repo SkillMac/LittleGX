@@ -1,4 +1,6 @@
-﻿
+﻿using System;
+
+[Serializable]
 public struct Pos2Int {
 	private int _x;
 	private int _y;

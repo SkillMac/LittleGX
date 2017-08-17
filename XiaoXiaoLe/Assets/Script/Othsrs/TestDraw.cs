@@ -1,21 +1,35 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
 
 public class TestDraw : MonoBehaviour {
     public Vector3 startpos;
     public Vector3 m_Scale;
-    public PrefabsType typp;
-	
+
+	[Serializable]
+	public struct Row {
+		public bool[] arr;
+	}
+	public Row[] _arrShapeMap;
+	public ElementType _elementType;
+
+	public List<Pos2Int> m_lstChildPos = new List<Pos2Int>();
+
 	void Start(){
         m_Scale = transform.localScale;
         startpos = transform.position;
     }
 
+	private void InitShap() {
+
+	}
+
 	void Update() {
 		if (Input.GetMouseButton(0)) {
             Vector3 offset = new Vector3(0, 1.0f, 0);
-            transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+			transform.localScale = Vector3.one;
 			for (int i = 0; i < transform.childCount; i++) {
-                transform.GetChild(i).localScale = new Vector3(1.0f, 1.0f, 1.0f) * 0.12f;
+                transform.GetChild(i).localScale = Vector3.one * 0.12f;
             }
             transform.position = (Input.mousePosition - new Vector3(Screen.width / 2.0f, Screen.height / 2.0f, 0)) / 100.0f + offset;
 			EventMgr.MouseDown(GetChilds());
