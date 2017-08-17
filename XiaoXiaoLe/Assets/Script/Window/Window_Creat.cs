@@ -46,117 +46,83 @@ public class Window_Creat : MonoBehaviour {
             }
         }
     }
-
-	//可以删除左边的列，返回可以删除的该行的元素
-	private bool CanDeletLeft(Element target) {
+	
+	private void TryDelLeft(Element target) {
 		bool bFlag = false;
         int i = 0;
 		Pos2Int pos = target.pos;
-        for (int aa = 0; aa < m_xDim; aa++) {
+		List<Element> lstDelElement = new List<Element>();
+		for (int aa = 0; aa < m_xDim; aa++) {
             i = pos.y - pos.x + aa;
             if (i >= 0 && i < m_yDim) {
 				Element element = m_arrElement[aa, i];
 				if (element != null) {
 					if (element.CheckIsEmpty()) {
-						return false;
+						return;
 					}
+					lstDelElement.Add(element);
 					if (!element.IsInDeleteList()) {
 						bFlag = true;
 					}
                 }
             }
         }
-        return bFlag;
+		if (bFlag) {
+			AddToDelList(lstDelElement);
+		}
     }
-
-	//可以删除右边的列，返回可以删除的该行的元素
-	private bool CanDeletRight(Element target) {
+	
+	private void TryDelRight(Element target) {
 		bool bFlag = false;
 		int i = 0;
 		Pos2Int pos = target.pos;
-        for (int aa = 0; aa < m_xDim; aa++) {
+		List<Element> lstDelElement = new List<Element>();
+		for (int aa = 0; aa < m_xDim; aa++) {
             i = pos.y + pos.x - aa;
             if (i >= 0 && i < m_yDim) {
 				Element element = m_arrElement[aa, i];
 				if (element != null) {
 					if (element.CheckIsEmpty()) {
-						return false;
+						return;
 					}
+					lstDelElement.Add(element);
 					if (!element.IsInDeleteList()) {
 						bFlag = true;
 					}
 				}
             }
         }
-        return bFlag;
+		if (bFlag) {
+			AddToDelList(lstDelElement);
+		}
     }
-
-	//可以删除该行的列，返回可以删除的该行的元素
-	private bool CanDeletLine(Element target) {
+	
+	private void TryDelCenter(Element target) {
 		bool bFlag = false;
 		Pos2Int pos = target.pos;
-        for (int aa = 0; aa < m_yDim; aa++) {
+		List<Element> listDelElement = new List<Element>();
+		for (int aa = 0; aa < m_yDim; aa++) {
 			Element element = m_arrElement[pos.x, aa];
 			if (element != null) {
 				if (element.CheckIsEmpty()) {
-					return false;
+					return;
 				}
+				listDelElement.Add(element);
 				if (!element.IsInDeleteList()) {
 					bFlag = true;
 				}
 			}
         }
-        return bFlag;
+		if (bFlag) {
+			AddToDelList(listDelElement);
+		}
     }
 
-	//删除该行的列
-	private void DeleLine(Element target) {
-		Pos2Int pos = target.pos;
-        List<Element> CanDelete = new List<Element>();
-        for (int aa = 0; aa < m_yDim; aa++) {
-			Element element = m_arrElement[pos.x, aa];
-			if (element != null) {
-				element.SetInDeleteList();
-				CanDelete.Add(element);
-            }
-        }
-		m_lstDelLine.Add(CanDelete);
-	}
-
-	//删除该行的列，把该行的元素改为空的
-	private void DeleLeft(Element target) {
-		Pos2Int pos = target.pos;
-        int ii = 0;
-        List<Element> CanDelete = new List<Element>();
-        for (int aa = 0; aa < m_xDim; aa++) {
-            ii = pos.y - pos.x + aa;
-            if (ii >= 0 && ii < m_yDim) {
-				Element element = m_arrElement[aa, ii];
-				if (element != null) {
-					element.SetInDeleteList();
-					CanDelete.Add(element);
-                }
-            }
-        }
-		m_lstDelLine.Add(CanDelete);
-	}
-
-	//删除该行的列，把该行的元素改为空的
-	private void DeleRight(Element target) {
-		Pos2Int pos = target.pos;
-        int ii = 0;
-        List<Element> CanDelete = new List<Element>();
-        for (int aa = 0; aa < m_xDim; aa++) {
-            ii = pos.y + pos.x - aa;
-            if (ii >= 0 && ii < m_yDim) {
-				Element element = m_arrElement[aa, ii];
-				if (element != null) {
-					element.SetInDeleteList();
-					CanDelete.Add(m_arrElement[aa, ii]);
-				}
-            }
-        }
-		m_lstDelLine.Add(CanDelete);
+	private void AddToDelList(List<Element> listDelElement) {
+		for (int i = 0; i < listDelElement.Count; i++) {
+			listDelElement[i].SetInDeleteList();
+		}
+		m_lstDelLine.Add(listDelElement);
 	}
 	
     private Vector2 GetWorldPos(int x, int y) {
@@ -205,15 +171,9 @@ public class Window_Creat : MonoBehaviour {
 		for (int i = 0; i < m_lstOldElement.Count; i++) {
 			Element trans = m_lstOldElement[i];
 			trans.colorType -= 1;
-			if (CanDeletLine(trans)) {
-				DeleLine(trans);
-			}
-			if (CanDeletLeft(trans)) {
-				DeleLeft(trans);
-			}
-			if (CanDeletRight(trans)) {
-				DeleRight(trans);
-			}
+			TryDelCenter(trans);
+			TryDelLeft(trans);
+			TryDelRight(trans);
 			tf.Add(trans);
 		}
 		if (m_lstDelLine.Count == 0) {
