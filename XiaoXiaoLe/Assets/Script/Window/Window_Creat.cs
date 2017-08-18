@@ -11,7 +11,8 @@ public class Window_Creat : MonoBehaviour {
 	private List<Element> m_lstBackElement;//所有元素的集合
 	private List<List<Element>> m_lstDelLine;
 	private Element[,] m_arrElement;
-	private int m_rowCount, m_colCount;
+	private int m_rowCount;
+	private int m_colCount;
 	private List<Element> m_lstOldElement = new List<Element>();
 	private Transform[] m_old;
 
@@ -63,7 +64,7 @@ public class Window_Creat : MonoBehaviour {
 						return;
 					}
 					lstDelElement.Add(element);
-					if (!element.IsInDeleteList()) {
+					if (!element.isInDeleteList) {
 						bFlag = true;
 					}
                 }
@@ -87,7 +88,7 @@ public class Window_Creat : MonoBehaviour {
 						return;
 					}
 					lstDelElement.Add(element);
-					if (!element.IsInDeleteList()) {
+					if (!element.isInDeleteList) {
 						bFlag = true;
 					}
 				}
@@ -109,7 +110,7 @@ public class Window_Creat : MonoBehaviour {
 					return;
 				}
 				listDelElement.Add(element);
-				if (!element.IsInDeleteList()) {
+				if (!element.isInDeleteList) {
 					bFlag = true;
 				}
 			}
@@ -144,9 +145,9 @@ public class Window_Creat : MonoBehaviour {
 		}
 		Element[] current = ComPos(pos);
 		m_lstOldElement.Clear();
-		if (current != null && IsVer(current, currenttype)) {
+		if (current != null && CanPut(current)) {
 			for (int i = 0; i < current.Length; i++) {
-				current[i].colorType = currenttype + 1;
+				current[i].SetDarkColor(currenttype);
 				m_old = tran;
 				m_lstOldElement.Add(current[i]);
 			}
@@ -154,13 +155,12 @@ public class Window_Creat : MonoBehaviour {
 	}
 
 	private void OnMouseUp(Transform[] tran) {
-		ElementType currenttype = tran[0].GetComponent<Element>().colorType;
 		Vector3[] poss = new Vector3[tran.Length];
 		for (int i = 0; i < tran.Length; i++) {
 			poss[i] = tran[i].position;
 		}
 		Element[] current = ComPos(poss);
-		if (current == null || !IsVer(current, currenttype)) {
+		if (current == null || !CanPut(current)) {
 			tran[0].parent.GetComponent<TestDraw>().ReturnStart();
 			m_lstOldElement.Clear();
 			return;
@@ -171,12 +171,12 @@ public class Window_Creat : MonoBehaviour {
 		m_lstDelLine = new List<List<Element>>();
 		List<Element> tf = new List<Element>();
 		for (int i = 0; i < m_lstOldElement.Count; i++) {
-			Element trans = m_lstOldElement[i];
-			trans.colorType -= 1;
-			TryDelCenter(trans);
-			TryDelLeft(trans);
-			TryDelRight(trans);
-			tf.Add(trans);
+			Element element = m_lstOldElement[i];
+			element.ApplyColor();
+			TryDelCenter(element);
+			TryDelLeft(element);
+			TryDelRight(element);
+			tf.Add(element);
 		}
 		if (m_lstDelLine.Count == 0) {
 			m_lstDelLine.Add(tf);
@@ -185,20 +185,16 @@ public class Window_Creat : MonoBehaviour {
 		m_lstOldElement.Clear();
 	}
     
-    //判断是否可以放进去
-	private bool IsVer(Element[] current, ElementType et) {
-        for (int i = 0; i < current.Length; i++) {
-            if (current[i] == null) {
-				return false;
-			}
-			if (!current[i].CheckIsEmpty() && current[i].colorType != et + 1) {
+	private bool CanPut(Element[] arrElement) {
+        for (int i = 0; i < arrElement.Length; i++) {
+			if (!arrElement[i].CheckIsEmpty()) {
                 return false;
             }
         }
         return true;
     }
-
-    //根据坐标获取当前的元素
+	
+	//根据坐标获取当前的元素
 	private Element[] ComPos(Vector3[] pos) {
 		Element[] current = new Element[pos.Length];
 		for (int a = 0; a < pos.Length; a++) {
@@ -208,6 +204,9 @@ public class Window_Creat : MonoBehaviour {
 					current[a] = m_lstBackElement[i];
 					break;
 				}
+			}
+			if (current[a] == null) {
+				return null;
 			}
 		}
 		return current;
@@ -223,21 +222,15 @@ public class Window_Creat : MonoBehaviour {
 					DicPos[j] = m_lstBackElement[i].position + posPre[j];
 				}
 				Element[] trans = ComPos(DicPos);
-				if (HasType(trans)) {
+				if (trans == null) {
+					return false;
+				}
+				if (CanPut(trans)) {
 					return true;
 				}
 			}
 		}
 		return false;
-	}
-
-	private bool HasType(Element[] trans) {
-		for (int j = 0; j < trans.Length; j++) {
-			if (trans[j] == null || !trans[j].CheckIsEmpty()) {
-				return false;
-			}
-		}
-		return true;
 	}
 
 	void OnDestroy() {

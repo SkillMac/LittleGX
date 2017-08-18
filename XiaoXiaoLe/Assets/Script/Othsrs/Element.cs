@@ -3,11 +3,14 @@
 public class Element : MonoBehaviour {
 	public const float ELEMENT_WIDTH = 0.6f;
 	public const float ELEMENT_HEIGHT = 0.5f;
-	public ElementType m_type;
-	private Pos2Int vec2Pos;
+	[SerializeField]
+	private ElementType m_type;
+	private Pos2Int m_pos;
 	private SpriteRenderer m_image;
-	private bool isInDeleteList = false;
-	private int m_row, m_col;
+	private bool m_isInDeleteList = false;
+	private int m_row;
+	private int m_col;
+	private bool m_isEmpty = true;
 
 	void Awake() {
         m_image = transform.GetComponentInChildren<SpriteRenderer>();
@@ -31,27 +34,39 @@ public class Element : MonoBehaviour {
 
 	public void ResetColor() {
 		colorType = ElementType.Empty;
-		isInDeleteList = false;
+		m_isInDeleteList = false;
+		m_isEmpty = true;
+	}
+
+	public void SetDarkColor(ElementType currColor) {
+		colorType = currColor + 1;
+	}
+
+	public void ApplyColor() {
+		colorType--;
+		m_isEmpty = false;
 	}
 
 	public bool CheckIsEmpty() {
-		return m_type == ElementType.Empty;
+		return m_isEmpty;
 	}
 
 	public void SetInDeleteList() {
-		isInDeleteList = true;
+		m_isInDeleteList = true;
 	}
-
-	public bool IsInDeleteList() {
-		return isInDeleteList;
+	
+	public bool isInDeleteList {
+		get {
+			return m_isInDeleteList;
+		}
 	}
 	
 	public Pos2Int pos {
 		set {
-			vec2Pos = value;
+			m_pos = value;
 		}
 		get {
-			return vec2Pos;
+			return m_pos;
 		}
 	}
 
