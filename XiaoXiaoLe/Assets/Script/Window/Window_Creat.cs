@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Window_Creat : MonoBehaviour {
-    public float offsetx, offsetY;
+	private const float COL_GAP = 0.6f;
+	private const float ROW_GAP = 0.5f;
     public GameObject prefabBG;
     public GameObject m_Effect;
 	private static Window_Creat _instance;
 	private List<Element> m_lstBackElement;//所有元素的集合
 	private List<List<Element>> m_lstDelLine;
 	private Element[,] m_arrElement;
-	private int m_xDim, m_yDim;
+	private int m_rowCount, m_colCount;
 	private List<Element> m_lstOldElement = new List<Element>();
 	private Transform[] m_old;
 
@@ -23,21 +24,23 @@ public class Window_Creat : MonoBehaviour {
 	
     void Start() {
 		int[,] mapTab = ConfigMapsMgr.instance.GetMapsData();
-		m_xDim = mapTab.GetLength(0);
-        m_yDim = mapTab.GetLength(1);
-        m_arrElement = new Element[m_xDim, m_yDim];
+		m_rowCount = mapTab.GetLength(0);
+        m_colCount = mapTab.GetLength(1);
+        m_arrElement = new Element[m_rowCount, m_colCount];
         //根据列表实例化出来棋盘
-        for (int x = 0; x < m_xDim; x++) {
-            for (int y = 0; y < m_yDim; y++) {
+        for (int x = 0; x < m_rowCount; x++) {
+            for (int y = 0; y < m_colCount; y++) {
                 if (mapTab[x, y] != 0) {
-                    GameObject goBack = Instantiate(prefabBG, GetWorldPos(x, y), Quaternion.identity);
+                    GameObject goBack = Instantiate(prefabBG);
                     goBack.transform.parent = transform;
+					goBack.transform.localPosition = GetWorldPos(x, y);
 					Element element = goBack.GetComponent<Element>();
 					element.ResetColor();
 					element.pos = new Pos2Int(x, y);
-                    GameObject effect = Instantiate(m_Effect, GetWorldPos(x, y), Quaternion.identity);
+                    GameObject effect = Instantiate(m_Effect);
                     effect.transform.parent = goBack.transform;
-                    effect.SetActive(false);
+					effect.transform.localPosition = Vector3.zero;
+					effect.SetActive(false);
 					m_lstBackElement.Add(element);
 					m_arrElement[x, y] = element;
 				} else {
@@ -49,13 +52,12 @@ public class Window_Creat : MonoBehaviour {
 	
 	private void TryDelLeft(Element target) {
 		bool bFlag = false;
-        int i = 0;
 		Pos2Int pos = target.pos;
 		List<Element> lstDelElement = new List<Element>();
-		for (int aa = 0; aa < m_xDim; aa++) {
-            i = pos.y - pos.x + aa;
-            if (i >= 0 && i < m_yDim) {
-				Element element = m_arrElement[aa, i];
+		for (int rowNum = 0; rowNum < m_rowCount; rowNum++) {
+			int colNum = pos.y + rowNum / 2 - pos.x / 2;
+            if (colNum >= 0 && colNum < m_colCount) {
+				Element element = m_arrElement[rowNum, colNum];
 				if (element != null) {
 					if (element.CheckIsEmpty()) {
 						return;
@@ -70,17 +72,16 @@ public class Window_Creat : MonoBehaviour {
 		if (bFlag) {
 			AddToDelList(lstDelElement);
 		}
-    }
+	}
 	
 	private void TryDelRight(Element target) {
 		bool bFlag = false;
-		int i = 0;
 		Pos2Int pos = target.pos;
 		List<Element> lstDelElement = new List<Element>();
-		for (int aa = 0; aa < m_xDim; aa++) {
-            i = pos.y + pos.x - aa;
-            if (i >= 0 && i < m_yDim) {
-				Element element = m_arrElement[aa, i];
+		for (int rowNum = 0; rowNum < m_rowCount; rowNum++) {
+			int colNum = pos.y + (pos.x + 1) / 2 - (rowNum + 1) / 2;
+            if (colNum >= 0 && colNum < m_colCount) {
+				Element element = m_arrElement[rowNum, colNum];
 				if (element != null) {
 					if (element.CheckIsEmpty()) {
 						return;
@@ -101,8 +102,8 @@ public class Window_Creat : MonoBehaviour {
 		bool bFlag = false;
 		Pos2Int pos = target.pos;
 		List<Element> listDelElement = new List<Element>();
-		for (int aa = 0; aa < m_yDim; aa++) {
-			Element element = m_arrElement[pos.x, aa];
+		for (int colNum = 0; colNum < m_colCount; colNum++) {
+			Element element = m_arrElement[pos.x, colNum];
 			if (element != null) {
 				if (element.CheckIsEmpty()) {
 					return;
@@ -125,8 +126,9 @@ public class Window_Creat : MonoBehaviour {
 		m_lstDelLine.Add(listDelElement);
 	}
 	
-    private Vector2 GetWorldPos(int x, int y) {
-        return new Vector2((y - (m_yDim - 1) / 2.0f) * offsetx + transform.position.x, ((m_xDim - 1) / 2.0f - x) * offsetY + transform.position.y);
+    private Vector2 GetWorldPos(int rowNum, int colNum) {
+		float offsetX = rowNum % 2 == 0 ? 0 : COL_GAP / 2;
+		return new Vector2((colNum - (m_colCount - 1) / 2.0f) * COL_GAP + offsetX, ((m_rowCount - 1) / 2.0f - rowNum) * ROW_GAP);
     }
 	
 	private void OnMouseDown(Transform[] tran) {
@@ -204,6 +206,7 @@ public class Window_Creat : MonoBehaviour {
 				float offset = Math.Abs(Vector3.Distance(m_lstBackElement[i].position, pos[a]));
 				if (offset < 0.25f) {
 					current[a] = m_lstBackElement[i];
+					break;
 				}
 			}
 		}
