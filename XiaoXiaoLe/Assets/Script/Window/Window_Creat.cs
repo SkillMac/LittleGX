@@ -143,9 +143,9 @@ public class Window_Creat : MonoBehaviour {
 		for (int i = 0; i < m_lstOldElement.Count; i++) {
 			m_lstOldElement[i].ResetColor();
 		}
-		Element[] current = ComPos(pos);
+		Element[] current = GetCanPutElement(pos);
 		m_lstOldElement.Clear();
-		if (current != null && CanPut(current)) {
+		if (current != null) {
 			for (int i = 0; i < current.Length; i++) {
 				current[i].SetDarkColor(currenttype);
 				m_old = tran;
@@ -159,8 +159,8 @@ public class Window_Creat : MonoBehaviour {
 		for (int i = 0; i < tran.Length; i++) {
 			poss[i] = tran[i].position;
 		}
-		Element[] current = ComPos(poss);
-		if (current == null || !CanPut(current)) {
+		Element[] current = GetCanPutElement(poss);
+		if (current == null) {
 			tran[0].parent.GetComponent<TestDraw>().ReturnStart();
 			m_lstOldElement.Clear();
 			return;
@@ -185,31 +185,24 @@ public class Window_Creat : MonoBehaviour {
 		m_lstOldElement.Clear();
 	}
     
-	private bool CanPut(Element[] arrElement) {
-        for (int i = 0; i < arrElement.Length; i++) {
-			if (!arrElement[i].CheckIsEmpty()) {
-                return false;
-            }
-        }
-        return true;
-    }
-	
-	//根据坐标获取当前的元素
-	private Element[] ComPos(Vector3[] pos) {
-		Element[] current = new Element[pos.Length];
-		for (int a = 0; a < pos.Length; a++) {
+	private Element[] GetCanPutElement(Vector3[] arrPos) {
+		Element[] arrElement = new Element[arrPos.Length];
+		for (int a = 0; a < arrPos.Length; a++) {
 			for (int i = 0; i < m_lstBackElement.Count; i++) {
-				float offset = Math.Abs(Vector3.Distance(m_lstBackElement[i].position, pos[a]));
+				Element element = m_lstBackElement[i];
+				float offset = Math.Abs(Vector3.Distance(element.position, arrPos[a]));
 				if (offset < 0.25f) {
-					current[a] = m_lstBackElement[i];
+					if (element.CheckIsEmpty()) {
+						arrElement[a] = element;
+					}
 					break;
 				}
 			}
-			if (current[a] == null) {
+			if (arrElement[a] == null) {
 				return null;
 			}
 		}
-		return current;
+		return arrElement;
     }
 
 	public bool CheckCanContinue(Vector3[] posPre) {
@@ -221,11 +214,8 @@ public class Window_Creat : MonoBehaviour {
 				for (int j = 0; j < posPre.Length; j++) {
 					DicPos[j] = m_lstBackElement[i].position + posPre[j];
 				}
-				Element[] trans = ComPos(DicPos);
-				if (trans == null) {
-					return false;
-				}
-				if (CanPut(trans)) {
+				Element[] trans = GetCanPutElement(DicPos);
+				if (trans != null) {
 					return true;
 				}
 			}
