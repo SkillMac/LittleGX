@@ -1,0 +1,1 @@
+{"rowCount":4,"colCount":4,"lstItem":[{"colorType":0,"preType":0,"m_flagMap":1050628,"m_rowCount":4,"m_colCount":4}]}
