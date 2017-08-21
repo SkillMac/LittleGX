@@ -10,7 +10,6 @@ public class EditorShape : EditorWindow {
 	private ShapeListVO m_shapeListVO;
 	private List<bool> m_lstItemFlag;
 	private Vector2 m_vec2Pos;
-	private bool m_bShowTips = false;
 	private GameObject m_goShow;
 	private List<Pos2Int> m_lstChildPos = new List<Pos2Int>();
 	private int m_uLastShowIndex = int.MaxValue;
@@ -58,35 +57,11 @@ public class EditorShape : EditorWindow {
 		EditorGUI.BeginDisabledGroup(true);
 		EditorGUILayout.BeginHorizontal();
 		EditorGUILayout.LabelField("Row", GUILayout.MaxWidth(50));
-		int oldRowCount = m_shapeListVO.rowCount;
 		m_shapeListVO.rowCount = EditorGUILayout.IntField(m_shapeListVO.rowCount, GUILayout.MaxWidth(50));
-		if (oldRowCount != m_shapeListVO.rowCount) {
-			if (m_shapeListVO.rowCount * m_shapeListVO.colCount * 2 > MAX_BIT) {
-				m_bShowTips = true;
-				m_shapeListVO.rowCount = MAX_BIT / (m_shapeListVO.colCount * 2);
-			} else {
-				m_bShowTips = false;
-			}
-			ResetAllItemRowAndCol();
-		}
 		EditorGUILayout.LabelField("Col", GUILayout.MaxWidth(50));
-		int oldColCount = m_shapeListVO.colCount;
 		m_shapeListVO.colCount = EditorGUILayout.IntField(m_shapeListVO.colCount, GUILayout.MaxWidth(50));
-		if (oldColCount != m_shapeListVO.colCount) {
-			if (m_shapeListVO.rowCount * m_shapeListVO.colCount * 2 > MAX_BIT) {
-				m_bShowTips = true;
-				m_shapeListVO.colCount = MAX_BIT / m_shapeListVO.rowCount / 2;
-			} else {
-				m_bShowTips = false;
-			}
-			ResetAllItemRowAndCol();
-		}
 		EditorGUILayout.EndHorizontal();
 		EditorGUI.EndDisabledGroup();
-		if (m_bShowTips) {
-			EditorGUILayout.LabelField("Col * 2 * Row <= " + MAX_BIT);
-		}
-		EditorGUILayout.Space();
 		EditorGUILayout.LabelField("Item Count:", m_shapeListVO.lstItem.Count.ToString());
 		EditorGUILayout.Space();
 		if (GUILayout.Button("Update & Save")) {
@@ -172,14 +147,9 @@ public class EditorShape : EditorWindow {
 		sw.Write(str);
 		sw.Close();
 		sw.Dispose();
+		ShowNotification(new GUIContent("Save Success!!!"));
 	}
-
-	private void ResetAllItemRowAndCol() {
-		for (int i = 0; i < m_shapeListVO.lstItem.Count; i++) {
-			m_shapeListVO.lstItem[i].UpdateCount(m_shapeListVO.rowCount, m_shapeListVO.colCount);
-		}
-	}
-
+	
 	private void ResetItemColor() {
 		for (int i = 0; i < m_goShow.transform.childCount; i++) {
 			SetBlockColor(m_goShow.transform.GetChild(i), m_shapeListVO.lstItem[m_uLastShowIndex].colorType);
@@ -231,7 +201,7 @@ public class EditorShape : EditorWindow {
 			}
 		}
 	}
-
+	
 	private Vector3 GetOffsetPos() {
 		int left = int.MaxValue, right = 0, top = int.MaxValue, bottom = 0;
 		for (int i = 0; i < m_lstChildPos.Count; i++) {
