@@ -32,6 +32,11 @@ public class ShapeItemVO {
 		m_flagMap = newFlag;
 	}
 
+	public bool GetFlag(int row, int col) {
+		int index = row * m_colCount * 2 + col;
+		return (m_flagMap & 1 << index) != 0;
+	}
+
 	public bool this[int row, int col] {
 		get {
 			return GetFlag(m_flagMap, m_colCount, row, col);

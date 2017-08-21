@@ -16,6 +16,13 @@ public class Element : MonoBehaviour {
         m_image = transform.GetComponentInChildren<SpriteRenderer>();
     }
 
+	public void InitElement(int row, int col, ElementType color, Vector3 offsetPos) {
+		m_row = row;
+		m_col = col;
+		colorType = color;
+		ResetPosition(offsetPos);
+	}
+
 	public void Init(int row, int col, ElementType color) {
 		m_image = transform.GetComponentInChildren<SpriteRenderer>();
 		m_row = row;
@@ -24,11 +31,7 @@ public class Element : MonoBehaviour {
 	}
 
 	public void ResetPosition(Vector3 offsetPos) {
-		float offset = 0f;
-		if (m_row % 2 == 0) {
-			offset = ELEMENT_WIDTH / 2;
-		}
-		Vector3 vec3Pos = new Vector3(m_col * ELEMENT_WIDTH + offset, -m_row * ELEMENT_HEIGHT) + offsetPos;
+		Vector3 vec3Pos = new Vector3(m_col * ELEMENT_WIDTH / 2, -m_row * ELEMENT_HEIGHT) + offsetPos;
 		transform.localPosition = vec3Pos;
 	}
 

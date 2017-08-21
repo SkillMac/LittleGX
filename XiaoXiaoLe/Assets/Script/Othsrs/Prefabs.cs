@@ -50,7 +50,7 @@ public class Prefabs : MonoBehaviour {
 			} else {
                 enumtype = Get(old);
             }
-            GameObject obj = Instantiate(PrefabsDic[(PrefabsType)enumtype], transform);
+			GameObject obj = PrefabsFactory.CreateShape(enumtype, transform);
             obj.transform.position = Roots[i];
             index++;
         }
@@ -151,7 +151,7 @@ public class Prefabs : MonoBehaviour {
 			IsActive = true;
 			timer = Time.realtimeSinceStartup;
 		}
-		GameObject obj = Instantiate(PrefabsDic[creattype], transform);
+		GameObject obj = PrefabsFactory.CreateShape((int)creattype, transform);
 		obj.transform.position = Roots[Roots.Length - 1];
 	}
 
@@ -185,11 +185,7 @@ public class Prefabs : MonoBehaviour {
         }
         return false;
     }
-
-	private IEnumerator wait() {
-		yield return new WaitForEndOfFrame();
-	}
-
+	
 	void OnDestroy() {
 		EventMgr.MouseUpCreateByIndexEvent -= OnMouseUpCreateByIndex;
 		EventMgr.MouseUpCreateByTransEvent -= OnMouseUpCreateByTrans;

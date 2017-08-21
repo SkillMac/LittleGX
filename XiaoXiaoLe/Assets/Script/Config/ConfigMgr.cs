@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 
 public class ConfigMgr {
+	public const string CONFIG_SHAPE = "Tab/shapeConfig";
 	private const string CONFIG_MAPS = "Tab/Maps";
 	private const string CONFIG_PREFABS = "Tab/prefabtype";
 	private const string CONFIG_SCORE = "Tab/Score";
@@ -9,6 +10,7 @@ public class ConfigMgr {
 		ConfigMapsMgr.instance.InitData(Load(CONFIG_MAPS));
 		ConfigPrefabsMgr.instance.InitData(Load(CONFIG_PREFABS));
 		ConfigScoreMgr.instance.InitData(Load(CONFIG_SCORE));
+		ConfigShapeMgr.instance.InitData(LoadJson(CONFIG_SHAPE));
 	}
 
 	private static string[,] Load(string path) {
@@ -25,5 +27,10 @@ public class ConfigMgr {
 			}
 		}
 		return datas;
+	}
+
+	private static string LoadJson(string path) {
+		TextAsset ta = Resources.Load<TextAsset>(path);
+		return ta.text;
 	}
 }

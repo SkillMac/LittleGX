@@ -15,13 +15,62 @@ public class TestDraw : MonoBehaviour {
 
 	public List<Pos2Int> m_lstChildPos = new List<Pos2Int>();
 
+	private Transform[,] m_arrChildTrans;
+
+	void Awake() {
+		ConfigShapeMgr shapeConf = ConfigShapeMgr.instance;
+		m_arrChildTrans = new Transform[shapeConf.rowCount, shapeConf.colCount * 2];
+	}
+
 	void Start(){
         m_Scale = transform.localScale;
         startpos = transform.position;
     }
 
-	private void InitShap() {
+	public void AddChild(int row, int col, Transform trans) {
+		trans.parent = transform;
+		trans.localScale = Vector3.one * 0.15f;
+		m_arrChildTrans[row, col] = trans;
+	}
 
+	public void InitShape(ElementType colorType) {
+		_elementType = colorType;
+		transform.localScale = Vector3.one * 0.6f;
+		Vector3 vec3 = GetOffsetPos();
+		for (int row = 0; row < m_arrChildTrans.GetLength(0); row++) {
+			for (int col = 0; col < m_arrChildTrans.GetLength(1); col++) {
+				if (m_arrChildTrans[row, col] != null) {
+					Element element = m_arrChildTrans[row, col].GetComponent<Element>();
+					element.InitElement(row, col, _elementType, vec3);
+				}
+			}
+		}
+	}
+
+	private Vector3 GetOffsetPos() {
+		int left = int.MaxValue, right = 0, top = int.MaxValue, bottom = 0;
+		for (int row = 0; row < m_arrChildTrans.GetLength(0); row++) {
+			for (int col = 0; col < m_arrChildTrans.GetLength(1); col++) {
+				if (m_arrChildTrans[row, col] != null) {
+					if (left > col) {
+						left = col;
+					}
+					if (right < col) {
+						right = col;
+					}
+					if (top > row) {
+						top = row;
+					}
+					if (bottom < row) {
+						bottom = row;
+					}
+				}
+			}
+		}
+		float posX = ((right - left) * 0.5f + left) * Element.ELEMENT_WIDTH / 2;
+		float posY = ((bottom - top) * 0.5f + top) * Element.ELEMENT_HEIGHT;
+		Vector3 vec3Pos = new Vector3(-posX, posY);
+		return vec3Pos;
 	}
 
 	void Update() {
