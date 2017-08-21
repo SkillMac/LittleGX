@@ -3,21 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Prefabs : MonoBehaviour {
-
-	[System.Serializable]
-	public struct PreType {
-		public PrefabsType type;
-		public GameObject prefab;
-	}
-
-    public PreType[] Allprefabs;
     public Vector3[] Roots;
 	public float offsetY = 0.2f;//Y轴坐标的偏移量
 	public GameObject window_gv;
 	private int index = 0;
-	private Dictionary<PrefabsType, GameObject> PrefabsDic;
 	private float speed = 15.0f;
-	private bool IsMove;
+	private bool m_bIsMove;
     private bool IsActive;
     private float timer;
 	//存储随机数的列表
@@ -31,12 +22,6 @@ public class Prefabs : MonoBehaviour {
 	void Awake() {
 		EventMgr.MouseUpCreateByIndexEvent += OnMouseUpCreateByIndex;
 		EventMgr.MouseUpCreateByTransEvent += OnMouseUpCreateByTrans;
-        PrefabsDic = new Dictionary<PrefabsType, GameObject>();
-		for (int i = 0; i < Allprefabs.Length; i++) {
-			if (!PrefabsDic.ContainsKey(Allprefabs[i].type)) {
-                PrefabsDic.Add(Allprefabs[i].type, Allprefabs[i].prefab);
-            }
-        }
 	}
 
 	void Start() {
@@ -72,11 +57,11 @@ public class Prefabs : MonoBehaviour {
                 }
             }
         }
-		if (IsMove) {
+		if (m_bIsMove) {
 			for (int i = 0; i < transform.childCount; i++) {
                 MoveWithIndex(transform.GetChild(i), i);
 				if (transform.GetChild(i).position.y != Roots[i].y) {
-                    IsMove = false;
+                    m_bIsMove = false;
                 }
             }
         }
@@ -166,10 +151,8 @@ public class Prefabs : MonoBehaviour {
 				SetList(3);
 		}
 		int enumtype = Get(old);
-		if (PrefabsDic.ContainsKey((PrefabsType)enumtype)) {
-			IsMove = true;
-			creattype = (PrefabsType)enumtype;
-		}
+		m_bIsMove = true;
+		creattype = (PrefabsType)enumtype;
 	}
 	
 	private bool CanContinue() {

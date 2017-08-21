@@ -112,37 +112,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76301fb8aca0e30459d96ededdf1b09f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AllElement:
-  - type: 0
-    image: {fileID: 21300000, guid: 792134a02ae469347bda859e5cba7fa0, type: 3}
-  - type: 1
-    image: {fileID: 21300000, guid: b9b827887dd94404ca2ec30c3c988776, type: 3}
-  - type: 2
-    image: {fileID: 21300000, guid: 7f124ce5fbd9fdd43acd86a32b441b0e, type: 3}
-  - type: 3
-    image: {fileID: 21300000, guid: c76586523487168478ec765485622825, type: 3}
-  - type: 4
-    image: {fileID: 21300000, guid: ab113df7636fdde42b2b618a4c9e15aa, type: 3}
-  - type: 5
-    image: {fileID: 21300000, guid: 366f90f730c8e664b8f0d20c595209cf, type: 3}
-  - type: 6
-    image: {fileID: 21300000, guid: 92791fe312f05924bb217dbde92934a8, type: 3}
-  - type: 7
-    image: {fileID: 21300000, guid: 8046d87ad44c0d548953d3e04bfa65d7, type: 3}
-  - type: 8
-    image: {fileID: 21300000, guid: 5bc6a42a81c1dd94f831e66f882004ed, type: 3}
-  - type: 9
-    image: {fileID: 21300000, guid: d503ecd041df0b54aad05d0bdcea5d0f, type: 3}
-  - type: 10
-    image: {fileID: 21300000, guid: 90cf09cce27a66d42a96da2c4ddd611c, type: 3}
-  - type: 11
-    image: {fileID: 21300000, guid: 4720ae222915ae44aac26a88ffcb4e54, type: 3}
-  - type: 12
-    image: {fileID: 21300000, guid: 063604e214e4e0e4e8af4dc7e7e92fb0, type: 3}
-  - type: 100
-    image: {fileID: 21300000, guid: a3104b1248d6ce548844df493caff26e, type: 3}
-  - type: 200
-    image: {fileID: 21300000, guid: 792134a02ae469347bda859e5cba7fa0, type: 3}
   m_type: 0
 --- !u!212 &212087472240882948
 SpriteRenderer:
