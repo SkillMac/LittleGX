@@ -56,6 +56,9 @@ public class Window_Delete : MonoBehaviour {
 		if (index > 1) {
 			CreatGold(m_AllDelete[index][m_AllDelete[1].Count / 2]);
 		}
+		if (!m_Gold.activeSelf) {
+			m_Gold.SetActive(true);
+		}
 		Effect(m_AllDelete[index], m_Gold.transform.GetChild(0).gameObject);
 		m_Gold.transform.localScale = new Vector3(2.2f, 2.2f, 2.2f);
 		m_Gold.transform.GetChild(0).GetComponent<Animator>().SetTrigger("IsScale");
@@ -63,7 +66,7 @@ public class Window_Delete : MonoBehaviour {
 
 	private void DeleMore() {
 		deleteTime += Time.deltaTime;
-		if (deleteTime * 2 > rewardIndex + 1) {
+		if (deleteTime * 2 > rewardIndex) {
 			if (rewardIndex < m_AllDelete.Count) {
 				OnDeleteLine(rewardIndex);
 				rewardIndex++;
