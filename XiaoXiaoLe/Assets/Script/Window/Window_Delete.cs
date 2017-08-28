@@ -53,7 +53,7 @@ public class Window_Delete : MonoBehaviour {
     }
 	
 	private void OnDeleteLine(int index) {
-		if (index > 1) {
+		if (index > 0) {
 			CreatGold(m_AllDelete[index][m_AllDelete[1].Count / 2]);
 		}
 		if (!m_Gold.activeSelf) {
