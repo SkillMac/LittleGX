@@ -7,7 +7,7 @@ public class Window_Delete : MonoBehaviour {
     public Window_Canvas m_canvas;
     public GameObject m_gold;//小金币
     public GameObject m_Sprite;
-	private List<List<Element>> m_AllDelete;
+	private List<List<BackElement>> m_AllDelete;
 	private bool BeginDelete;
 	private Transform tf;
 	private float deleteTime = 0f;
@@ -27,7 +27,7 @@ public class Window_Delete : MonoBehaviour {
 	private void DleteEle() {
 		if (m_AllDelete.Count <= 1) {
 			if (m_AllDelete[0].Count <= 4) {
-				GetScoreWithNum(0, m_AllDelete[0][m_AllDelete[0].Count / 2].position, m_GoldMove);
+				GetScoreWithNum(0, m_AllDelete[0][m_AllDelete[0].Count / 2].transform.position, m_GoldMove);
 			} else {
 				Effect(m_AllDelete[0], m_GoldMove);
 			}
@@ -39,8 +39,8 @@ public class Window_Delete : MonoBehaviour {
 		}
     }
 
-	private void Effect(List<Element> element, GameObject obj) {
-        GetScoreWithNum(element.Count, element[element.Count / 2].position, obj);
+	private void Effect(List<BackElement> element, GameObject obj) {
+        GetScoreWithNum(element.Count, element[element.Count / 2].transform.position, obj);
         for (int i = 0; i < element.Count; i++) {
 			element[i].ResetColor();
 			GameObject child = element[i].transform.GetChild(1).gameObject;
@@ -79,7 +79,7 @@ public class Window_Delete : MonoBehaviour {
 		}
     }
 
-	private int SortDelList(List<Element> arrA, List<Element> arrB) {
+	private int SortDelList(List<BackElement> arrA, List<BackElement> arrB) {
 		if (arrA.Count > arrB.Count) {
 			return -1;
 		}
@@ -89,7 +89,7 @@ public class Window_Delete : MonoBehaviour {
 		return 0;
 	}
 
-	private void OnDelete(List<List<Element>> list) {
+	private void OnDelete(List<List<BackElement>> list) {
 		list.Sort(SortDelList);
 		m_AllDelete = list;
 		deleteTime = 0f;
@@ -121,9 +121,9 @@ public class Window_Delete : MonoBehaviour {
     }
 	
 	//创建小金币
-	private void CreatGold(Element pos) {
+	private void CreatGold(BackElement pos) {
         GameObject obj = Instantiate(m_gold);
-        obj.transform.position = pos.position;
+        obj.transform.position = pos.transform.position;
     }
 	
     private void OnDestroy() {

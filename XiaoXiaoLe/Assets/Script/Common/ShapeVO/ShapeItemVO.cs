@@ -3,7 +3,7 @@ using UnityEngine;
 
 [Serializable]
 public class ShapeItemVO {
-	public ColorType colorType;
+	public EColorType colorType;
 	public PrefabsType preType;
 	[SerializeField]
 	private int m_flagMap = 0;

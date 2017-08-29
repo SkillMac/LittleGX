@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class EventMgr {
-	public static event Action<List<List<Element>>> DeleteEvent;
+	public static event Action<List<List<BackElement>>> DeleteEvent;
 	public static event Action<Vector3> AddScoreEvent;
 	public static event Action AddGoldEvent;
 	public static event Action<Transform> MouseUpDeleteEvent;
@@ -12,7 +12,7 @@ public class EventMgr {
 	public static event Action<TestDraw> MouseUpEvent;
 	public static event Action<TestDraw> MouseDownEvent;
 
-	public static void Delete(List<List<Element>> list) {
+	public static void Delete(List<List<BackElement>> list) {
 		if (DeleteEvent != null) {
 			DeleteEvent(list);
         }

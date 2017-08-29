@@ -4,14 +4,14 @@ using UnityEngine;
 public class TestDraw : MonoBehaviour {
     public Vector3 startpos;
 	private Vector3 m_Scale;
-	private ColorType m_eColorType;
+	private EColorType m_eColorType;
 	private Transform[,] m_arrChildTrans;
-	private List<Element> m_lstElement;
+	private List<ShapeElement> m_lstElement;
 
 	void Awake() {
 		ConfigShapeMgr shapeConf = ConfigShapeMgr.instance;
 		m_arrChildTrans = new Transform[shapeConf.rowCount, shapeConf.colCount * 2];
-		m_lstElement = new List<Element>();
+		m_lstElement = new List<ShapeElement>();
 	}
 
 	void Start(){
@@ -25,15 +25,15 @@ public class TestDraw : MonoBehaviour {
 		m_arrChildTrans[row, col] = trans;
 	}
 
-	public void InitShape(ColorType colorType) {
+	public void InitShape(EColorType colorType) {
 		m_eColorType = colorType;
 		transform.localScale = Vector3.one * 0.6f;
 		Vector3 vec3 = GetOffsetPos();
 		for (int row = 0; row < m_arrChildTrans.GetLength(0); row++) {
 			for (int col = 0; col < m_arrChildTrans.GetLength(1); col++) {
 				if (m_arrChildTrans[row, col] != null) {
-					Element element = m_arrChildTrans[row, col].GetComponent<Element>();
-					element.InitElement(row, col, m_eColorType, vec3);
+					ShapeElement element = m_arrChildTrans[row, col].GetComponent<ShapeElement>();
+					element.InitShapeElement(row, col, m_eColorType, vec3);
 					m_lstElement.Add(element);
 				}
 			}
@@ -89,11 +89,11 @@ public class TestDraw : MonoBehaviour {
         }
     }
 	
-	public List<Element> GetAllElement() {
+	public List<ShapeElement> GetAllElement() {
 		return m_lstElement;
 	}
 
-	public ColorType f_eColorType {
+	public EColorType f_eColorType {
 		get {
 			return m_eColorType;
 		}
