@@ -154,31 +154,3 @@ public class Prefabs : MonoBehaviour {
 		EventMgr.MouseUpCreateByTransEvent -= OnMouseUpCreateByTrans;
 	}
 }
-
-public enum EPrefabsType {
-    m_01,
-    m_02,
-    m_03,
-    m_04,
-    m_05,
-    m_06,
-    m_07,
-    m_08,
-    m_09,
-    m_010,
-    m_011,
-    m_012,
-    m_013,
-    m_014,
-    m_015,
-    m_016,
-    m_017,
-    m_018,
-    m_019,
-    m_020,
-    m_021,
-    m_022,
-    m_023,
-    m_024,
-    m_025,
-}

@@ -4,7 +4,6 @@ using UnityEngine;
 [Serializable]
 public class ShapeItemVO {
 	public EColorType colorType;
-	public EPrefabsType preType;
 	[SerializeField]
 	private int m_flagMap = 0;
 	[SerializeField]

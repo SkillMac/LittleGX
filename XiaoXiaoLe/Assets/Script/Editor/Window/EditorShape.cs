@@ -95,10 +95,6 @@ public class EditorShape : EditorWindow {
 					ResetItemColor();
 				}
 				EditorGUILayout.EndHorizontal();
-				EditorGUILayout.BeginHorizontal();
-				GUILayout.Space(15f);
-				m_shapeListVO.lstItem[i].preType = (EPrefabsType)EditorGUILayout.EnumPopup("PreType", m_shapeListVO.lstItem[i].preType);
-				EditorGUILayout.EndHorizontal();
 				RefreshMap(i);
 			}
 		}
