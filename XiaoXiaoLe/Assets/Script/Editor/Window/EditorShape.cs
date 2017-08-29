@@ -97,7 +97,7 @@ public class EditorShape : EditorWindow {
 				EditorGUILayout.EndHorizontal();
 				EditorGUILayout.BeginHorizontal();
 				GUILayout.Space(15f);
-				m_shapeListVO.lstItem[i].preType = (PrefabsType)EditorGUILayout.EnumPopup("PreType", m_shapeListVO.lstItem[i].preType);
+				m_shapeListVO.lstItem[i].preType = (EPrefabsType)EditorGUILayout.EnumPopup("PreType", m_shapeListVO.lstItem[i].preType);
 				EditorGUILayout.EndHorizontal();
 				RefreshMap(i);
 			}
