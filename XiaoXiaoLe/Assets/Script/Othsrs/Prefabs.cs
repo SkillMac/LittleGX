@@ -123,7 +123,7 @@ public class Prefabs : MonoBehaviour {
             Vector3 dir = Roots[index];
             trans.position = Vector3.MoveTowards(trans.position, dir, speed * Time.deltaTime);
 			if(trans.GetComponent<TestDraw>() != null) {
-                trans.GetComponent<TestDraw>().startpos = dir;
+                trans.GetComponent<TestDraw>().f_vec3StartPos = dir;
             }
         }
     }

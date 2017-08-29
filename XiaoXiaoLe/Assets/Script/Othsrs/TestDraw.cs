@@ -2,8 +2,11 @@
 using UnityEngine;
 
 public class TestDraw : MonoBehaviour {
-    public Vector3 startpos;
-	private Vector3 m_Scale;
+	private const float SHAPE_SCALE = 0.6f;
+	private const float ELEMENT_SCALE_N = 0.15f;
+	private const float ELEMENT_SCALE_P = 0.12f;
+	private Vector3 m_vec3StartPos;
+	private Vector3 m_Vec3StartScale;
 	private EColorType m_eColorType;
 	private Transform[,] m_arrChildTrans;
 	private List<ShapeElement> m_lstElement;
@@ -15,25 +18,25 @@ public class TestDraw : MonoBehaviour {
 	}
 
 	void Start(){
-        m_Scale = transform.localScale;
-        startpos = transform.position;
+        m_Vec3StartScale = transform.localScale;
+        m_vec3StartPos = transform.position;
     }
 
-	public void AddChild(int row, int col, Transform trans) {
+	public void AddChild(int uRow, int uCol, Transform trans) {
 		trans.parent = transform;
-		trans.localScale = Vector3.one * 0.15f;
-		m_arrChildTrans[row, col] = trans;
+		trans.localScale = Vector3.one * ELEMENT_SCALE_N;
+		m_arrChildTrans[uRow, uCol] = trans;
 	}
 
-	public void InitShape(EColorType colorType) {
-		m_eColorType = colorType;
-		transform.localScale = Vector3.one * 0.6f;
-		Vector3 vec3 = GetOffsetPos();
-		for (int row = 0; row < m_arrChildTrans.GetLength(0); row++) {
-			for (int col = 0; col < m_arrChildTrans.GetLength(1); col++) {
-				if (m_arrChildTrans[row, col] != null) {
-					ShapeElement element = m_arrChildTrans[row, col].GetComponent<ShapeElement>();
-					element.InitShapeElement(row, col, m_eColorType, vec3);
+	public void InitShape(EColorType eColorType) {
+		m_eColorType = eColorType;
+		transform.localScale = Vector3.one * SHAPE_SCALE;
+		Vector3 vec3Offset = GetOffsetPos();
+		for (int uRow = 0; uRow < m_arrChildTrans.GetLength(0); uRow++) {
+			for (int uCol = 0; uCol < m_arrChildTrans.GetLength(1); uCol++) {
+				if (m_arrChildTrans[uRow, uCol] != null) {
+					ShapeElement element = m_arrChildTrans[uRow, uCol].GetComponent<ShapeElement>();
+					element.InitShapeElement(uRow, uCol, m_eColorType, vec3Offset);
 					m_lstElement.Add(element);
 				}
 			}
@@ -41,38 +44,32 @@ public class TestDraw : MonoBehaviour {
 	}
 
 	private Vector3 GetOffsetPos() {
-		int left = int.MaxValue, right = 0, top = int.MaxValue, bottom = 0;
-		for (int row = 0; row < m_arrChildTrans.GetLength(0); row++) {
-			for (int col = 0; col < m_arrChildTrans.GetLength(1); col++) {
-				if (m_arrChildTrans[row, col] != null) {
-					if (left > col) {
-						left = col;
-					}
-					if (right < col) {
-						right = col;
-					}
-					if (top > row) {
-						top = row;
-					}
-					if (bottom < row) {
-						bottom = row;
-					}
+		int uLeft	= int.MaxValue;
+		int uRight	= 0;
+		int uTop	= int.MaxValue;
+		int uBottom	= 0;
+		for (int uRow = 0; uRow < m_arrChildTrans.GetLength(0); uRow++) {
+			for (int uCol = 0; uCol < m_arrChildTrans.GetLength(1); uCol++) {
+				if (m_arrChildTrans[uRow, uCol] != null) {
+					uLeft	= Mathf.Min(uLeft, uCol);
+					uRight	= Mathf.Max(uRight, uCol);
+					uTop	= Mathf.Min(uTop, uRow);
+					uBottom	= Mathf.Max(uBottom, uRow);
 				}
 			}
 		}
-		float posX = ((right - left) * 0.5f + left) * Element.ELEMENT_WIDTH / 2;
-		float posY = ((bottom - top) * 0.5f + top) * Element.ELEMENT_HEIGHT;
-		Vector3 vec3Pos = new Vector3(-posX, posY);
-		return vec3Pos;
+		float fPosX = ((uRight - uLeft) * 0.5f + uLeft) * Element.ELEMENT_WIDTH / 2;
+		float fPosY = ((uBottom - uTop) * 0.5f + uTop) * Element.ELEMENT_HEIGHT;
+		return new Vector3(-fPosX, fPosY);
 	}
 
 	void Update() {
 		if (Input.GetMouseButton(0)) {
             Vector3 offset = new Vector3(0, 1.0f, 0);
 			transform.localScale = Vector3.one;
-			for (int i = 0; i < transform.childCount; i++) {
-                transform.GetChild(i).localScale = Vector3.one * 0.12f;
-            }
+			for (int i = 0; i < m_lstElement.Count; i++) {
+				m_lstElement[i].transform.localScale = Vector3.one * ELEMENT_SCALE_P;
+			}
             transform.position = (Input.mousePosition - new Vector3(Screen.width / 2.0f, Screen.height / 2.0f, 0)) / 100.0f + offset;
 			EventMgr.MouseDown(this);
         }
@@ -82,11 +79,11 @@ public class TestDraw : MonoBehaviour {
     }
 
 	public void ReturnStart() {
-        transform.position = startpos;
-        transform.localScale = m_Scale;
-		for (int i = 0; i < transform.childCount; i++) {
-            transform.GetChild(i).localScale = new Vector3(0.15f, 0.15f, 0.15f);
-        }
+        transform.position = m_vec3StartPos;
+        transform.localScale = m_Vec3StartScale;
+		for (int i = 0; i < m_lstElement.Count; i++) {
+			m_lstElement[i].transform.localScale = Vector3.one * ELEMENT_SCALE_N;
+		}
     }
 	
 	public List<ShapeElement> GetAllElement() {
@@ -96,6 +93,12 @@ public class TestDraw : MonoBehaviour {
 	public EColorType f_eColorType {
 		get {
 			return m_eColorType;
+		}
+	}
+
+	public Vector3 f_vec3StartPos {
+		set {
+			m_vec3StartPos = value;
 		}
 	}
 }
