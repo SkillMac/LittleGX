@@ -89,8 +89,8 @@ public class EditorShape : EditorWindow {
 				CloseOther(i);
 				EditorGUILayout.BeginHorizontal();
 				GUILayout.Space(15f);
-				ElementType oldType = m_shapeListVO.lstItem[i].colorType;
-				m_shapeListVO.lstItem[i].colorType = (ElementType)EditorGUILayout.EnumPopup("ColorType", m_shapeListVO.lstItem[i].colorType);
+				ColorType oldType = m_shapeListVO.lstItem[i].colorType;
+				m_shapeListVO.lstItem[i].colorType = (ColorType)EditorGUILayout.EnumPopup("ColorType", m_shapeListVO.lstItem[i].colorType);
 				if (oldType != m_shapeListVO.lstItem[i].colorType) {
 					ResetItemColor();
 				}
@@ -235,7 +235,7 @@ public class EditorShape : EditorWindow {
 		trans.localPosition = vec3Pos;
 	}
 
-	private static void SetBlockColor(Transform trans, ElementType color) {
+	private static void SetBlockColor(Transform trans, ColorType color) {
 		SpriteRenderer spriteRenderer = trans.GetComponentInChildren<SpriteRenderer>();
 		spriteRenderer.sprite = HummerRes.LoadElementSprite((int)color);
 	}

@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class Prefabs : MonoBehaviour {
@@ -160,8 +159,8 @@ public class Prefabs : MonoBehaviour {
 			Transform childTrans = transform.GetChild(a);
 			//包含了想要删除的物体
 			if (childTrans.GetHashCode() != dexcode) {
-				Vector3[] posPre = childTrans.GetComponent<TestDraw>().GetAbsPos();
-				if (Window_Creat.instance.CheckCanContinue(posPre)) {
+				TestDraw shape = childTrans.GetComponent<TestDraw>();
+				if (Window_Creat.instance.CheckCanContinue(shape)) {
 					return true;
 				}
             }

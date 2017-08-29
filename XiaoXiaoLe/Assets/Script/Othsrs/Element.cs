@@ -3,8 +3,7 @@
 public class Element : MonoBehaviour {
 	public const float ELEMENT_WIDTH = 0.6f;
 	public const float ELEMENT_HEIGHT = 0.5f;
-	[SerializeField]
-	private ElementType m_type;
+	private ColorType m_type;
 	private Pos2Int m_pos;
 	private SpriteRenderer m_image;
 	private bool m_isInDeleteList = false;
@@ -16,32 +15,30 @@ public class Element : MonoBehaviour {
         m_image = transform.GetComponentInChildren<SpriteRenderer>();
     }
 
-	public void InitElement(int row, int col, ElementType color, Vector3 offsetPos) {
+	public void InitPos(int row, int col) {
+		m_row = row;
+		m_col = col;
+	}
+
+	public void InitElement(int row, int col, ColorType color, Vector3 offsetPos) {
 		m_row = row;
 		m_col = col;
 		colorType = color;
 		ResetPosition(offsetPos);
 	}
-
-	public void Init(int row, int col, ElementType color) {
-		m_image = transform.GetComponentInChildren<SpriteRenderer>();
-		m_row = row;
-		m_col = col;
-		ResetPosition(Vector3.zero);
-	}
-
-	public void ResetPosition(Vector3 offsetPos) {
+	
+	private void ResetPosition(Vector3 offsetPos) {
 		Vector3 vec3Pos = new Vector3(m_col * ELEMENT_WIDTH / 2, -m_row * ELEMENT_HEIGHT) + offsetPos;
 		transform.localPosition = vec3Pos;
 	}
 
 	public void ResetColor() {
-		colorType = ElementType.Empty;
+		colorType = ColorType.Empty;
 		m_isInDeleteList = false;
 		m_isEmpty = true;
 	}
 
-	public void SetDarkColor(ElementType currColor) {
+	public void SetDarkColor(ColorType currColor) {
 		colorType = currColor + 1;
 	}
 
@@ -79,7 +76,7 @@ public class Element : MonoBehaviour {
 		}
 	}
 	
-	public ElementType colorType {
+	public ColorType colorType {
 		get {
 			return m_type;
 		}
@@ -88,10 +85,22 @@ public class Element : MonoBehaviour {
 			m_image.sprite = HummerRes.LoadElementSprite((int)m_type);
 		}
 	}
+
+	public int f_uRow {
+		get {
+			return m_row;
+		}
+	}
+
+	public int f_uCol {
+		get {
+			return m_col;
+		}
+	}
 }
 
 //元素的颜色类型
-public enum ElementType {
+public enum ColorType {
     Empty,
     Green,
     DarkGreen,

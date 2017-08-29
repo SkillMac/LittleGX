@@ -9,8 +9,8 @@ public class EventMgr {
 	public static event Action<Transform> MouseUpDeleteEvent;
 	public static event Action MouseUpCreateByIndexEvent;
 	public static event Action<Transform> MouseUpCreateByTransEvent;
-	public static event Action<Transform[]> MouseUpEvent;
-	public static event Action<Transform[]> MouseDownEvent;
+	public static event Action<TestDraw> MouseUpEvent;
+	public static event Action<TestDraw> MouseDownEvent;
 
 	public static void Delete(List<List<Element>> list) {
 		if (DeleteEvent != null) {
@@ -48,15 +48,15 @@ public class EventMgr {
 		}
 	}
 
-	public static void MouseUp(Transform[] arrTrans) {
+	public static void MouseUp(TestDraw shape) {
 		if (MouseUpEvent != null) {
-			MouseUpEvent(arrTrans);
+			MouseUpEvent(shape);
 		}
 	}
 
-	public static void MouseDown(Transform[] arrTrans) {
+	public static void MouseDown(TestDraw shape) {
 		if (MouseDownEvent != null) {
-			MouseDownEvent(arrTrans);
+			MouseDownEvent(shape);
 		}
 	}
 }

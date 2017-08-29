@@ -1,25 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class TestDraw : MonoBehaviour {
     public Vector3 startpos;
-    public Vector3 m_Scale;
-
-	[Serializable]
-	public struct Row {
-		public bool[] arr;
-	}
-	public Row[] _arrShapeMap;
-	public ElementType _elementType;
-
-	public List<Pos2Int> m_lstChildPos = new List<Pos2Int>();
-
+	private Vector3 m_Scale;
+	private ColorType m_eColorType;
 	private Transform[,] m_arrChildTrans;
+	private List<Element> m_lstElement;
 
 	void Awake() {
 		ConfigShapeMgr shapeConf = ConfigShapeMgr.instance;
 		m_arrChildTrans = new Transform[shapeConf.rowCount, shapeConf.colCount * 2];
+		m_lstElement = new List<Element>();
 	}
 
 	void Start(){
@@ -33,15 +25,16 @@ public class TestDraw : MonoBehaviour {
 		m_arrChildTrans[row, col] = trans;
 	}
 
-	public void InitShape(ElementType colorType) {
-		_elementType = colorType;
+	public void InitShape(ColorType colorType) {
+		m_eColorType = colorType;
 		transform.localScale = Vector3.one * 0.6f;
 		Vector3 vec3 = GetOffsetPos();
 		for (int row = 0; row < m_arrChildTrans.GetLength(0); row++) {
 			for (int col = 0; col < m_arrChildTrans.GetLength(1); col++) {
 				if (m_arrChildTrans[row, col] != null) {
 					Element element = m_arrChildTrans[row, col].GetComponent<Element>();
-					element.InitElement(row, col, _elementType, vec3);
+					element.InitElement(row, col, m_eColorType, vec3);
+					m_lstElement.Add(element);
 				}
 			}
 		}
@@ -81,10 +74,10 @@ public class TestDraw : MonoBehaviour {
                 transform.GetChild(i).localScale = Vector3.one * 0.12f;
             }
             transform.position = (Input.mousePosition - new Vector3(Screen.width / 2.0f, Screen.height / 2.0f, 0)) / 100.0f + offset;
-			EventMgr.MouseDown(GetChilds());
+			EventMgr.MouseDown(this);
         }
         if (Input.GetMouseButtonUp(0)) {
-			EventMgr.MouseUp(GetChilds());
+			EventMgr.MouseUp(this);
         }
     }
 
@@ -96,22 +89,13 @@ public class TestDraw : MonoBehaviour {
         }
     }
 	
-	private Transform[] GetChilds() {
-        Transform[] postion = new Transform[transform.childCount];
-		for (int i = 0; i < transform.childCount; i++) {
-            postion[i] = transform.GetChild(i);
-        }
-        return postion;
-    }
-	
-    //相对坐标
-	public Vector3[] GetAbsPos() {
-		if (transform.childCount == 1)
-			return null;
-		Vector3[] AbsPos = new Vector3[transform.childCount - 1];
-		for (int i = 1; i < transform.childCount; i++) {
-			AbsPos[i - 1] = (transform.GetChild(i).localPosition - transform.GetChild(0).localPosition);
+	public List<Element> GetAllElement() {
+		return m_lstElement;
+	}
+
+	public ColorType f_eColorType {
+		get {
+			return m_eColorType;
 		}
-		return AbsPos;
 	}
 }

@@ -14,7 +14,6 @@ public class Window_Creat : MonoBehaviour {
 	private int m_rowCount;
 	private int m_colCount;
 	private List<Element> m_lstOldElement = new List<Element>();
-	private Transform[] m_old;
 
 	void Awake() {
 		_instance = this;
@@ -38,15 +37,14 @@ public class Window_Creat : MonoBehaviour {
 					Element element = goBack.GetComponent<Element>();
 					element.ResetColor();
 					element.pos = new Pos2Int(x, y);
-                    GameObject effect = Instantiate(m_Effect);
+					element.InitPos(x, y);
+					GameObject effect = Instantiate(m_Effect);
                     effect.transform.parent = goBack.transform;
 					effect.transform.localPosition = Vector3.zero;
 					effect.SetActive(false);
 					m_lstBackElement.Add(element);
 					m_arrElement[x, y] = element;
-				} else {
-                    m_arrElement[x, y] = null;
-                }
+				}
             }
         }
     }
@@ -56,7 +54,7 @@ public class Window_Creat : MonoBehaviour {
 		Pos2Int pos = target.pos;
 		List<Element> lstDelElement = new List<Element>();
 		for (int rowNum = 0; rowNum < m_rowCount; rowNum++) {
-			int colNum = pos.y + rowNum / 2 - pos.x / 2;
+			int colNum = pos.y + rowNum - pos.x;
             if (colNum >= 0 && colNum < m_colCount) {
 				Element element = m_arrElement[rowNum, colNum];
 				if (element != null) {
@@ -80,7 +78,7 @@ public class Window_Creat : MonoBehaviour {
 		Pos2Int pos = target.pos;
 		List<Element> lstDelElement = new List<Element>();
 		for (int rowNum = 0; rowNum < m_rowCount; rowNum++) {
-			int colNum = pos.y + (pos.x + 1) / 2 - (rowNum + 1) / 2;
+			int colNum = pos.y + pos.x - rowNum;
             if (colNum >= 0 && colNum < m_colCount) {
 				Element element = m_arrElement[rowNum, colNum];
 				if (element != null) {
@@ -128,45 +126,32 @@ public class Window_Creat : MonoBehaviour {
 	}
 	
     private Vector2 GetWorldPos(int rowNum, int colNum) {
-		float offsetX = rowNum % 2 == 0 ? 0 : COL_GAP / 2;
-		return new Vector2((colNum - (m_colCount - 1) / 2.0f) * COL_GAP + offsetX, ((m_rowCount - 1) / 2.0f - rowNum) * ROW_GAP);
+		return new Vector2((colNum - (m_colCount - 1) / 2.0f) * COL_GAP / 2.0f, ((m_rowCount - 1) / 2.0f - rowNum) * ROW_GAP);
     }
 	
-	private void OnMouseDown(Transform[] tran) {
-		if (tran == null || tran == m_old)
-			return;
-		Vector3[] pos = new Vector3[tran.Length];
-		ElementType currenttype = tran[0].GetComponent<Element>().colorType;
-		for (int i = 0; i < tran.Length; i++) {
-			pos[i] = tran[i].position;
-		}
+	private void OnMouseDown(TestDraw shape) {
 		for (int i = 0; i < m_lstOldElement.Count; i++) {
 			m_lstOldElement[i].ResetColor();
 		}
-		Element[] current = GetCanPutElement(pos);
 		m_lstOldElement.Clear();
+		List<Element> current = GetCanPutElement(shape);
 		if (current != null) {
-			for (int i = 0; i < current.Length; i++) {
-				current[i].SetDarkColor(currenttype);
-				m_old = tran;
-				m_lstOldElement.Add(current[i]);
+			m_lstOldElement = current;
+			for (int i = 0; i < current.Count; i++) {
+				current[i].SetDarkColor(shape.f_eColorType);
 			}
 		}
 	}
 
-	private void OnMouseUp(Transform[] tran) {
-		Vector3[] poss = new Vector3[tran.Length];
-		for (int i = 0; i < tran.Length; i++) {
-			poss[i] = tran[i].position;
-		}
-		Element[] current = GetCanPutElement(poss);
+	private void OnMouseUp(TestDraw shape) {
+		List<Element> current = GetCanPutElement(shape);
 		if (current == null) {
-			tran[0].parent.GetComponent<TestDraw>().ReturnStart();
+			shape.ReturnStart();
 			m_lstOldElement.Clear();
 			return;
 		}
-		Destroy(tran[0].parent.gameObject);
-		EventMgr.MouseUpDelete(tran[0].parent);
+		Destroy(shape.gameObject);
+		EventMgr.MouseUpDelete(shape.transform);
 		EventMgr.MouseUpCreateByIndex();
 		m_lstDelLine = new List<List<Element>>();
 		List<Element> tf = new List<Element>();
@@ -185,38 +170,54 @@ public class Window_Creat : MonoBehaviour {
 		m_lstOldElement.Clear();
 	}
     
-	private Element[] GetCanPutElement(Vector3[] arrPos) {
-		Element[] arrElement = new Element[arrPos.Length];
-		for (int a = 0; a < arrPos.Length; a++) {
-			for (int i = 0; i < m_lstBackElement.Count; i++) {
-				Element element = m_lstBackElement[i];
-				float offset = Math.Abs(Vector3.Distance(element.position, arrPos[a]));
-				if (offset < 0.25f) {
-					if (element.CheckIsEmpty()) {
-						arrElement[a] = element;
-					}
-					break;
-				}
+	private List<Element> GetCanPutElement(TestDraw shape) {
+		List<Element> lstRetElement = null;
+		List<Element> lstElement = shape.GetAllElement();
+		Element eleFirst = lstElement[0];
+		for (int i = 0; i < m_lstBackElement.Count; i++) {
+			Element element = m_lstBackElement[i];
+			if (!element.CheckIsEmpty()) {
+				continue;
 			}
-			if (arrElement[a] == null) {
-				return null;
+			float offset = Math.Abs(Vector3.Distance(element.transform.position, eleFirst.transform.position));
+			if (offset < 0.25f) {
+				lstRetElement = CanPutShape(lstElement, element.f_uRow, element.f_uCol);
 			}
 		}
-		return arrElement;
-    }
+		return lstRetElement;
+	}
 
-	public bool CheckCanContinue(Vector3[] posPre) {
-		if (posPre == null)
+	private List<Element> CanPutShape(List<Element> lstElement, int uFirstRow, int uFirstCol) {
+		List<Element> lstRetElement = new List<Element>();
+		lstRetElement.Add(m_arrElement[uFirstRow, uFirstCol]);
+		Element eleFirst = lstElement[0];
+		for (int i = 1; i < lstElement.Count; i++) {
+			Element eleOther = lstElement[i];
+			int uRow = uFirstRow + eleOther.f_uRow - eleFirst.f_uRow;
+			int uCol = uFirstCol + eleOther.f_uCol - eleFirst.f_uCol;
+			if (uRow < 0 || uRow >= m_rowCount || uCol < 0 || uCol >= m_colCount) {
+				return null;
+			}
+			Element eleBack = m_arrElement[uRow, uCol];
+			if (eleBack == null || !eleBack.CheckIsEmpty()) {
+				return null;
+			}
+			lstRetElement.Add(eleBack);
+		}
+		return lstRetElement;
+	}
+
+	public bool CheckCanContinue(TestDraw shape) {
+		List<Element> lstElement = shape.GetAllElement();
+		if (lstElement.Count <= 1) {
 			return true;
-		for (int i = 0; i < m_lstBackElement.Count; i++) {
-			if (m_lstBackElement[i].CheckIsEmpty()) {
-				Vector3[] DicPos = new Vector3[posPre.Length];
-				for (int j = 0; j < posPre.Length; j++) {
-					DicPos[j] = m_lstBackElement[i].position + posPre[j];
-				}
-				Element[] trans = GetCanPutElement(DicPos);
-				if (trans != null) {
-					return true;
+		}
+		for (int row = 0; row < m_arrElement.GetLength(0); row++) {
+			for (int col = 0; col < m_arrElement.GetLength(1); col++) {
+				if (m_arrElement[row, col] != null && m_arrElement[row, col].CheckIsEmpty()) {
+					if (CanPutShape(lstElement, row, col) != null) {
+						return true;
+					}
 				}
 			}
 		}
