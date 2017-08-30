@@ -43,7 +43,7 @@ public class Gold : MonoBehaviour {
         }
 		if (transform.position == target) {
 			if (count == 0) {
-				EventMgr.AddGold();
+				GameMgr.instance.AddGold();
             }
             count++;
             ani.SetTrigger("IsColor");
@@ -53,7 +53,7 @@ public class Gold : MonoBehaviour {
             MousePos = (Input.mousePosition - new Vector3(Screen.width / 2.0f, Screen.height / 2.0f, 0)) / 100.0f;
 			if (Mathf.Abs(Vector3.Distance(transform.position, MousePos)) < 1.0f) {
                 IsMoved = true;
-				EventMgr.AddScore(transform.position);
+				GameMgr.instance.AddScore(transform.position);
 			}
         }
     }

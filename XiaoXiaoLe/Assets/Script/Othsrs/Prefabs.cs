@@ -20,9 +20,8 @@ public class Prefabs : MonoBehaviour {
 	private List<int> m_lstShapeGroup = new List<int>();
 
 	void Awake() {
+		GameMgr.instance.f_prefabs = this;
 		InitShapeGroup();
-		EventMgr.MouseUpCreateByIndexEvent += OnMouseUpCreateByIndex;
-		EventMgr.MouseUpCreateByTransEvent += OnMouseUpCreateByTrans;
 	}
 
 	private void InitShapeGroup() {
@@ -47,10 +46,10 @@ public class Prefabs : MonoBehaviour {
 		if (window_gv.activeSelf)
 			return;
 		if (Input.GetMouseButtonDown(0)) {
-			Vector3 MousePos = (Input.mousePosition - new Vector3(Screen.width / 2.0f, Screen.height / 2.0f)) / 100.0f;
+			Vector3 vec3MousePos = (Input.mousePosition - new Vector3(Screen.width / 2.0f, Screen.height / 2.0f)) / 100.0f;
 			for (int i = 0; i < Roots.Length && i < transform.childCount; i++) {
                 transform.GetChild(i).GetComponent<TestDraw>().enabled = false;
-				if (Mathf.Abs(Vector3.Distance(Roots[i], MousePos)) < 1.2f) {
+				if (Mathf.Abs(Vector3.Distance(Roots[i], vec3MousePos)) < 1.2f) {
                     transform.GetChild(i).GetComponent<TestDraw>().enabled = true;
                 }
             }
@@ -112,7 +111,7 @@ public class Prefabs : MonoBehaviour {
 		}
     }
 	
-	private void OnMouseUpCreateByTrans(Transform trans) {
+	public void OnMouseUpCreateByTrans(Transform trans) {
 		m_uDexcode = trans.GetHashCode();
 		//根据类型判断是否游戏可以继续
 		if (!CanContinue()) {
@@ -123,7 +122,7 @@ public class Prefabs : MonoBehaviour {
 		goShape.transform.position = Roots[Roots.Length - 1];
 	}
 
-	private void OnMouseUpCreateByIndex() {
+	public void OnMouseUpCreateByIndex() {
 		m_uShapeNum++;
 		if (m_uShapeNum >= 30 && m_uShapeNum < 60) {
 			m_uColIndex = 2;
@@ -141,16 +140,11 @@ public class Prefabs : MonoBehaviour {
 			//包含了想要删除的物体
 			if (childTrans.GetHashCode() != m_uDexcode) {
 				TestDraw shape = childTrans.GetComponent<TestDraw>();
-				if (Window_Creat.instance.CheckCanContinue(shape)) {
+				if (GameMgr.instance.CheckCanContinue(shape)) {
 					return true;
 				}
             }
         }
         return false;
     }
-	
-	void OnDestroy() {
-		EventMgr.MouseUpCreateByIndexEvent -= OnMouseUpCreateByIndex;
-		EventMgr.MouseUpCreateByTransEvent -= OnMouseUpCreateByTrans;
-	}
 }

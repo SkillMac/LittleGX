@@ -71,10 +71,10 @@ public class TestDraw : MonoBehaviour {
 				m_lstElement[i].transform.localScale = Vector3.one * ELEMENT_SCALE_P;
 			}
             transform.position = (Input.mousePosition - new Vector3(Screen.width / 2.0f, Screen.height / 2.0f, 0)) / 100.0f + offset;
-			EventMgr.MouseDown(this);
+			GameMgr.instance.MouseDown(this);
         }
         if (Input.GetMouseButtonUp(0)) {
-			EventMgr.MouseUp(this);
+			GameMgr.instance.MouseUp(this);
         }
     }
 

@@ -7,7 +7,6 @@ public class Window_Creat : MonoBehaviour {
 	private const float ROW_GAP = 0.5f;
     public GameObject prefabBG;
     public GameObject m_Effect;
-	private static Window_Creat _instance;
 	private List<BackElement> m_lstBackElement;//所有元素的集合
 	private List<List<BackElement>> m_lstDelLine;
 	private BackElement[,] m_arrElement;
@@ -16,9 +15,7 @@ public class Window_Creat : MonoBehaviour {
 	private List<BackElement> m_lstOldElement = new List<BackElement>();
 
 	void Awake() {
-		_instance = this;
-		EventMgr.MouseUpEvent += OnMouseUp;
-		EventMgr.MouseDownEvent += OnMouseDown;
+		GameMgr.instance.f_windowCreate = this;
 		m_lstBackElement = new List<BackElement>();
     }
 	
@@ -125,7 +122,7 @@ public class Window_Creat : MonoBehaviour {
 		return new Vector2((colNum - (m_colCount - 1) / 2.0f) * COL_GAP / 2.0f, ((m_rowCount - 1) / 2.0f - rowNum) * ROW_GAP);
     }
 	
-	private void OnMouseDown(TestDraw shape) {
+	public void OnMouseDown(TestDraw shape) {
 		for (int i = 0; i < m_lstOldElement.Count; i++) {
 			m_lstOldElement[i].ResetColor();
 		}
@@ -139,7 +136,7 @@ public class Window_Creat : MonoBehaviour {
 		}
 	}
 
-	private void OnMouseUp(TestDraw shape) {
+	public void OnMouseUp(TestDraw shape) {
 		List<BackElement> current = GetCanPutElement(shape);
 		if (current == null) {
 			shape.ReturnStart();
@@ -147,8 +144,8 @@ public class Window_Creat : MonoBehaviour {
 			return;
 		}
 		Destroy(shape.gameObject);
-		EventMgr.MouseUpDelete(shape.transform);
-		EventMgr.MouseUpCreateByIndex();
+		GameMgr.instance.MouseUpDelete(shape.transform);
+		GameMgr.instance.MouseUpCreateByIndex();
 		m_lstDelLine = new List<List<BackElement>>();
 		List<BackElement> tf = new List<BackElement>();
 		for (int i = 0; i < m_lstOldElement.Count; i++) {
@@ -162,7 +159,7 @@ public class Window_Creat : MonoBehaviour {
 		if (m_lstDelLine.Count == 0) {
 			m_lstDelLine.Add(tf);
 		}
-		EventMgr.Delete(m_lstDelLine);
+		GameMgr.instance.Delete(m_lstDelLine);
 		m_lstOldElement.Clear();
 	}
     
@@ -218,16 +215,5 @@ public class Window_Creat : MonoBehaviour {
 			}
 		}
 		return false;
-	}
-
-	void OnDestroy() {
-		EventMgr.MouseUpEvent -= OnMouseUp;
-		EventMgr.MouseDownEvent -= OnMouseDown;
-	}
-
-	public static Window_Creat instance {
-		get {
-			return _instance;
-		}
 	}
 }

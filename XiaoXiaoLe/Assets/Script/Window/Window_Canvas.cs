@@ -11,8 +11,7 @@ public class Window_Canvas : MonoBehaviour {
 	private int number;
 
 	void Awake() {
-		EventMgr.AddScoreEvent += OnAddScore;
-		EventMgr.AddGoldEvent += OnAddGold;
+		GameMgr.instance.f_windowCanvas = this;
 		m_Highscore.text = HummerString.FormatNum(PlayerPrefs.GetInt("Highscore"));
         m_gold.text = PlayerPrefs.GetInt("Gold").ToString();
     }
@@ -50,21 +49,16 @@ public class Window_Canvas : MonoBehaviour {
             yield return new WaitForEndOfFrame();
         }
     }
-	
-	private void OnAddGold() {
+
+	public void OnAddGold() {
 		int dex = PlayerPrefs.GetInt("Gold") + 1;
 		PlayerPrefs.SetInt("Gold", dex);
 		m_gold.text = dex.ToString();
 	}
 
-	private void OnAddScore(Vector3 pp) {
+	public void OnAddScore(Vector3 pp) {
 		AddScores(goldScore);
 		preGold.transform.position = pp + new Vector3(-1.0f, 0, 0);
 		preGold.SetActive(true);
-	}
-
-    private void OnDestroy() {
-		EventMgr.AddScoreEvent -= OnAddScore;
-		EventMgr.AddGoldEvent -= OnAddGold;
 	}
 }

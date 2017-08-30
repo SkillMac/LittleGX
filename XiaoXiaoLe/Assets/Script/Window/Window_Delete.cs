@@ -7,33 +7,32 @@ public class Window_Delete : MonoBehaviour {
     public Window_Canvas m_canvas;
     public GameObject m_gold;//小金币
     public GameObject m_Sprite;
-	private List<List<BackElement>> m_AllDelete;
-	private bool BeginDelete;
-	private Transform tf;
-	private float deleteTime = 0f;
-	private int rewardIndex = 0;
+	private List<List<BackElement>> m_listDelLine;
+	private bool m_bBeginDelete;
+	private Transform transShape;
+	private float m_fDeleteTime = 0f;
+	private int m_uRewardIndex = 0;
 
 	private void Awake() {
-		EventMgr.DeleteEvent += OnDelete;
-		EventMgr.MouseUpDeleteEvent += OnMouseUpDelete;
+		GameMgr.instance.f_windowDelete = this;
     }
 	
 	void Update() {
-        if (BeginDelete) {
-            DleteEle();
+        if (m_bBeginDelete) {
+            DeleteEle();
         }
 	}
 
-	private void DleteEle() {
-		if (m_AllDelete.Count <= 1) {
-			if (m_AllDelete[0].Count <= 4) {
-				GetScoreWithNum(0, m_AllDelete[0][m_AllDelete[0].Count / 2].transform.position, m_GoldMove);
+	private void DeleteEle() {
+		if (m_listDelLine.Count <= 1) {
+			if (m_listDelLine[0].Count <= 4) {
+				GetScoreWithNum(0, m_listDelLine[0][m_listDelLine[0].Count / 2].transform.position, m_GoldMove);
 			} else {
-				Effect(m_AllDelete[0], m_GoldMove);
+				Effect(m_listDelLine[0], m_GoldMove);
 			}
 			m_GoldMove.SetActive(true);
-			BeginDelete = false;
-			EventMgr.MouseUpCreateByTrans(tf);
+			m_bBeginDelete = false;
+			GameMgr.instance.MouseUpCreateByTrans(transShape);
 		} else {
 			DeleMore();
 		}
@@ -54,27 +53,27 @@ public class Window_Delete : MonoBehaviour {
 	
 	private void OnDeleteLine(int index) {
 		if (index > 0) {
-			CreatGold(m_AllDelete[index][m_AllDelete[1].Count / 2]);
+			CreatGold(m_listDelLine[index][m_listDelLine[1].Count / 2]);
 		}
 		if (!m_Gold.activeSelf) {
 			m_Gold.SetActive(true);
 		}
-		Effect(m_AllDelete[index], m_Gold.transform.GetChild(0).gameObject);
+		Effect(m_listDelLine[index], m_Gold.transform.GetChild(0).gameObject);
 		m_Gold.transform.localScale = new Vector3(2.2f, 2.2f, 2.2f);
 		m_Gold.transform.GetChild(0).GetComponent<Animator>().SetTrigger("IsScale");
 	}
 
 	private void DeleMore() {
-		deleteTime += Time.deltaTime;
-		if (deleteTime * 2 > rewardIndex) {
-			if (rewardIndex < m_AllDelete.Count) {
-				OnDeleteLine(rewardIndex);
-				rewardIndex++;
+		m_fDeleteTime += Time.deltaTime;
+		if (m_fDeleteTime * 2 > m_uRewardIndex) {
+			if (m_uRewardIndex < m_listDelLine.Count) {
+				OnDeleteLine(m_uRewardIndex);
+				m_uRewardIndex++;
 			} else {
-				SetSprite(m_AllDelete.Count - 2);
+				SetSprite(m_listDelLine.Count - 2);
 				m_Gold.SetActive(false);
-				BeginDelete = false;
-				EventMgr.MouseUpCreateByTrans(tf);
+				m_bBeginDelete = false;
+				GameMgr.instance.MouseUpCreateByTrans(transShape);
 			}
 		}
     }
@@ -89,16 +88,16 @@ public class Window_Delete : MonoBehaviour {
 		return 0;
 	}
 
-	private void OnDelete(List<List<BackElement>> list) {
+	public void OnDelete(List<List<BackElement>> list) {
 		list.Sort(SortDelList);
-		m_AllDelete = list;
-		deleteTime = 0f;
-		BeginDelete = true;
-		rewardIndex = 0;
+		m_listDelLine = list;
+		m_fDeleteTime = 0f;
+		m_bBeginDelete = true;
+		m_uRewardIndex = 0;
     }
 
-	private void OnMouseUpDelete(Transform trans) {
-		tf = trans;
+	public void OnMouseUpDelete(Transform trans) {
+		transShape = trans;
 	}
 
 	private void SetSprite(int dx) {
@@ -125,9 +124,4 @@ public class Window_Delete : MonoBehaviour {
         GameObject obj = Instantiate(m_gold);
         obj.transform.position = pos.transform.position;
     }
-	
-    private void OnDestroy() {
-		EventMgr.DeleteEvent -= OnDelete;
-		EventMgr.MouseUpDeleteEvent -= OnMouseUpDelete;
-	}
 }
