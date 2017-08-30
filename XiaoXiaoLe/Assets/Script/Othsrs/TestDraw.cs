@@ -85,7 +85,13 @@ public class TestDraw : MonoBehaviour {
 			m_lstElement[i].transform.localScale = Vector3.one * ELEMENT_SCALE_N;
 		}
     }
-	
+
+	public void DestroySelf() {
+		GameMgr.instance.RemoveShap(this);
+		Destroy(gameObject);
+	}
+
+
 	public List<ShapeElement> GetAllElement() {
 		return m_lstElement;
 	}

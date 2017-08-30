@@ -9,7 +9,7 @@ public class PrefabsFactory {
 		return go;
 	}
 
-	public static GameObject CreateShape(int uIndex, Transform trans) {
+	public static TestDraw CreateShape(int uIndex, Transform trans) {
 		GameObject go = new GameObject("Shape");
 		go.transform.parent = trans;
 		TestDraw shape = go.AddComponent<TestDraw>();
@@ -24,6 +24,6 @@ public class PrefabsFactory {
 			}
 		}
 		shape.InitShape(shapeItemVO.colorType);
-		return go;
+		return shape;
 	}
 }

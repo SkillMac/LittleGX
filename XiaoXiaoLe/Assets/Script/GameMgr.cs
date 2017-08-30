@@ -12,10 +12,6 @@ public class GameMgr {
 
 	}
 
-	public void Delete(List<List<BackElement>> list) {
-		m_windowDelete.OnDelete(list);
-	}
-
 	public void AddScore(Vector3 vec3) {
 		m_windowCanvas.OnAddScore(vec3);
 	}
@@ -23,17 +19,21 @@ public class GameMgr {
 	public void AddGold() {
 		m_windowCanvas.OnAddGold();
 	}
-
-	public void MouseUpDelete(Transform trans) {
-		m_windowDelete.OnMouseUpDelete(trans);
+	
+	public void Delete(List<List<BackElement>> list) {
+		m_windowDelete.OnDelete(list);
 	}
 
-	public void MouseUpCreateByIndex() {
-		m_prefabs.OnMouseUpCreateByIndex();
+	public void ShapeForward() {
+		m_prefabs.ShapeForward();
 	}
 
-	public void MouseUpCreateByTrans(Transform trans) {
-		m_prefabs.OnMouseUpCreateByTrans(trans);
+	public void CheckEndAndCreateShape() {
+		m_prefabs.CheckEndAndCreateShape();
+	}
+
+	public void RemoveShap(TestDraw shap) {
+		m_prefabs.RemoveShap(shap);
 	}
 
 	public void MouseUp(TestDraw shape) {

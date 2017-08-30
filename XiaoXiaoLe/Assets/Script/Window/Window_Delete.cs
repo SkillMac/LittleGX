@@ -9,7 +9,6 @@ public class Window_Delete : MonoBehaviour {
     public GameObject m_Sprite;
 	private List<List<BackElement>> m_listDelLine;
 	private bool m_bBeginDelete;
-	private Transform transShape;
 	private float m_fDeleteTime = 0f;
 	private int m_uRewardIndex = 0;
 
@@ -32,7 +31,7 @@ public class Window_Delete : MonoBehaviour {
 			}
 			m_GoldMove.SetActive(true);
 			m_bBeginDelete = false;
-			GameMgr.instance.MouseUpCreateByTrans(transShape);
+			GameMgr.instance.CheckEndAndCreateShape();
 		} else {
 			DeleMore();
 		}
@@ -73,7 +72,7 @@ public class Window_Delete : MonoBehaviour {
 				SetSprite(m_listDelLine.Count - 2);
 				m_Gold.SetActive(false);
 				m_bBeginDelete = false;
-				GameMgr.instance.MouseUpCreateByTrans(transShape);
+				GameMgr.instance.CheckEndAndCreateShape();
 			}
 		}
     }
@@ -95,11 +94,7 @@ public class Window_Delete : MonoBehaviour {
 		m_bBeginDelete = true;
 		m_uRewardIndex = 0;
     }
-
-	public void OnMouseUpDelete(Transform trans) {
-		transShape = trans;
-	}
-
+	
 	private void SetSprite(int dx) {
         m_Sprite.SetActive(true);
         m_Sprite.transform.GetComponent<Disapper>().Enable(dx);

@@ -8,7 +8,7 @@ public class Window_Creat : MonoBehaviour {
     public GameObject prefabBG;
     public GameObject m_Effect;
 	private List<BackElement> m_lstBackElement;//所有元素的集合
-	private List<List<BackElement>> m_lstDelLine;
+	private List<List<BackElement>> m_lstDelLine = new List<List<BackElement>>();
 	private BackElement[,] m_arrElement;
 	private int m_rowCount;
 	private int m_colCount;
@@ -20,24 +20,24 @@ public class Window_Creat : MonoBehaviour {
     }
 	
     void Start() {
-		int[,] mapTab = ConfigMapsMgr.instance.GetMapsData();
-		m_rowCount = mapTab.GetLength(0);
-        m_colCount = mapTab.GetLength(1);
+		int[,] arrMapTab = ConfigMapsMgr.instance.GetMapsData();
+		m_rowCount = arrMapTab.GetLength(0);
+        m_colCount = arrMapTab.GetLength(1);
         m_arrElement = new BackElement[m_rowCount, m_colCount];
         //根据列表实例化出来棋盘
         for (int x = 0; x < m_rowCount; x++) {
             for (int y = 0; y < m_colCount; y++) {
-                if (mapTab[x, y] != 0) {
+                if (arrMapTab[x, y] != 0) {
                     GameObject goBack = Instantiate(prefabBG);
                     goBack.transform.parent = transform;
 					goBack.transform.localPosition = GetWorldPos(x, y);
 					BackElement element = goBack.GetComponent<BackElement>();
 					element.ResetColor();
 					element.InitPos(x, y);
-					GameObject effect = Instantiate(m_Effect);
-                    effect.transform.parent = goBack.transform;
-					effect.transform.localPosition = Vector3.zero;
-					effect.SetActive(false);
+					GameObject goEffect = Instantiate(m_Effect);
+                    goEffect.transform.parent = goBack.transform;
+					goEffect.transform.localPosition = Vector3.zero;
+					goEffect.SetActive(false);
 					m_lstBackElement.Add(element);
 					m_arrElement[x, y] = element;
 				}
@@ -45,13 +45,13 @@ public class Window_Creat : MonoBehaviour {
         }
     }
 	
-	private void TryDelLeft(BackElement target) {
+	private void TryDelLeft(BackElement eleTarget) {
 		bool bFlag = false;
 		List<BackElement> lstDelElement = new List<BackElement>();
-		for (int rowNum = 0; rowNum < m_rowCount; rowNum++) {
-			int colNum = target.f_uCol + rowNum - target.f_uRow;
-            if (colNum >= 0 && colNum < m_colCount) {
-				BackElement element = m_arrElement[rowNum, colNum];
+		for (int uRow = 0; uRow < m_rowCount; uRow++) {
+			int uCol = eleTarget.f_uCol + uRow - eleTarget.f_uRow;
+            if (uCol >= 0 && uCol < m_colCount) {
+				BackElement element = m_arrElement[uRow, uCol];
 				if (element != null) {
 					if (element.CheckIsEmpty()) {
 						return;
@@ -68,13 +68,13 @@ public class Window_Creat : MonoBehaviour {
 		}
 	}
 	
-	private void TryDelRight(BackElement target) {
+	private void TryDelRight(BackElement eleTarget) {
 		bool bFlag = false;
 		List<BackElement> lstDelElement = new List<BackElement>();
-		for (int rowNum = 0; rowNum < m_rowCount; rowNum++) {
-			int colNum = target.f_uCol + target.f_uRow - rowNum;
-            if (colNum >= 0 && colNum < m_colCount) {
-				BackElement element = m_arrElement[rowNum, colNum];
+		for (int uRow = 0; uRow < m_rowCount; uRow++) {
+			int uCol = eleTarget.f_uCol + eleTarget.f_uRow - uRow;
+            if (uCol >= 0 && uCol < m_colCount) {
+				BackElement element = m_arrElement[uRow, uCol];
 				if (element != null) {
 					if (element.CheckIsEmpty()) {
 						return;
@@ -91,11 +91,11 @@ public class Window_Creat : MonoBehaviour {
 		}
     }
 	
-	private void TryDelCenter(BackElement target) {
+	private void TryDelCenter(BackElement eleTarget) {
 		bool bFlag = false;
 		List<BackElement> listDelElement = new List<BackElement>();
-		for (int colNum = 0; colNum < m_colCount; colNum++) {
-			BackElement element = m_arrElement[target.f_uRow, colNum];
+		for (int uCol = 0; uCol < m_colCount; uCol++) {
+			BackElement element = m_arrElement[eleTarget.f_uRow, uCol];
 			if (element != null) {
 				if (element.CheckIsEmpty()) {
 					return;
@@ -118,8 +118,8 @@ public class Window_Creat : MonoBehaviour {
 		m_lstDelLine.Add(listDelElement);
 	}
 	
-    private Vector2 GetWorldPos(int rowNum, int colNum) {
-		return new Vector2((colNum - (m_colCount - 1) / 2.0f) * COL_GAP / 2.0f, ((m_rowCount - 1) / 2.0f - rowNum) * ROW_GAP);
+    private Vector2 GetWorldPos(int uRow, int uCol) {
+		return new Vector2((uCol - (m_colCount - 1) / 2.0f) * COL_GAP / 2.0f, ((m_rowCount - 1) / 2.0f - uRow) * ROW_GAP);
     }
 	
 	public void OnMouseDown(TestDraw shape) {
@@ -127,37 +127,36 @@ public class Window_Creat : MonoBehaviour {
 			m_lstOldElement[i].ResetColor();
 		}
 		m_lstOldElement.Clear();
-		List<BackElement> current = GetCanPutElement(shape);
-		if (current != null) {
-			m_lstOldElement = current;
-			for (int i = 0; i < current.Count; i++) {
-				current[i].SetDarkColor(shape.f_eColorType);
+		List<BackElement> lstCurrent = GetCanPutElement(shape);
+		if (lstCurrent != null) {
+			m_lstOldElement = lstCurrent;
+			for (int i = 0; i < lstCurrent.Count; i++) {
+				lstCurrent[i].SetDarkColor(shape.f_eColorType);
 			}
 		}
 	}
 
 	public void OnMouseUp(TestDraw shape) {
-		List<BackElement> current = GetCanPutElement(shape);
-		if (current == null) {
+		List<BackElement> lstCurrent = GetCanPutElement(shape);
+		if (lstCurrent == null) {
 			shape.ReturnStart();
 			m_lstOldElement.Clear();
 			return;
 		}
-		Destroy(shape.gameObject);
-		GameMgr.instance.MouseUpDelete(shape.transform);
-		GameMgr.instance.MouseUpCreateByIndex();
-		m_lstDelLine = new List<List<BackElement>>();
-		List<BackElement> tf = new List<BackElement>();
+		shape.DestroySelf();
+		GameMgr.instance.ShapeForward();
+		m_lstDelLine.Clear();
+		List<BackElement> lstDelElement = new List<BackElement>();
 		for (int i = 0; i < m_lstOldElement.Count; i++) {
 			BackElement element = m_lstOldElement[i];
 			element.ApplyColor();
 			TryDelCenter(element);
 			TryDelLeft(element);
 			TryDelRight(element);
-			tf.Add(element);
+			lstDelElement.Add(element);
 		}
 		if (m_lstDelLine.Count == 0) {
-			m_lstDelLine.Add(tf);
+			m_lstDelLine.Add(lstDelElement);
 		}
 		GameMgr.instance.Delete(m_lstDelLine);
 		m_lstOldElement.Clear();
