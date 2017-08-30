@@ -12,8 +12,8 @@ public class GameMgr {
 
 	}
 
-	public void AddScore(Vector3 vec3) {
-		m_windowCanvas.OnAddScore(vec3);
+	public void AddScore() {
+		m_windowCanvas.OnAddScore();
 	}
 
 	public void AddGold() {

@@ -7,7 +7,6 @@ public class Window_Canvas : MonoBehaviour {
     public Text m_Highscore;
     public Text m_gold;
 	public int goldScore;
-	public GameObject preGold;
 	private int number;
 
 	void Awake() {
@@ -56,9 +55,7 @@ public class Window_Canvas : MonoBehaviour {
 		m_gold.text = dex.ToString();
 	}
 
-	public void OnAddScore(Vector3 pp) {
+	public void OnAddScore() {
 		AddScores(goldScore);
-		preGold.transform.position = pp + new Vector3(-1.0f, 0, 0);
-		preGold.SetActive(true);
 	}
 }

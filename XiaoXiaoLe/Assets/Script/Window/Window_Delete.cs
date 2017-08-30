@@ -5,7 +5,6 @@ public class Window_Delete : MonoBehaviour {
     public GameObject m_GoldMove;
     public GameObject m_Gold;
     public Window_Canvas m_canvas;
-    public GameObject m_gold;//小金币
     public GameObject m_Sprite;
 	private List<List<BackElement>> m_listDelLine;
 	private bool m_bBeginDelete;
@@ -52,7 +51,8 @@ public class Window_Delete : MonoBehaviour {
 	
 	private void OnDeleteLine(int index) {
 		if (index > 0) {
-			CreatGold(m_listDelLine[index][m_listDelLine[1].Count / 2]);
+			BackElement eleMid = m_listDelLine[index][m_listDelLine[1].Count / 2];
+			PrefabsFactory.CreatGold(eleMid.transform.position);
 		}
 		if (!m_Gold.activeSelf) {
 			m_Gold.SetActive(true);
@@ -110,13 +110,7 @@ public class Window_Delete : MonoBehaviour {
             obj.transform.parent.position = pos;
 		int scorenum = ConfigScoreMgr.instance.GetScoreNum(num.ToString());
 		int path = ConfigScoreMgr.instance.GetPathNum(num.ToString());
-		obj.transform.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Num/" + path);
+		obj.transform.GetComponentInChildren<SpriteRenderer>().sprite = Resources.Load<Sprite>("Num/" + path);
         m_canvas.AddScores(scorenum);
-    }
-	
-	//创建小金币
-	private void CreatGold(BackElement pos) {
-        GameObject obj = Instantiate(m_gold);
-        obj.transform.position = pos.transform.position;
     }
 }

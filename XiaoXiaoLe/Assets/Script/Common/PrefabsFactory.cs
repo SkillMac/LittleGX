@@ -2,6 +2,7 @@
 
 public class PrefabsFactory {
 	private const string PRE_BLOCK = "Prefabs/Pre_Block";
+	private const string PRE_GOLD = "Prefabs/Pre_Gold";
 
 	public static GameObject CreateBlock() {
 		GameObject goPre = Resources.Load<GameObject>(PRE_BLOCK);
@@ -25,5 +26,12 @@ public class PrefabsFactory {
 		}
 		shape.InitShape(shapeItemVO.colorType);
 		return shape;
+	}
+
+	public static void CreatGold(Vector3 vec3Pos) {
+		GameObject goPre = Resources.Load<GameObject>(PRE_GOLD);
+		GameObject go = Object.Instantiate(goPre);
+		Gold gold = go.GetComponent<Gold>();
+		gold.Init(vec3Pos);
 	}
 }
