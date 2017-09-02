@@ -7,6 +7,7 @@ public class Window_Canvas : MonoBehaviour {
     public Text m_Highscore;
     public Text m_gold;
 	public int goldScore;
+	public RectTransform _rtGold;
 	private int number;
 
 	void Awake() {
@@ -57,5 +58,9 @@ public class Window_Canvas : MonoBehaviour {
 
 	public void OnAddScore() {
 		AddScores(goldScore);
+	}
+
+	public Vector3 GetGoldTargetPos() {
+		return Camera.main.ScreenToWorldPoint(_rtGold.position);
 	}
 }

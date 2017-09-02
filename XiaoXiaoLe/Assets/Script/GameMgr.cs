@@ -19,7 +19,11 @@ public class GameMgr {
 	public void AddGold() {
 		m_windowCanvas.OnAddGold();
 	}
-	
+
+	public Vector3 GetGoldTargetPos() {
+		return m_windowCanvas.GetGoldTargetPos();
+	}
+
 	public void Delete(List<List<BackElement>> list) {
 		m_windowDelete.OnDelete(list);
 	}

@@ -80,7 +80,9 @@ public class TestDraw : MonoBehaviour {
 	private void MouseEvent() {
 		if (Input.GetMouseButton(0)) {
 			Vector3 offset = new Vector3(0, 1.0f, 0);
-			transform.position = (Input.mousePosition - new Vector3(Screen.width / 2.0f, Screen.height / 2.0f, 0)) / 100.0f + offset;
+			Vector3 vec3MousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+			vec3MousePos.z = 0;
+			transform.position = vec3MousePos + offset;
 			GameMgr.instance.MouseDown(this);
 		}
 		if (Input.GetMouseButtonUp(0)) {

@@ -9,7 +9,8 @@ public class MouseEventMgr : MonoBehaviour {
 	}
 
 	private void OnMouseDown() {
-		Vector3 vec3MousePos = (Input.mousePosition - new Vector3(Screen.width / 2.0f, Screen.height / 2.0f, 0)) / 100.0f;
+		Vector3 vec3MousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+		vec3MousePos.z = 0;
 		bool bFlag = GameMgr.instance.CheckClickGold(vec3MousePos);
 		if (bFlag) {
 			return;

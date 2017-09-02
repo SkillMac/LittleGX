@@ -7,9 +7,9 @@ public class Gold : MonoBehaviour {
 	public Transform sun;
     public Transform gold;
     public float yoffset;
-    public Vector3 target;
 	public int startAni;//开始闪烁的时间
 	public int Disable;//物体消失的时间
+	private Vector3 m_vec3Target;
 	private bool m_bMoved = false;
 	private bool m_bCanMove = false;
 	private int m_uCount = 0;
@@ -20,7 +20,9 @@ public class Gold : MonoBehaviour {
 	
 	void Start() {
         m_animator = GetComponent<Animator>();
-    }
+		m_vec3Target = GameMgr.instance.GetGoldTargetPos();
+
+	}
 
 	public void Init(Vector3 vec3StartPos, Window_Delete winDelete) {
 		m_winDelete = winDelete;
@@ -45,9 +47,9 @@ public class Gold : MonoBehaviour {
             sun.gameObject.SetActive(false);
             m_animator.SetBool("BeginAni", false);
             m_bCanMove = true;
-            MoveToPos(target);
+            MoveToPos(m_vec3Target);
         }
-		if (_transMoveGold.transform.position == target) {
+		if (_transMoveGold.transform.position == m_vec3Target) {
 			if (m_uCount == 0) {
 				GameMgr.instance.AddGold();
             }
