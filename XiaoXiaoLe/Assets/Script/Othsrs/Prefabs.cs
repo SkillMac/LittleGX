@@ -44,15 +44,6 @@ public class Prefabs : MonoBehaviour {
 	void Update() {
 		if (window_gv.activeSelf)
 			return;
-		if (Input.GetMouseButtonDown(0)) {
-			Vector3 vec3MousePos = (Input.mousePosition - new Vector3(Screen.width / 2.0f, Screen.height / 2.0f)) / 100.0f;
-			for (int i = 0; i < m_lstShape.Count; i++) {
-				m_lstShape[i].enabled = false;
-				if (Mathf.Abs(Vector3.Distance(Roots[i], vec3MousePos)) < 1.2f) {
-					m_lstShape[i].enabled = true;
-                }
-            }
-        }
 		if (m_bMove) {
 			for (int i = 0; i < m_lstShape.Count; i++) {
                 MoveWithIndex(m_lstShape[i].transform, i);
@@ -67,6 +58,17 @@ public class Prefabs : MonoBehaviour {
                 m_bGameOver = false;
             }
         }
+	}
+
+	public void CheckClickShape(Vector3 vec3ClickPos) {
+		if (window_gv.activeSelf)
+			return;
+		for (int i = 0; i < m_lstShape.Count; i++) {
+			m_lstShape[i].enabled = false;
+			if (Mathf.Abs(Vector3.Distance(Roots[i], vec3ClickPos)) < 1.2f) {
+				m_lstShape[i].enabled = true;
+			}
+		}
 	}
 	
 	private int GetRandomMaxNum(int uLastGroup) {

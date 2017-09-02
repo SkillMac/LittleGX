@@ -10,6 +10,7 @@ public class Window_Delete : MonoBehaviour {
 	private bool m_bBeginDelete;
 	private float m_fDeleteTime = 0f;
 	private int m_uRewardIndex = 0;
+	private List<Gold> m_lstGold = new List<Gold>();
 
 	private void Awake() {
 		GameMgr.instance.f_windowDelete = this;
@@ -52,7 +53,8 @@ public class Window_Delete : MonoBehaviour {
 	private void OnDeleteLine(int index) {
 		if (index > 0) {
 			BackElement eleMid = m_listDelLine[index][m_listDelLine[1].Count / 2];
-			PrefabsFactory.CreatGold(eleMid.transform.position);
+			Gold gold = PrefabsFactory.CreatGold(eleMid.transform.position, this);
+			m_lstGold.Add(gold);
 		}
 		if (!m_Gold.activeSelf) {
 			m_Gold.SetActive(true);
@@ -113,4 +115,17 @@ public class Window_Delete : MonoBehaviour {
 		obj.transform.GetComponentInChildren<SpriteRenderer>().sprite = Resources.Load<Sprite>("Num/" + path);
         m_canvas.AddScores(scorenum);
     }
+
+	public bool CheckClickGold(Vector3 vec3ClickPos) {
+		for (int i = m_lstGold.Count - 1; i >= 0; i--) {
+			if (m_lstGold[i].CheckOnMouseDown(vec3ClickPos)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public void RemoveGold(Gold gold) {
+		m_lstGold.Remove(gold);
+	}
 }

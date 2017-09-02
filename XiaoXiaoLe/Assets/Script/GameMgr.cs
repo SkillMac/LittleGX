@@ -24,6 +24,10 @@ public class GameMgr {
 		m_windowDelete.OnDelete(list);
 	}
 
+	public bool CheckClickGold(Vector3 vec3ClickPos) {
+		return m_windowDelete.CheckClickGold(vec3ClickPos);
+	}
+
 	public void ShapeForward() {
 		m_prefabs.ShapeForward();
 	}
@@ -34,6 +38,10 @@ public class GameMgr {
 
 	public void RemoveShap(TestDraw shap) {
 		m_prefabs.RemoveShap(shap);
+	}
+
+	public void CheckClickShape(Vector3 vec3ClickPos) {
+		m_prefabs.CheckClickShape(vec3ClickPos);
 	}
 
 	public void MouseUp(TestDraw shape) {

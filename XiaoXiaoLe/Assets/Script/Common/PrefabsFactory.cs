@@ -25,13 +25,15 @@ public class PrefabsFactory {
 			}
 		}
 		shape.InitShape(shapeItemVO.colorType);
+		shape.enabled = false;
 		return shape;
 	}
 
-	public static void CreatGold(Vector3 vec3Pos) {
+	public static Gold CreatGold(Vector3 vec3Pos, Window_Delete winDelete) {
 		GameObject goPre = Resources.Load<GameObject>(PRE_GOLD);
 		GameObject go = Object.Instantiate(goPre);
 		Gold gold = go.GetComponent<Gold>();
-		gold.Init(vec3Pos);
+		gold.Init(vec3Pos, winDelete);
+		return gold;
 	}
 }

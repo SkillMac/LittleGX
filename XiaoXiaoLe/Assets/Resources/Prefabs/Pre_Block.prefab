@@ -20,7 +20,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4330888956980030}
   - component: {fileID: 212541792275693142}
-  - component: {fileID: 60619098728825740}
   - component: {fileID: 114100012191619326}
   m_Layer: 0
   m_Name: Pre_Block
@@ -42,36 +41,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!60 &60619098728825740
-PolygonCollider2D:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1249294481765958}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 3.47, y: 4}
-    newSize: {x: 3.47, y: 4}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: 0.020215807, y: 2.027386}
-      - {x: -1.7378229, y: 1.0153292}
-      - {x: -1.7526891, y: -1.0113333}
-      - {x: 0.05348235, y: -1.9954679}
-      - {x: 1.7064487, y: -0.99395424}
-      - {x: 1.7078521, y: 0.9868653}
 --- !u!114 &114100012191619326
 MonoBehaviour:
   m_ObjectHideFlags: 1

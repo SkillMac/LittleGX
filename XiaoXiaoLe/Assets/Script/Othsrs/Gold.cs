@@ -16,12 +16,14 @@ public class Gold : MonoBehaviour {
 	private float m_fTime;
 	private Vector3 m_vec3FirstPos;
 	private Animator m_animator;
+	private Window_Delete m_winDelete;
 	
 	void Start() {
         m_animator = GetComponent<Animator>();
     }
 
-	public void Init(Vector3 vec3StartPos) {
+	public void Init(Vector3 vec3StartPos, Window_Delete winDelete) {
+		m_winDelete = winDelete;
 		m_vec3FirstPos = new Vector3(vec3StartPos.x, yoffset, 0);
 		_transMoveGold.transform.position = vec3StartPos;
 	}
@@ -36,7 +38,7 @@ public class Gold : MonoBehaviour {
                 m_animator.SetBool("BeginAni", true);
             }
 			if (Disable == 0) {
-                Destroy(gameObject);
+				DestroySelf();
             }
         }
 		if (m_bMoved) {
@@ -51,29 +53,36 @@ public class Gold : MonoBehaviour {
             }
             m_uCount++;
             m_animator.SetTrigger("IsColor");
-            Destroy(gameObject, 0.2f);
-        }
-		if (Input.GetMouseButtonDown(0)) {
-			Vector3 MousePos = (Input.mousePosition - new Vector3(Screen.width / 2.0f, Screen.height / 2.0f, 0)) / 100.0f;
-			if (Mathf.Abs(Vector3.Distance(_transMoveGold.transform.position, MousePos)) < 1.0f) {
-                m_bMoved = true;
-				GameMgr.instance.AddScore();
-				_goGold.transform.position = _transMoveGold.transform.position;
-				_goGold.SetActive(true);
-			}
+			DestroySelf(0.2f);
         }
     }
 
-	void MoveToPos(Vector3 pos) {
+	public bool CheckOnMouseDown(Vector3 vec3ClickPos) {
+		if (Mathf.Abs(Vector3.Distance(_transMoveGold.transform.position, vec3ClickPos)) < 1.0f) {
+			m_bMoved = true;
+			GameMgr.instance.AddScore();
+			_goGold.transform.position = _transMoveGold.transform.position;
+			_goGold.SetActive(true);
+			return true;
+		}
+		return false;
+	}
+
+	private void MoveToPos(Vector3 pos) {
 		_transMoveGold.transform.position = Vector3.MoveTowards(_transMoveGold.transform.position, pos, MOVE_SPEED * Time.deltaTime);
     }
 
 
-	void waittime() {
+	private void waittime() {
 		if(Time.realtimeSinceStartup - m_fTime > 1.0f) {
             m_fTime = Time.realtimeSinceStartup;
             startAni--;
             Disable--;
         }
     }
+
+	private void DestroySelf(float time = 0f) {
+		m_winDelete.RemoveGold(this);
+		Destroy(gameObject, time);
+	}
 }
