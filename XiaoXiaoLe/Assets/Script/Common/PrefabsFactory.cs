@@ -10,9 +10,9 @@ public class PrefabsFactory {
 		return go;
 	}
 
-	public static TestDraw CreateShape(int uIndex, Transform trans) {
+	public static TestDraw CreateShape(Prefabs prefabs, int uIndex) {
 		GameObject go = new GameObject("Shape");
-		go.transform.parent = trans;
+		go.transform.parent = prefabs.transform;
 		TestDraw shape = go.AddComponent<TestDraw>();
 		ConfigShapeMgr shapeConf = ConfigShapeMgr.instance;
 		ShapeItemVO shapeItemVO = shapeConf.GetShape(uIndex);
@@ -24,8 +24,7 @@ public class PrefabsFactory {
 				}
 			}
 		}
-		shape.InitShape(shapeItemVO.colorType);
-		shape.enabled = false;
+		shape.InitShape(prefabs, shapeItemVO.colorType);
 		return shape;
 	}
 

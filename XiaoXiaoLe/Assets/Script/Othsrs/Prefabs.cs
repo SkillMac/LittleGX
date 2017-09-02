@@ -4,11 +4,8 @@ using UnityEngine;
 public class Prefabs : MonoBehaviour {
 	private const int SHAPE_COUNT = 25;
     public Vector3[] Roots;
-	public float offsetY = 0.2f;//Y轴坐标的偏移量
 	public GameObject window_gv;
 	private int m_uShapeNum = 0;
-	private float m_fMoveSpeed = 15.0f;
-	private bool m_bMove;
     private bool m_bGameOver;
     private float m_fGameOverTime;
 	//随机数列的列数
@@ -35,7 +32,7 @@ public class Prefabs : MonoBehaviour {
 		m_uColIndex = 1;
 		for (int i = 0; i < Roots.Length; i++) {
             int uShapeIndex = GetRandomIndex();
-			TestDraw shape = PrefabsFactory.CreateShape(uShapeIndex, transform);
+			TestDraw shape = PrefabsFactory.CreateShape(this, uShapeIndex);
             shape.transform.position = Roots[i];
 			m_lstShape.Add(shape);
         }
@@ -44,14 +41,6 @@ public class Prefabs : MonoBehaviour {
 	void Update() {
 		if (window_gv.activeSelf)
 			return;
-		if (m_bMove) {
-			for (int i = 0; i < m_lstShape.Count; i++) {
-                MoveWithIndex(m_lstShape[i].transform, i);
-				if (m_lstShape[i].transform.position.y != Roots[i].y) {
-                    m_bMove = false;
-                }
-            }
-        }
 		if(m_bGameOver) {
 			if (Time.realtimeSinceStartup - m_fGameOverTime > 1.0f) {
                 window_gv.SetActive(true);
@@ -64,9 +53,10 @@ public class Prefabs : MonoBehaviour {
 		if (window_gv.activeSelf)
 			return;
 		for (int i = 0; i < m_lstShape.Count; i++) {
-			m_lstShape[i].enabled = false;
-			if (Mathf.Abs(Vector3.Distance(Roots[i], vec3ClickPos)) < 1.2f) {
-				m_lstShape[i].enabled = true;
+			TestDraw shape = m_lstShape[i];
+			if (Vector3.Distance(shape.transform.position, vec3ClickPos) < 1.2f) {
+				shape.OnMouseDown();
+				break;
 			}
 		}
 	}
@@ -109,14 +99,6 @@ public class Prefabs : MonoBehaviour {
 		m_uShapeNum++;
 		return uIndex;
     }
-
-	private void MoveWithIndex(Transform trans, int uIndex) {
-		if (uIndex >= 0 && uIndex < Roots.Length) {
-            Vector3 vec3Pos = Roots[uIndex];
-            trans.position = Vector3.MoveTowards(trans.position, vec3Pos, m_fMoveSpeed * Time.deltaTime);
-			trans.GetComponent<TestDraw>().f_vec3StartPos = vec3Pos;
-		}
-    }
 	
 	public void CheckEndAndCreateShape() {
 		if (!CanContinue()) {
@@ -124,13 +106,15 @@ public class Prefabs : MonoBehaviour {
 			m_fGameOverTime = Time.realtimeSinceStartup;
 		}
 		int uCreatType = GetRandomIndex();
-		TestDraw shape = PrefabsFactory.CreateShape(uCreatType, transform);
+		TestDraw shape = PrefabsFactory.CreateShape(this, uCreatType);
 		shape.transform.position = Roots[Roots.Length - 1];
 		m_lstShape.Add(shape);
 	}
 
 	public void ShapeForward() {
-		m_bMove = true;
+		for (int i = 0; i < m_lstShape.Count; i++) {
+			m_lstShape[i].DoMove(Roots[i]);
+		}
 	}
 	
 	private bool CanContinue() {

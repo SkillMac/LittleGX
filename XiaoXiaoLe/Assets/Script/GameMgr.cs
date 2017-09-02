@@ -35,11 +35,7 @@ public class GameMgr {
 	public void CheckEndAndCreateShape() {
 		m_prefabs.CheckEndAndCreateShape();
 	}
-
-	public void RemoveShap(TestDraw shap) {
-		m_prefabs.RemoveShap(shap);
-	}
-
+	
 	public void CheckClickShape(Vector3 vec3ClickPos) {
 		m_prefabs.CheckClickShape(vec3ClickPos);
 	}
