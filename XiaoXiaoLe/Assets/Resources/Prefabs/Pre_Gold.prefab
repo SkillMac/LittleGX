@@ -19,7 +19,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4062292250463416}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: MoveGold
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36,7 +36,7 @@ GameObject:
   - component: {fileID: 4976087156581752}
   - component: {fileID: 114093825752538434}
   - component: {fileID: 95044762196419420}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Pre_Gold
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -52,7 +52,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4673253716259908}
   - component: {fileID: 212471695607917314}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: sun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -68,7 +68,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4678078673485246}
   - component: {fileID: 212537795718869686}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: gold1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -84,7 +84,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4195115903343358}
   - component: {fileID: 212274031276511336}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Renderer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -101,7 +101,7 @@ GameObject:
   - component: {fileID: 4933708215200662}
   - component: {fileID: 111352436884364310}
   - component: {fileID: 114796986986066336}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: GoldScore
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -239,7 +239,6 @@ MonoBehaviour:
   sun: {fileID: 4673253716259908}
   gold: {fileID: 4678078673485246}
   yoffset: -3
-  target: {x: 3.04, y: 5.323, z: 0}
   startAni: 3
   Disable: 8
 --- !u!114 &114796986986066336

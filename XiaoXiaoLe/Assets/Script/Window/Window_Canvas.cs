@@ -61,6 +61,6 @@ public class Window_Canvas : MonoBehaviour {
 	}
 
 	public Vector3 GetGoldTargetPos() {
-		return Camera.main.ScreenToWorldPoint(_rtGold.position);
+		return new Vector3(_rtGold.position.x, _rtGold.position.y);
 	}
 }
