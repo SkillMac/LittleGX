@@ -232,7 +232,7 @@ public class EditorShape : EditorWindow {
 	}
 
 	private static void SetBlockColor(Transform trans, EColorType color) {
-		SpriteRenderer spriteRenderer = trans.GetComponentInChildren<SpriteRenderer>();
-		spriteRenderer.sprite = HummerRes.LoadElementSprite((int)color);
+		//SpriteRenderer spriteRenderer = trans.GetComponentInChildren<SpriteRenderer>();
+		//spriteRenderer.sprite = HummerRes.LoadElementSprite((int)color);
 	}
 }
