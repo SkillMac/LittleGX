@@ -39,8 +39,6 @@ public class Prefabs : MonoBehaviour {
     }
 	
 	void Update() {
-		if (window_gv.activeSelf)
-			return;
 		if(m_bGameOver) {
 			if (Time.realtimeSinceStartup - m_fGameOverTime > 1.0f) {
                 window_gv.SetActive(true);
@@ -50,7 +48,7 @@ public class Prefabs : MonoBehaviour {
 	}
 
 	public void CheckClickShape(Vector3 vec3ClickPos) {
-		if (window_gv.activeSelf)
+		if (Window_Creat.IsGameOver)
 			return;
 		for (int i = 0; i < m_lstShape.Count; i++) {
 			TestDraw shape = m_lstShape[i];
@@ -103,6 +101,7 @@ public class Prefabs : MonoBehaviour {
 	public void CheckEndAndCreateShape() {
 		if (!CanContinue()) {
 			m_bGameOver = true;
+            Window_Creat.IsGameOver = true;
 			m_fGameOverTime = Time.realtimeSinceStartup;
 		}
 		int uCreatType = GetRandomIndex();

@@ -13,10 +13,12 @@ public class Window_Creat : MonoBehaviour {
 	private int m_rowCount;
 	private int m_colCount;
 	private List<BackElement> m_lstOldElement = new List<BackElement>();
+    public static bool IsGameOver;
 
 	void Awake() {
 		GameMgr.instance.f_windowCreate = this;
 		m_lstBackElement = new List<BackElement>();
+        IsGameOver = false;
     }
 	
     void Start() {
