@@ -53,16 +53,45 @@ public class Window_Delete : MonoBehaviour {
 	private void OnDeleteLine(int index) {
 		if (index > 0) {
 			BackElement eleMid = m_listDelLine[index][m_listDelLine[1].Count / 2];
-			Gold gold = PrefabsFactory.CreatGold(eleMid.transform.position, this);
+            Vector3 pos = SetGoldPosition(eleMid.transform.position);
+            Gold gold = PrefabsFactory.CreatGold(pos, this);
 			m_lstGold.Add(gold);
 		}
 		if (!m_Gold.activeSelf) {
 			m_Gold.SetActive(true);
 		}
 		Effect(m_listDelLine[index], m_Gold.transform.GetChild(0).gameObject);
-		m_Gold.transform.localScale = new Vector3(2.2f, 2.2f, 2.2f);
-		m_Gold.transform.GetChild(0).GetComponent<Animator>().SetTrigger("IsScale");
+		m_Gold.transform.localScale = Vector3.one * (1.0f + index * 0.2f);
+        m_Gold.transform.GetChild(0).GetComponent<Animator>().SetTrigger("IsScale");
 	}
+    //private void Test()
+    //{
+    //    for(int i =0;i<5;i++)
+    //    {
+    //        Vector3 pos = SetGoldPosition(Vector3.one);
+    //        Gold gold = PrefabsFactory.CreatGold(pos, this);
+    //        m_lstGold.Add(gold);
+    //    }
+    //}
+    private Vector3 SetGoldPosition(Vector3 pos){
+        if (m_lstGold.Count == 0){
+            return pos;
+        }else{
+            return SetPos(pos);
+        }
+    }
+
+    private Vector3 SetPos(Vector3 pos){
+        float offsetX = Random.Range(-1f, 1f);
+        for (int i = 0; i < m_lstGold.Count; i++){
+            float X = m_lstGold[i].transform.position.x;
+            if (m_lstGold[i].GetFirstPos.x == pos.x){
+                pos.x += offsetX;
+                SetPos(pos);
+            }
+        }
+        return pos;
+    }
 
 	private void DeleMore() {
 		m_fDeleteTime += Time.deltaTime;

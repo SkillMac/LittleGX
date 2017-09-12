@@ -74,8 +74,13 @@ public class Gold : MonoBehaviour {
 		_transMoveGold.transform.position = Vector3.MoveTowards(_transMoveGold.transform.position, pos, MOVE_SPEED * Time.deltaTime);
     }
 
+    public Vector3 GetFirstPos{
+        get{
+            return m_vec3FirstPos;
+        }
+    }
 
-	private void waittime() {
+    private void waittime() {
 		if(Time.realtimeSinceStartup - m_fTime > 1.0f) {
             m_fTime = Time.realtimeSinceStartup;
             startAni--;
