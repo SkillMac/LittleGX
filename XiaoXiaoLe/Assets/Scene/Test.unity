@@ -679,7 +679,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   obj: {fileID: 1037133121}
-  gobj1: {fileID: 514707435}
   gobj2: {fileID: 1747632471}
   gobj3: {fileID: 130691323}
 --- !u!95 &842222420

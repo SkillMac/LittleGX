@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 
 public class Gold : MonoBehaviour {
-	private const float MOVE_SPEED = 5.0f;
-	public Transform _transMoveGold;
+	private const float MOVE_DOWN_SPEED = 3.0f;
+    private const float MOVE_UP_SPEED = 15.0f;
+    public Transform _transMoveGold;
 	public GameObject _goGold;
 	public Transform sun;
     public Transform gold;
@@ -32,7 +33,7 @@ public class Gold : MonoBehaviour {
 	
 	void Update() {
 		if (!m_bCanMove) {
-            MoveToPos(m_vec3FirstPos);
+            MoveToPos(m_vec3FirstPos,MOVE_DOWN_SPEED);
         }
 		if (_transMoveGold.transform.position == m_vec3FirstPos) {
             waittime();
@@ -47,7 +48,7 @@ public class Gold : MonoBehaviour {
             sun.gameObject.SetActive(false);
             m_animator.SetBool("BeginAni", false);
             m_bCanMove = true;
-            MoveToPos(m_vec3Target);
+            MoveToPos(m_vec3Target,MOVE_UP_SPEED);
         }
 		if (_transMoveGold.transform.position == m_vec3Target) {
 			if (m_uCount == 0) {
@@ -70,8 +71,8 @@ public class Gold : MonoBehaviour {
 		return false;
 	}
 
-	private void MoveToPos(Vector3 pos) {
-		_transMoveGold.transform.position = Vector3.MoveTowards(_transMoveGold.transform.position, pos, MOVE_SPEED * Time.deltaTime);
+	private void MoveToPos(Vector3 pos,float speed) {
+		_transMoveGold.transform.position = Vector3.MoveTowards(_transMoveGold.transform.position, pos, speed * Time.deltaTime);
     }
 
     public Vector3 GetFirstPos{
