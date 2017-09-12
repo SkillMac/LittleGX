@@ -6,6 +6,7 @@ public class TestDraw : MonoBehaviour {
 	private const float ELEMENT_SCALE_N = 0.15f;
 	private const float ELEMENT_SCALE_P = 0.12f;
 	private const float AUTO_MOVE_SPEED = 15.0f;
+    private const float RETURN_MOVE_SPEED = 30.0f;
 	private Vector3 m_vec3StartPos;
 	private Vector3 m_Vec3StartScale;
 	private EColorType m_eColorType;
@@ -14,8 +15,10 @@ public class TestDraw : MonoBehaviour {
 	private bool m_bMouseEnable = false;
 	private bool m_bMove = false;
 	private Prefabs m_prefabs;
+    [HideInInspector]
+    public bool m_returnStart = false;
 
-	void Awake() {
+    void Awake() {
 		ConfigShapeMgr shapeConf = ConfigShapeMgr.instance;
 		m_arrChildTrans = new Transform[shapeConf.rowCount, shapeConf.colCount * 2];
 		m_lstElement = new List<ShapeElement>();
@@ -75,6 +78,10 @@ public class TestDraw : MonoBehaviour {
 		if (m_bMove) {
 			Move();
 		}
+        if (m_returnStart)
+        {
+            ReturnStart();
+        }
     }
 
 	private void MouseEvent() {
@@ -113,11 +120,15 @@ public class TestDraw : MonoBehaviour {
 	}
 
 	public void ReturnStart() {
-        transform.position = m_vec3StartPos;
+        transform.position = Vector3.MoveTowards(transform.position, m_vec3StartPos, RETURN_MOVE_SPEED * Time.deltaTime);
         transform.localScale = m_Vec3StartScale;
 		for (int i = 0; i < m_lstElement.Count; i++) {
 			m_lstElement[i].transform.localScale = Vector3.one * ELEMENT_SCALE_N;
 		}
+        if (transform.position == m_vec3StartPos)
+        {
+            m_returnStart = false;
+        }
     }
 
 	public void DestroySelf() {

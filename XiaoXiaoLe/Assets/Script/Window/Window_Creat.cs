@@ -141,7 +141,7 @@ public class Window_Creat : MonoBehaviour {
 	public void OnMouseUp(TestDraw shape) {
 		List<BackElement> lstCurrent = GetCanPutElement(shape);
 		if (lstCurrent == null) {
-			shape.ReturnStart();
+            shape.m_returnStart = true;
 			m_lstOldElement.Clear();
 			return;
 		}
