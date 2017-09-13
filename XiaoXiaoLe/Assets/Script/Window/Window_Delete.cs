@@ -28,13 +28,14 @@ public class Window_Delete : MonoBehaviour {
 				GetScoreWithNum(0, m_listDelLine[0][m_listDelLine[0].Count / 2].transform.position, m_GoldMove);
 			} else {
 				Effect(m_listDelLine[0], m_GoldMove);
-			}
+                SoundManager.Instance.ClearLines();
+            }
 			m_GoldMove.SetActive(true);
 			m_bBeginDelete = false;
-			GameMgr.instance.CheckEndAndCreateShape();
+            GameMgr.instance.CheckEndAndCreateShape();
 		} else {
 			DeleMore();
-		}
+        }
     }
 
 	private void Effect(List<BackElement> element, GameObject obj) {
@@ -104,7 +105,8 @@ public class Window_Delete : MonoBehaviour {
 				m_Gold.SetActive(false);
 				m_bBeginDelete = false;
 				GameMgr.instance.CheckEndAndCreateShape();
-			}
+                SoundManager.Instance.ClearLines();
+            }
 		}
     }
 

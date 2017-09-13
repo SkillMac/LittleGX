@@ -76,36 +76,102 @@
     <Reference Include="UnityEngine.HoloLens">
       <HintPath>Library\UnityAssemblies\UnityEngine.HoloLens.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEditor.iOS.Extensions.Xcode">
+      <HintPath>Library\UnityAssemblies\UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.iOS.Extensions.Common">
+      <HintPath>Library\UnityAssemblies\UnityEditor.iOS.Extensions.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Facebook.Unity.Settings">
+      <HintPath>Library\FacebookSDK\Facebook.Unity.Settings.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Script\Message\IMessageHandler.cs" />
-    <Compile Include="Assets\Script\Message\MessageCenter.cs" />
-    <Compile Include="Assets\Script\Message\MessageData.cs" />
-    <Compile Include="Assets\Script\Message\MessageType.cs" />
-    <Compile Include="Assets\Script\Othsrs\DeleteList.cs" />
+    <Compile Include="Assets\GoogleMobileAds\Api\AdFailedToLoadEventArgs.cs" />
+    <Compile Include="Assets\GoogleMobileAds\Api\AdLoader.cs" />
+    <Compile Include="Assets\GoogleMobileAds\Api\AdPosition.cs" />
+    <Compile Include="Assets\GoogleMobileAds\Api\AdRequest.cs" />
+    <Compile Include="Assets\GoogleMobileAds\Api\AdSize.cs" />
+    <Compile Include="Assets\GoogleMobileAds\Api\BannerView.cs" />
+    <Compile Include="Assets\GoogleMobileAds\Api\CustomNativeEventArgs.cs" />
+    <Compile Include="Assets\GoogleMobileAds\Api\CustomNativeTemplateAd.cs" />
+    <Compile Include="Assets\GoogleMobileAds\Api\Gender.cs" />
+    <Compile Include="Assets\GoogleMobileAds\Api\InterstitialAd.cs" />
+    <Compile Include="Assets\GoogleMobileAds\Api\Mediation\MediationExtras.cs" />
+    <Compile Include="Assets\GoogleMobileAds\Api\MobileAds.cs" />
+    <Compile Include="Assets\GoogleMobileAds\Api\NativeExpressAdView.cs" />
+    <Compile Include="Assets\GoogleMobileAds\Api\Reward.cs" />
+    <Compile Include="Assets\GoogleMobileAds\Api\RewardBasedVideoAd.cs" />
+    <Compile Include="Assets\GoogleMobileAds\Common\DummyClient.cs" />
+    <Compile Include="Assets\GoogleMobileAds\Common\IAdLoaderClient.cs" />
+    <Compile Include="Assets\GoogleMobileAds\Common\IBannerClient.cs" />
+    <Compile Include="Assets\GoogleMobileAds\Common\ICustomNativeTemplateClient.cs" />
+    <Compile Include="Assets\GoogleMobileAds\Common\IInterstitialClient.cs" />
+    <Compile Include="Assets\GoogleMobileAds\Common\IMobileAdsClient.cs" />
+    <Compile Include="Assets\GoogleMobileAds\Common\INativeExpressAdClient.cs" />
+    <Compile Include="Assets\GoogleMobileAds\Common\IRewardBasedVideoAdClient.cs" />
+    <Compile Include="Assets\GoogleMobileAds\Common\Utils.cs" />
+    <Compile Include="Assets\GoogleMobileAds\Platforms\Android\AdLoaderClient.cs" />
+    <Compile Include="Assets\GoogleMobileAds\Platforms\Android\BannerClient.cs" />
+    <Compile Include="Assets\GoogleMobileAds\Platforms\Android\CustomNativeTemplateClient.cs" />
+    <Compile Include="Assets\GoogleMobileAds\Platforms\Android\InterstitialClient.cs" />
+    <Compile Include="Assets\GoogleMobileAds\Platforms\Android\MobileAdsClient.cs" />
+    <Compile Include="Assets\GoogleMobileAds\Platforms\Android\NativeExpressAdClient.cs" />
+    <Compile Include="Assets\GoogleMobileAds\Platforms\Android\RewardBasedVideoAdClient.cs" />
+    <Compile Include="Assets\GoogleMobileAds\Platforms\Android\Utils.cs" />
+    <Compile Include="Assets\GoogleMobileAds\Platforms\GoogleMobileAdsClientFactory.cs" />
+    <Compile Include="Assets\GoogleMobileAds\Platforms\iOS\AdLoaderClient.cs" />
+    <Compile Include="Assets\GoogleMobileAds\Platforms\iOS\BannerClient.cs" />
+    <Compile Include="Assets\GoogleMobileAds\Platforms\iOS\CustomNativeTemplateClient.cs" />
+    <Compile Include="Assets\GoogleMobileAds\Platforms\iOS\Externs.cs" />
+    <Compile Include="Assets\GoogleMobileAds\Platforms\iOS\InterstitialClient.cs" />
+    <Compile Include="Assets\GoogleMobileAds\Platforms\iOS\MobileAdsClient.cs" />
+    <Compile Include="Assets\GoogleMobileAds\Platforms\iOS\MonoPInvokeCallbackAttribute.cs" />
+    <Compile Include="Assets\GoogleMobileAds\Platforms\iOS\NativeExpressAdClient.cs" />
+    <Compile Include="Assets\GoogleMobileAds\Platforms\iOS\RewardBasedVideoAdClient.cs" />
+    <Compile Include="Assets\GoogleMobileAds\Platforms\iOS\Utils.cs" />
+    <Compile Include="Assets\Script\Ads\GoogleAdModSet.cs" />
+    <Compile Include="Assets\Script\Ads\MyGameManager.cs" />
+    <Compile Include="Assets\Script\Audios\MusicManager.cs" />
+    <Compile Include="Assets\Script\Audios\SoundManager.cs" />
+    <Compile Include="Assets\Script\Common\Pos2Int.cs" />
+    <Compile Include="Assets\Script\Common\PrefabsFactory.cs" />
+    <Compile Include="Assets\Script\Common\ShapeVO\ShapeItemVO.cs" />
+    <Compile Include="Assets\Script\Common\ShapeVO\ShapeListVO.cs" />
+    <Compile Include="Assets\Script\Config\ConfigMaps\ConfigMapsMgr.cs" />
+    <Compile Include="Assets\Script\Config\ConfigMgr.cs" />
+    <Compile Include="Assets\Script\Config\ConfigPrefabs\ConfigPrefabsMgr.cs" />
+    <Compile Include="Assets\Script\Config\ConfigScore\ConfigScoreMgr.cs" />
+    <Compile Include="Assets\Script\Config\ConfigShape\ConfigShapeMgr.cs" />
+    <Compile Include="Assets\Script\GameMain.cs" />
+    <Compile Include="Assets\Script\GameMgr.cs" />
+    <Compile Include="Assets\Script\MouseEventMgr.cs" />
+    <Compile Include="Assets\Script\Othsrs\AniScore.cs" />
     <Compile Include="Assets\Script\Othsrs\Disapper.cs" />
     <Compile Include="Assets\Script\Othsrs\Effects.cs" />
-    <Compile Include="Assets\Script\Othsrs\Element.cs" />
+    <Compile Include="Assets\Script\Othsrs\Element\BackElement.cs" />
+    <Compile Include="Assets\Script\Othsrs\Element\Element.cs" />
+    <Compile Include="Assets\Script\Othsrs\Element\ShapeElement.cs" />
     <Compile Include="Assets\Script\Othsrs\Gold.cs" />
     <Compile Include="Assets\Script\Othsrs\LoadScene.cs" />
-    <Compile Include="Assets\Script\Othsrs\LockScreen.cs" />
     <Compile Include="Assets\Script\Othsrs\Prefabs.cs" />
     <Compile Include="Assets\Script\Othsrs\SceneLoad.cs" />
-    <Compile Include="Assets\Script\Othsrs\SunRotate.cs" />
     <Compile Include="Assets\Script\Othsrs\TestDraw.cs" />
-    <Compile Include="Assets\Script\Othsrs\Window_Play.cs" />
-    <Compile Include="Assets\Script\Tables\DataManager.cs" />
-    <Compile Include="Assets\Script\Tables\Tables.cs" />
+    <Compile Include="Assets\Script\Utils\HummerString.cs" />
     <Compile Include="Assets\Script\Window\Window_Canvas.cs" />
     <Compile Include="Assets\Script\Window\Window_Creat.cs" />
     <Compile Include="Assets\Script\Window\Window_Delete.cs" />
     <Compile Include="Assets\Script\Window\Window_Over.cs" />
-    <Compile Include="Assets\Script\Window\Window_Score.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\PlayServicesResolver\Editor\play-services-resolver_v1.2.35.0.txt" />
+    <None Include="Assets\PlayServicesResolver\proguard-messaging-workaround.txt" />
+    <None Include="Assets\PlayServicesResolver\proguard-unity.txt" />
+    <None Include="Assets\Plugins\Android\GoogleMobileAdsPlugin\AndroidManifest.xml" />
     <None Include="Assets\Resources\Tab\Maps.txt" />
     <None Include="Assets\Resources\Tab\Score.txt" />
     <None Include="Assets\Resources\Tab\prefabtype.txt" />
+    <None Include="Assets\Resources\Tab\shapeConfig.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />

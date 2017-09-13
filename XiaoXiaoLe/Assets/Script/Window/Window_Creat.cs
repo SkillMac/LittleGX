@@ -14,6 +14,7 @@ public class Window_Creat : MonoBehaviour {
 	private int m_colCount;
 	private List<BackElement> m_lstOldElement = new List<BackElement>();
     public static bool IsGameOver;
+    private bool playOnce = true;
 
 	void Awake() {
 		GameMgr.instance.f_windowCreate = this;
@@ -125,6 +126,10 @@ public class Window_Creat : MonoBehaviour {
     }
 	
 	public void OnMouseDown(TestDraw shape) {
+        if (playOnce){
+            SoundManager.Instance.ClickPrefabs();
+            playOnce = false;
+        }
 		for (int i = 0; i < m_lstOldElement.Count; i++) {
 			m_lstOldElement[i].ResetColor();
 		}
@@ -138,11 +143,13 @@ public class Window_Creat : MonoBehaviour {
 		}
 	}
 
-	public void OnMouseUp(TestDraw shape) {
-		List<BackElement> lstCurrent = GetCanPutElement(shape);
+	public void OnMouseUp(TestDraw shape){
+        playOnce = true;
+        List<BackElement> lstCurrent = GetCanPutElement(shape);
 		if (lstCurrent == null) {
             shape.m_returnStart = true;
 			m_lstOldElement.Clear();
+            SoundManager.Instance.DMatchPrefabs();
 			return;
 		}
 		shape.DestroySelf();
@@ -162,6 +169,7 @@ public class Window_Creat : MonoBehaviour {
 		}
 		GameMgr.instance.Delete(m_lstDelLine);
 		m_lstOldElement.Clear();
+        SoundManager.Instance.MatchPrefabs();
 	}
     
 	private List<BackElement> GetCanPutElement(TestDraw shape) {
