@@ -5,14 +5,27 @@ using GoogleMobileAds.Api;
 
 public class GoogleAdModSet : MonoBehaviour
 {
-    public string adUnitid = "";
-
     private BannerView banner;
-
     // Use this for initialization
-    void Start()
+    void Awake()
     {
-        banner = new BannerView(adUnitid, AdSize.SmartBanner, AdPosition.Bottom);
+        #if UNITY_ANDROID
+            string adUnitId = "ca-app-pub-6250098546319109/6286165159";
+        #elif UNITY_IPHONE
+            string adUnitId = "ca-app-pub-6250098546319109/6361422432";
+        #else
+            string adUnitId = "unexpected_platform";
+        #endif
+
+        banner = new BannerView(adUnitId, AdSize.Banner, AdPosition.Bottom);
+        AdRequest request = new AdRequest.Builder().Build();
+        banner.LoadAd(request);
+
+        banner.OnAdClosed += Banner_OnAdClosed;
+    }
+
+    private void Banner_OnAdClosed(object sender, System.EventArgs e)
+    {
         AdRequest request = new AdRequest.Builder().Build();
         banner.LoadAd(request);
     }

@@ -16,6 +16,7 @@ public class SceneLoad : MonoBehaviour {
 		for (int i = 0; i < 120; i++) {
             yield return new WaitForEndOfFrame();
         }
+        MyGameManager.Instance.ShowInterAD();
         obj.SetActive(true);
         gameObject.SetActive(false);
     }

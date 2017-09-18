@@ -6,32 +6,43 @@ using GoogleMobileAds.Api;
 public class MyGameManager : MonoBehaviour
 {
     private InterstitialAd ad;
-    public string path = "";
+    private string adUnitId;
     public static MyGameManager Instance;
 
     void Awake()
     {
         Instance = this;
+
+        #if UNITY_ANDROID
+            adUnitId = "ca-app-pub-6250098546319109/7375885543";
+        #elif UNITY_IPHONE
+            adUnitId = "ca-app-pub-6250098546319109/6501679774";
+        #else
+            adUnitId = "unexpected_platform";
+        #endif
     }
     // Use this for initialization
     void Start()
     {
-        Load();
+        ad = new InterstitialAd(adUnitId);
+        AdRequest request = new AdRequest.Builder().Build();
+        ad.LoadAd(request);
+
+        ad.OnAdClosed += Ad_OnAdClosed;
     }
-    private void Load()
+
+    private void Ad_OnAdClosed(object sender, System.EventArgs e)
     {
-        ad = new InterstitialAd(path);
         AdRequest request = new AdRequest.Builder().Build();
         ad.LoadAd(request);
     }
-    public void OnClickPause()
+
+    public void ShowInterAD()
     {
-        //播放广告的接口
-        ShowInterAD();
-    }
-    private void ShowInterAD()
-    {
-        if (ad.IsLoaded())
+        int count = PlayerPrefs.GetInt("InterstitialAd");
+        PlayerPrefs.SetInt("InterstitialAd", count + 1);
+        Debug.Log(count);
+        if (ad.IsLoaded() && (count%2 ==0))
         {
             ad.Show();
         }

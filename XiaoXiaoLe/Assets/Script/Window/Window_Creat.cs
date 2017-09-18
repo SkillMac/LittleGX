@@ -15,6 +15,7 @@ public class Window_Creat : MonoBehaviour {
 	private List<BackElement> m_lstOldElement = new List<BackElement>();
     public static bool IsGameOver;
     private bool playOnce = true;
+    private const float OFFSET_CANPUT = 0.3f; 
 
 	void Awake() {
 		GameMgr.instance.f_windowCreate = this;
@@ -182,7 +183,7 @@ public class Window_Creat : MonoBehaviour {
 				continue;
 			}
 			float offset = Math.Abs(Vector3.Distance(element.transform.position, eleFirst.transform.position));
-			if (offset < 0.25f) {
+			if (offset < OFFSET_CANPUT) {
 				lstRetElement = CanPutShape(lstElement, element.f_uRow, element.f_uCol);
 			}
 		}
