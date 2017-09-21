@@ -18,4 +18,9 @@ public class MusicManager : MonoBehaviour {
     public void MusicOff(){
         m_Audio.mute = true;
     }
+    public void PlayMusic()
+    {
+        m_Audio.mute = false;
+        m_Audio.Play();
+    }
 }

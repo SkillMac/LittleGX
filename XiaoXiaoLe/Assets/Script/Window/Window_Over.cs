@@ -27,6 +27,7 @@ public class Window_Over : MonoBehaviour {
 	private void ClickPlay() {
         gameObject.SetActive(false);
         GameMgr.instance.ReStartGame();
+        MusicManager.Instance.PlayMusic();
     }
 
 	private void AddScores(int num) {
@@ -35,8 +36,8 @@ public class Window_Over : MonoBehaviour {
 
 	private IEnumerator AddScore(int num) {
         number += num;
-        for (int i = 0; i < 60; i++) {
-            tempnum += num / 60;
+        for (int i = 0; i < 50; i++) {
+            tempnum += num / 50;
             m_Current.text = HummerString.FormatNum(tempnum);
 			yield return new WaitForEndOfFrame();
         }
