@@ -65,6 +65,13 @@ public class GameMgr {
 		}
 	}
 
+    public void ReStartGame()
+    {
+        m_windowCreate.ReStartGame();
+        m_windowCanvas.ReStartGame();
+        m_prefabs.ReStartGame();
+    }
+
 	public Window_Creat f_windowCreate {
 		set {
 			m_windowCreate = value;

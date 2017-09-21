@@ -1,8 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Window_Canvas : MonoBehaviour {
+public class Window_Canvas : MonoBehaviour,IBaseWindowHandler {
     public Text m_Currentscore;
     public Text m_Highscore;
     public Text m_gold;
@@ -12,11 +13,28 @@ public class Window_Canvas : MonoBehaviour {
 
 	void Awake() {
 		GameMgr.instance.f_windowCanvas = this;
-		m_Highscore.text = HummerString.FormatNum(PlayerPrefs.GetInt("Highscore"));
+        Init();
+    }
+
+    public void Init()
+    {
+        m_Currentscore.text = "0";
+        m_Highscore.text = HummerString.FormatNum(PlayerPrefs.GetInt("Highscore"));
         m_gold.text = PlayerPrefs.GetInt("Gold").ToString();
     }
 
-	void Update() {
+    public void DestroyData()
+    {
+        StartCoroutine(ReduceScore());
+    }
+
+    public void ReStartGame()
+    {
+        DestroyData();
+        Init();
+    }
+
+    void Update() {
 		if (Input.GetKeyDown(KeyCode.F1)) {
             PlayerPrefs.SetInt("Gold", 0);
             m_gold.text = PlayerPrefs.GetInt("Gold").ToString();
@@ -40,6 +58,20 @@ public class Window_Canvas : MonoBehaviour {
         }
         m_Currentscore.text = HummerString.FormatNum(number);
         PlayerPrefs.SetInt("CurrentScore", number);
+    }
+
+    private IEnumerator ReduceScore()
+    {
+        int temp = number;
+        number =0;
+        for (int i = 0; i < 10; i++)
+        {
+            temp -= temp / 10;
+            m_Currentscore.text = HummerString.FormatNum(temp);
+            yield return new WaitForEndOfFrame();
+        }
+        m_Currentscore.text = HummerString.FormatNum(number);
+        PlayerPrefs.SetInt("CurrentScore", 0);
     }
 
 	private IEnumerator Cut() {

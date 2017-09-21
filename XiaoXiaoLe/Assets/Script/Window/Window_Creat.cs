@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Window_Creat : MonoBehaviour {
+public class Window_Creat : MonoBehaviour ,IBaseWindowHandler{
 	private const float COL_GAP = 0.6f;
 	private const float ROW_GAP = 0.5f;
     public GameObject prefabBG;
     public GameObject m_Effect;
 	private List<BackElement> m_lstBackElement;//所有元素的集合
-	private List<List<BackElement>> m_lstDelLine = new List<List<BackElement>>();
+	private List<List<BackElement>> m_lstDelLine;
 	private BackElement[,] m_arrElement;
 	private int m_rowCount;
 	private int m_colCount;
-	private List<BackElement> m_lstOldElement = new List<BackElement>();
+	private List<BackElement> m_lstOldElement;
     public static bool IsGameOver;
     private bool playOnce = true;
     private const float OFFSET_CANPUT = 0.3f; 
@@ -20,11 +20,29 @@ public class Window_Creat : MonoBehaviour {
 	void Awake() {
 		GameMgr.instance.f_windowCreate = this;
 		m_lstBackElement = new List<BackElement>();
-        IsGameOver = false;
     }
-	
+
+    public void Init(){
+        m_lstDelLine = new List<List<BackElement>>();
+        m_lstOldElement = new List<BackElement>();
+        IsGameOver = false;
+
+    }
+    public void DestroyData(){
+        for (int i = 0; i < m_lstBackElement.Count; i++) {
+            m_lstBackElement[i].ResetColor();
+            GameObject goEffect = m_lstBackElement[i].transform.GetChild(1).gameObject;
+            goEffect.SetActive(false);
+        }
+    }
+    public void ReStartGame(){
+        DestroyData();
+        Init();
+    }
+    
     void Start() {
-		int[,] arrMapTab = ConfigMapsMgr.instance.GetMapsData();
+        Init();
+        int[,] arrMapTab = ConfigMapsMgr.instance.GetMapsData();
 		m_rowCount = arrMapTab.GetLength(0);
         m_colCount = arrMapTab.GetLength(1);
         m_arrElement = new BackElement[m_rowCount, m_colCount];
@@ -41,7 +59,8 @@ public class Window_Creat : MonoBehaviour {
 					GameObject goEffect = Instantiate(m_Effect);
                     goEffect.transform.parent = goBack.transform;
 					goEffect.transform.localPosition = Vector3.zero;
-					goEffect.SetActive(false);
+                    goEffect.transform.localScale = Vector3.one*0.15f;
+                    goEffect.SetActive(false);
 					m_lstBackElement.Add(element);
 					m_arrElement[x, y] = element;
 				}

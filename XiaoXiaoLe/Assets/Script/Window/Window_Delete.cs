@@ -23,7 +23,8 @@ public class Window_Delete : MonoBehaviour {
 	}
 
 	private void DeleteEle() {
-		if (m_listDelLine.Count <= 1) {
+        m_GoldMove.SetActive(false);
+        if (m_listDelLine.Count <= 1) {
 			if (m_listDelLine[0].Count <= 4) {
 				GetScoreWithNum(0, m_listDelLine[0][m_listDelLine[0].Count / 2].transform.position, m_GoldMove);
 			} else {
@@ -150,4 +151,5 @@ public class Window_Delete : MonoBehaviour {
 	public void RemoveGold(Gold gold) {
 		m_lstGold.Remove(gold);
 	}
+    
 }

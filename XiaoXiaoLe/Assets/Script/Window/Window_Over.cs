@@ -1,28 +1,20 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
 public class Window_Over : MonoBehaviour {
     public Text m_Current;
     public Text m_Hight;
     public Button m_Share;
     public Button m_RePlay;
-    private int number = 0, tempnum;
-	
-    void Awake() {
-        int hight;
-        if (PlayerPrefs.GetInt("CurrentScore") > PlayerPrefs.GetInt("Highscore")) {
-            hight = PlayerPrefs.GetInt("CurrentScore");
-            m_Hight.text = HummerString.FormatNum(hight);
-        } else {
-            hight = PlayerPrefs.GetInt("Highscore");
-            m_Hight.text = HummerString.FormatNum(hight);
-        }
-        PlayerPrefs.SetInt("Highscore", hight);
-        AddScores(PlayerPrefs.GetInt("CurrentScore"));
-    }
+    private int number, tempnum;
 
+    void OnEnable()
+    {
+        Init();
+    }
+  
     void Start() {
         m_Share.onClick.AddListener(ClickShare);
         m_RePlay.onClick.AddListener(ClickPlay);
@@ -33,7 +25,8 @@ public class Window_Over : MonoBehaviour {
     }
 
 	private void ClickPlay() {
-        SceneManager.LoadScene("Test");
+        gameObject.SetActive(false);
+        GameMgr.instance.ReStartGame();
     }
 
 	private void AddScores(int num) {
@@ -42,11 +35,30 @@ public class Window_Over : MonoBehaviour {
 
 	private IEnumerator AddScore(int num) {
         number += num;
-        for (int i = 0; i < 90; i++) {
-            tempnum += num / 90;
+        for (int i = 0; i < 60; i++) {
+            tempnum += num / 60;
             m_Current.text = HummerString.FormatNum(tempnum);
 			yield return new WaitForEndOfFrame();
         }
         m_Current.text = HummerString.FormatNum(number);
+    }
+
+    private void Init()
+    {
+        number = 0;
+        tempnum = 0;
+        int hight;
+        if (PlayerPrefs.GetInt("CurrentScore") > PlayerPrefs.GetInt("Highscore"))
+        {
+            hight = PlayerPrefs.GetInt("CurrentScore");
+            m_Hight.text = HummerString.FormatNum(hight);
+        }
+        else
+        {
+            hight = PlayerPrefs.GetInt("Highscore");
+            m_Hight.text = HummerString.FormatNum(hight);
+        }
+        PlayerPrefs.SetInt("Highscore", hight);
+        AddScores(PlayerPrefs.GetInt("CurrentScore"));
     }
 }

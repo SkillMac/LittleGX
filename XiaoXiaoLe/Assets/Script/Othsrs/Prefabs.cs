@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class Prefabs : MonoBehaviour {
+public class Prefabs : MonoBehaviour,IBaseWindowHandler{
 	private const int SHAPE_COUNT = 25;
     public Vector3[] Roots;
 	public GameObject window_gv;
@@ -28,14 +28,33 @@ public class Prefabs : MonoBehaviour {
 		}
 	}
 
-	void Start() {
-		m_uColIndex = 1;
-		for (int i = 0; i < Roots.Length; i++) {
+    public void Init(){
+        m_uColIndex = 1;
+        m_uShapeNum = 0;
+        for (int i = 0; i < Roots.Length; i++){
             int uShapeIndex = GetRandomIndex();
-			TestDraw shape = PrefabsFactory.CreateShape(this, uShapeIndex);
+            TestDraw shape = PrefabsFactory.CreateShape(this, uShapeIndex);
             shape.transform.position = Roots[i];
-			m_lstShape.Add(shape);
+            m_lstShape.Add(shape);
         }
+    }
+
+    public void DestroyData(){
+        if (transform.childCount > 0){
+            m_lstShape.Clear();
+            for (int i = 0; i < transform.childCount; i++){
+                Destroy(transform.GetChild(i).gameObject);
+            }
+        }
+    }
+
+    public void ReStartGame(){
+        DestroyData();
+        Init();
+    }
+
+    void Start() {
+        Init();
     }
 	
 	void Update() {
@@ -46,7 +65,7 @@ public class Prefabs : MonoBehaviour {
             }
         }
 	}
-
+ 
 	public void CheckClickShape(Vector3 vec3ClickPos) {
 		if (Window_Creat.IsGameOver)
 			return;
@@ -130,4 +149,5 @@ public class Prefabs : MonoBehaviour {
 	public void RemoveShap(TestDraw shap) {
 		m_lstShape.Remove(shap);
 	}
+
 }

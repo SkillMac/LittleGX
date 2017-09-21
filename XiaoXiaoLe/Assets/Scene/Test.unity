@@ -145,7 +145,7 @@ Transform:
   m_GameObject: {fileID: 21215582}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.4, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.2, y: 1.2, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 8
@@ -492,7 +492,7 @@ Transform:
   m_GameObject: {fileID: 514707435}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.5, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.2, y: 1.2, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 7
@@ -509,10 +509,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Roots:
-  - {x: -2.4, y: -4, z: 0}
-  - {x: 0, y: -4, z: 0}
-  - {x: 2.4, y: -4, z: 0}
-  - {x: 6, y: -4, z: 0}
+  - {x: -2.4, y: -4.2, z: 0}
+  - {x: 0, y: -4.2, z: 0}
+  - {x: 2.4, y: -4.2, z: 0}
+  - {x: 6, y: -4.2, z: 0}
   window_gv: {fileID: 842222417}
 --- !u!1 &583385906
 GameObject:
@@ -2270,7 +2270,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1747632476}
-        m_MethodName: Load
+        m_MethodName: ReStart
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2326,7 +2326,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 164a29133ba4ddc42a4620e9bccba64a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scene: Test
 --- !u!1 &1926509556
 GameObject:
   m_ObjectHideFlags: 0

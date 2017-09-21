@@ -153,11 +153,12 @@
     <Compile Include="Assets\Script\Othsrs\Element\Element.cs" />
     <Compile Include="Assets\Script\Othsrs\Element\ShapeElement.cs" />
     <Compile Include="Assets\Script\Othsrs\Gold.cs" />
-    <Compile Include="Assets\Script\Othsrs\LoadScene.cs" />
     <Compile Include="Assets\Script\Othsrs\Prefabs.cs" />
+    <Compile Include="Assets\Script\Othsrs\ReStartMyGame.cs" />
     <Compile Include="Assets\Script\Othsrs\SceneLoad.cs" />
     <Compile Include="Assets\Script\Othsrs\TestDraw.cs" />
     <Compile Include="Assets\Script\Utils\HummerString.cs" />
+    <Compile Include="Assets\Script\Window\IBaseWindowHandler.cs" />
     <Compile Include="Assets\Script\Window\Window_Canvas.cs" />
     <Compile Include="Assets\Script\Window\Window_Creat.cs" />
     <Compile Include="Assets\Script\Window\Window_Delete.cs" />
