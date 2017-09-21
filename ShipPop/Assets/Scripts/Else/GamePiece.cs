@@ -59,7 +59,7 @@ public class GamePiece : MonoBehaviour {
         get { return numComponent; }
     }
 
-    private Vector3 startPos,oldPos;
+    private Vector3 oldPos;
 
     private Animator m_Anim;
 
@@ -72,8 +72,6 @@ public class GamePiece : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-
-        startPos = transform.position;
         oldPos = transform.position * 100.0f + new Vector3(Screen.width / 2.0f, Screen.height / 2.0f, 0);
     }
 	

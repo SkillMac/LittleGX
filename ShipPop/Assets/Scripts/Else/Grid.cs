@@ -4,27 +4,29 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class Grid : MonoBehaviour {
-
     [System.Serializable]
     public struct PiecePrefab
     {
         public PieceType type;
         public GameObject prefab;
     };
-
     public PiecePrefab[] piecePrefabs;
-    private Dictionary<PieceType, GameObject> m_Prefabs;
-
-    public int XDim, YDim;//行列
-
-    public float offsetx, offsetY;
-
+    private Dictionary<PieceType, GameObject> m_Prefabs = new Dictionary<PieceType, GameObject>();
+    private const int rowCount =5;
+    private const int colCount =5;
+    private const float OFFSETX = 1.4f;
+    private const float OFFSETY = 1.8f;
     public GameObject background;
-    
-    int[] output;
+    private int[] rangeID;
+    private int[] rolePob = { 9,10,6};
+    private int[] levPob = {23,2};
+    private int[] creatPob = { 4,2,4};
+    private List<int> lstRole = new List<int>();
+    private List<int> lstLev = new List<int>();
+    private List<int> lstCreat = new List<int>();
 
     private GamePiece[,] pieces;
-    private GameObject[,] backs;
+    private Vector2[,] backs = new Vector2[rowCount, colCount];
     
     private bool IsMoveLeft, IsMoveRight, IsMoveUp, IsMoveDown;
     public float movespeed;
@@ -36,20 +38,15 @@ public class Grid : MonoBehaviour {
     public Text text_Score;
 
     public GameObject window_over;
-
-    private float timer;
-
-    GamePiece current;
-
+    
     public GameObject GoldEffect, EnemyEffect;
     
 
     private void Awake()
     {
-        timer = Time.realtimeSinceStartup;
-
-        m_Prefabs = new Dictionary<PieceType, GameObject>();
-        backs = new GameObject[XDim, YDim];
+        InitLstRole();
+        InitLstLev();
+        InitLstCreat();
         HighDex = 1;
 
         for (int i =0;i< piecePrefabs.Length;i++)
@@ -57,46 +54,60 @@ public class Grid : MonoBehaviour {
             m_Prefabs.Add(piecePrefabs[i].type, piecePrefabs[i].prefab);
         }
 
-        //生成背景
-        for (int i =0;i<XDim;i++)
-        {
-            for(int j =0;j<YDim;j++)
-            {
-                GameObject oob = Instantiate(background, GetWorldPos(i, j), Quaternion.identity);
-                oob.transform.parent = transform;
-                backs[i, j] = oob;
-            }
-        }
-
-
         GetRandomnum();
-
-        pieces = new GamePiece[XDim, YDim];
-
-        //生成元素
-        Tables element = DataManager.tables[TableName.begin];
-
-        for (int i = 0; i < XDim; i++)
+        pieces = new GamePiece[rowCount, colCount];
+        
+        for (int i = 0; i < rowCount; i++)
         {
-            for (int j = 0; j < YDim; j++)
+            for (int j = 0; j < colCount; j++)
             {
-                int id = output[i * YDim + j];
-
-                int tp = element.GetDataWithIDAndIndex<int>(id.ToString(), 1);
-                int dex = element.GetDataWithIDAndIndex<int>(id.ToString(), 2) - 1;
-
-                GameObject oob = Instantiate(m_Prefabs[(PieceType)tp], GetWorldPos(i, j), Quaternion.identity);
-
+                int id = rangeID[i * colCount + j];
+                int tp = lstRole[id];
+                int dex = lstLev[id];
+                Vector2 tempPos = GetWorldPos(i, j);
+                backs[i, j] = tempPos;
+                GameObject oob = Instantiate(m_Prefabs[(PieceType)tp], tempPos, Quaternion.identity);
                 oob.GetComponent<PieceNum>().Setsprite((NumType)dex);
-
                 pieces[i, j] = oob.GetComponent<GamePiece>();
                 pieces[i, j].Init(i, j, this, (PieceType)tp);
-
                 oob.transform.parent = transform;
             }
         }
-
     }
+
+    private void InitLstRole()
+    {
+        for(int i =0;i<rolePob.Length;i++)
+        {
+            for(int j =0;j<rolePob[i];j++)
+            {
+                lstRole.Add(i);
+            }
+        }
+    }
+
+    private void InitLstLev()
+    {
+        for(int i =0;i<levPob.Length;i++)
+        {
+            for(int j =0;j<levPob[i];j++)
+            {
+                lstLev.Add(i);
+            }
+        }
+    }
+
+    private void InitLstCreat()
+    {
+        for (int i = 0; i < creatPob.Length; i++)
+        {
+            for (int j = 0; j < creatPob[i]; j++)
+            {
+                lstCreat.Add(i);
+            }
+        }
+    }
+
     // Use this for initialization
     void Start () {
         
@@ -153,9 +164,9 @@ public class Grid : MonoBehaviour {
 
     void SetUnActive()
     {
-        for (int i = 0; i < XDim; i++)
+        for (int i = 0; i < rowCount; i++)
         {
-            for (int j = 0; j < YDim; j++)
+            for (int j = 0; j < colCount; j++)
             {
                 pieces[i, j].enabled = false;
             }
@@ -163,29 +174,29 @@ public class Grid : MonoBehaviour {
     }
     public Vector2 GetWorldPos(int x,int y)
     {
-        return new Vector2((y - YDim / 2) * offsetx + transform.position.x,
-           (XDim / 2 - x) * offsetY + transform.position.y);
+        return new Vector2((y - colCount / 2) * OFFSETX + transform.position.x,
+           (rowCount / 2 - x) * OFFSETY + transform.position.y);
     }
 
     void GetRandomnum()
     {
         //随机总数组  
-        int[] sequence = new int[XDim*YDim];
+        int[] sequence = new int[rowCount*colCount];
         //取到的不重复数字的数组长度  
-         output = new int[XDim * YDim];
+         rangeID = new int[rowCount * colCount];
 
-        for (int i = 0; i < XDim * YDim; i++)
+        for (int i = 0; i < rowCount * colCount; i++)
         {
             sequence[i] = i;
         }
-        int end = XDim * YDim -1;
+        int end = rowCount * colCount -1;
 
-        for (int i = 0; i < XDim * YDim; i++)
+        for (int i = 0; i < rowCount * colCount; i++)
         {
             //随机一个数，每随机一次，随机区间-1  
             int num = Random.Range(0, end + 1);
 
-            output[i] = sequence[num];
+            rangeID[i] = sequence[num];
             //将区间最后一个数赋值到取到数上  
             sequence[num] = sequence[end];
             end--;
@@ -263,13 +274,13 @@ public class Grid : MonoBehaviour {
 
     public GamePiece IsOver()
     {
-        for (int i = 0; i < XDim; i++)
+        for (int i = 0; i < rowCount; i++)
         {
-            for (int j = 0; j < YDim; j++)
+            for (int j = 0; j < colCount; j++)
             {
                 if(pieces[i,j].Type != PieceType.Enemy)
                 {
-                    if((j>0&&EnDelete(pieces[i,j],pieces[i,j-1])) || (j<YDim-1&& EnDelete(pieces[i, j], pieces[i, j + 1]) )|| (i < XDim -1 && EnDelete(pieces[i, j], pieces[i + 1, j]) ) || ( i>0 &&EnDelete(pieces[i, j], pieces[i - 1, j])))
+                    if((j>0&&EnDelete(pieces[i,j],pieces[i,j-1])) || (j<colCount-1&& EnDelete(pieces[i, j], pieces[i, j + 1]) )|| (i < rowCount -1 && EnDelete(pieces[i, j], pieces[i + 1, j]) ) || ( i>0 &&EnDelete(pieces[i, j], pieces[i - 1, j])))
                     {
                         return pieces[i, j];
                     }
@@ -379,34 +390,25 @@ public class Grid : MonoBehaviour {
     {
         int x = ob.X;
         int y = ob.Y;
-
-        Tables tb = DataManager.tables[TableName.creat];
         int id0 = Random.Range(0, 9);
-
-        int ty = tb.GetDataWithIDAndIndex<int>(id0.ToString(), 1);
-        
+        int ty = lstCreat[id0];
         GameObject newobj = Instantiate(m_Prefabs[(PieceType)ty], pos, Quaternion.identity);
-
         GamePiece newob = newobj.GetComponent<GamePiece>();
         newob.Init(0,0, this, (PieceType)ty);
-
-
         GetCurrenNum(newobj);
-        
         newob.transform.parent = transform;
-        
         if(IsMoveLeft)
         {
-            for (int i = y; i < YDim; i++)
+            for (int i = y; i < colCount; i++)
             {
-                if (i != YDim - 1)
+                if (i != colCount - 1)
                 {
                     pieces[x, i] = pieces[x, i + 1];
 
                     m_Move.Add(pieces[x, i]);
                 }
 
-                if (i == YDim - 1)
+                if (i == colCount - 1)
                 {
                     pieces[x, i] = newob;
                     newob.Init(x, i + 1, this, (PieceType)ty);
@@ -437,16 +439,16 @@ public class Grid : MonoBehaviour {
         }
         if (IsMoveUp)
         {
-            for (int i = x; i < XDim; i++)
+            for (int i = x; i < rowCount; i++)
             {
-                if (i != XDim - 1)
+                if (i != rowCount - 1)
                 {
                     pieces[i, y] = pieces[ i + 1,y];
 
                     m_Move.Add(pieces[i, y]);
                 }
 
-                if (i == XDim - 1)
+                if (i == rowCount - 1)
                 {
                     pieces[i, y] = newob;
                     newob.Init(i+1, y, this, (PieceType)ty);
@@ -482,7 +484,7 @@ public class Grid : MonoBehaviour {
     {
         for(int i =0;i<m_Move.Count;i++)
         {
-            Vector3 pp = backs[m_Move[i].X, m_Move[i].Y - 1].transform.position;
+            Vector3 pp = backs[m_Move[i].X, m_Move[i].Y - 1];
 
             m_Move[i].transform.position = Vector3.MoveTowards(m_Move[i].transform.position, pp, movespeed * Time.deltaTime);
 
@@ -501,7 +503,7 @@ public class Grid : MonoBehaviour {
     {
         for (int i = 0; i < m_Move.Count; i++)
         {
-            Vector3 pp = backs[m_Move[i].X, m_Move[i].Y + 1].transform.position;
+            Vector3 pp = backs[m_Move[i].X, m_Move[i].Y + 1];
 
             m_Move[i].transform.position = Vector3.MoveTowards(m_Move[i].transform.position, pp, movespeed * Time.deltaTime);
 
@@ -520,7 +522,7 @@ public class Grid : MonoBehaviour {
     {
         for (int i = 0; i < m_Move.Count; i++)
         {
-            Vector3 pp = backs[m_Move[i].X - 1, m_Move[i].Y].transform.position;
+            Vector3 pp = backs[m_Move[i].X - 1, m_Move[i].Y];
 
             m_Move[i].transform.position = Vector3.MoveTowards(m_Move[i].transform.position, pp, movespeed * Time.deltaTime);
 
@@ -539,7 +541,7 @@ public class Grid : MonoBehaviour {
     {
         for (int i = 0; i < m_Move.Count; i++)
         {
-            Vector3 pp = backs[m_Move[i].X + 1, m_Move[i].Y].transform.position;
+            Vector3 pp = backs[m_Move[i].X + 1, m_Move[i].Y];
 
             m_Move[i].transform.position = Vector3.MoveTowards(m_Move[i].transform.position, pp, movespeed * Time.deltaTime);
 
@@ -559,7 +561,7 @@ public class Grid : MonoBehaviour {
     {
         for (int i = 0; i < m_Move.Count; i++)
         {
-            Vector3 pp = backs[m_Move[i].X, m_Move[i].Y - 1].transform.position;
+            Vector3 pp = backs[m_Move[i].X, m_Move[i].Y - 1];
 
             if (m_Move[i].transform.position != pp)
             {
@@ -572,7 +574,7 @@ public class Grid : MonoBehaviour {
     {
         for (int i = 0; i < m_Move.Count; i++)
         {
-            Vector3 pp = backs[m_Move[i].X, m_Move[i].Y + 1].transform.position;
+            Vector3 pp = backs[m_Move[i].X, m_Move[i].Y + 1];
 
             if (m_Move[i].transform.position != pp)
             {
@@ -586,7 +588,7 @@ public class Grid : MonoBehaviour {
     {
         for (int i = 0; i < m_Move.Count; i++)
         {
-            Vector3 pp = backs[m_Move[i].X - 1, m_Move[i].Y].transform.position;
+            Vector3 pp = backs[m_Move[i].X - 1, m_Move[i].Y];
 
             if (m_Move[i].transform.position != pp)
             {
@@ -599,7 +601,7 @@ public class Grid : MonoBehaviour {
     {
         for (int i = 0; i < m_Move.Count; i++)
         {
-            Vector3 pp = backs[m_Move[i].X + 1, m_Move[i].Y].transform.position;
+            Vector3 pp = backs[m_Move[i].X + 1, m_Move[i].Y];
 
             if (m_Move[i].transform.position != pp)
             {
@@ -613,8 +615,7 @@ public class Grid : MonoBehaviour {
 
 public enum PieceType
 {
-    Empty,
     My,
-    Enemy,
     Gold,
+    Enemy,
 }

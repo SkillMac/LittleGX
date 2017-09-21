@@ -120,7 +120,6 @@ GameObject:
   - component: {fileID: 335613912}
   - component: {fileID: 335613911}
   - component: {fileID: 335613910}
-  - component: {fileID: 335613915}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -198,17 +197,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &335613915
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 335613909}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e7df7cdf0bc822e41a13e0605bc92461, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &418877602
 GameObject:
   m_ObjectHideFlags: 0
@@ -238,17 +226,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   piecePrefabs:
   - type: 0
-    prefab: {fileID: 1614572640170574, guid: 054210485ff8d4c4991ad34e828a91e0, type: 2}
-  - type: 1
     prefab: {fileID: 1332283077459112, guid: 32b579dfe61d50a4cb105b902b00d6fb, type: 2}
+  - type: 1
+    prefab: {fileID: 1486857795791800, guid: 34e5c56e4dbf903449db4ced61e70ae3, type: 2}
   - type: 2
     prefab: {fileID: 1850081400078312, guid: 3ce257449c7a1a1459f50ec0e6a89da6, type: 2}
-  - type: 3
-    prefab: {fileID: 1486857795791800, guid: 34e5c56e4dbf903449db4ced61e70ae3, type: 2}
-  XDim: 5
-  YDim: 5
-  offsetx: 1.4
-  offsetY: 1.8
   background: {fileID: 1160995286803278, guid: 9ed25ffe57ee51545ab626968d42cf81, type: 2}
   movespeed: 20
   text_Score: {fileID: 1533111766}
