@@ -94,6 +94,8 @@
     <Compile Include="Assets\Scripts\Else\MoveAble.cs" />
     <Compile Include="Assets\Scripts\Else\PieceNum.cs" />
     <Compile Include="Assets\Scripts\Else\ScoreAnim.cs" />
+    <Compile Include="Assets\Scripts\LoadData\DataManager.cs" />
+    <Compile Include="Assets\Scripts\LoadData\LoadDataClass.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />

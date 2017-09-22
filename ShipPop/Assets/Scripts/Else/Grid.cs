@@ -4,162 +4,72 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class Grid : MonoBehaviour {
-    [System.Serializable]
-    public struct PiecePrefab
-    {
-        public PieceType type;
-        public GameObject prefab;
-    };
-    public PiecePrefab[] piecePrefabs;
-    private Dictionary<PieceType, GameObject> m_Prefabs = new Dictionary<PieceType, GameObject>();
     private const int rowCount =5;
     private const int colCount =5;
     private const float OFFSETX = 1.4f;
     private const float OFFSETY = 1.8f;
-    public GameObject background;
     private int[] rangeID;
-    private int[] rolePob = { 9,10,6};
-    private int[] levPob = {23,2};
-    private int[] creatPob = { 4,2,4};
-    private List<int> lstRole = new List<int>();
-    private List<int> lstLev = new List<int>();
-    private List<int> lstCreat = new List<int>();
-
     private GamePiece[,] pieces;
     private Vector2[,] backs = new Vector2[rowCount, colCount];
-    
+    public RuntimeAnimatorController control;
     private bool IsMoveLeft, IsMoveRight, IsMoveUp, IsMoveDown;
-    public float movespeed;
+    private const float movespeed = 20.0f;
     
     private List<GamePiece> m_Move;
 
     private static int HighDex;//记录最高分数的物体
 
     public Text text_Score;
-
+    public GameObject m_Prefab;
     public GameObject window_over;
     
     public GameObject GoldEffect, EnemyEffect;
     
-
-    private void Awake()
+    public void Init(bool bol)
     {
-        InitLstRole();
-        InitLstLev();
-        InitLstCreat();
         HighDex = 1;
-
-        for (int i =0;i< piecePrefabs.Length;i++)
-        {
-            m_Prefabs.Add(piecePrefabs[i].type, piecePrefabs[i].prefab);
-        }
-
         GetRandomnum();
-        pieces = new GamePiece[rowCount, colCount];
-        
         for (int i = 0; i < rowCount; i++)
         {
             for (int j = 0; j < colCount; j++)
             {
                 int id = rangeID[i * colCount + j];
-                int tp = lstRole[id];
-                int dex = lstLev[id];
+                int role = LoadDataClass.lstRole[id];
                 Vector2 tempPos = GetWorldPos(i, j);
                 backs[i, j] = tempPos;
-                GameObject oob = Instantiate(m_Prefabs[(PieceType)tp], tempPos, Quaternion.identity);
-                oob.GetComponent<PieceNum>().Setsprite((NumType)dex);
+                GameObject current;
+                if (bol)
+                {
+                    current = null;
+                }
+                else
+                    current = pieces[i, j].gameObject;
+
+                GameObject oob = LoadDataClass.Instace.CreatGobjByID(id, tempPos, m_Prefab, current);
                 pieces[i, j] = oob.GetComponent<GamePiece>();
-                pieces[i, j].Init(i, j, this, (PieceType)tp);
+                pieces[i, j].Init(i, j, this, (PieceType)role);
                 oob.transform.parent = transform;
             }
         }
     }
 
-    private void InitLstRole()
+    void Start()
     {
-        for(int i =0;i<rolePob.Length;i++)
-        {
-            for(int j =0;j<rolePob[i];j++)
-            {
-                lstRole.Add(i);
-            }
-        }
+        pieces = new GamePiece[rowCount, colCount];
+        Init(true);
     }
-
-    private void InitLstLev()
-    {
-        for(int i =0;i<levPob.Length;i++)
-        {
-            for(int j =0;j<levPob[i];j++)
-            {
-                lstLev.Add(i);
-            }
-        }
-    }
-
-    private void InitLstCreat()
-    {
-        for (int i = 0; i < creatPob.Length; i++)
-        {
-            for (int j = 0; j < creatPob[i]; j++)
-            {
-                lstCreat.Add(i);
-            }
-        }
-    }
-
-    // Use this for initialization
-    void Start () {
-        
-    }
-	
+  
 	// Update is called once per frame
 	void Update () {
-		
-        if(IsMoveLeft)
-        {
-            MoveLeft();
-        }
-        if (IsMoveRight)
-        {
-            MoveRight();
-        }
-        if (IsMoveDown)
-        {
-            MoveDown();
-        }
-        if (IsMoveUp)
-        {
-            MoveUp();
-        }
-
+        if (IsMoveLeft) { MoveLeft();}
+        if (IsMoveRight) {MoveRight(); }
+        if (IsMoveDown) {MoveDown(); }
+        if (IsMoveUp) {MoveUp(); }
         if(IsOver() == null && !window_over.activeSelf)
         {
             window_over.SetActive(true);
-            Debug.Log("GameOver");
-
             SetUnActive();
         }
-
-        //闪烁效果
-        //if(Input.GetMouseButtonUp(0) && !window_over.activeSelf)
-        //{
-        //    timer = Time.realtimeSinceStartup;
-        //}
-
-        //if(Input.GetMouseButtonDown(0) && !window_over.activeSelf)
-        //{
-        //    if (current != null)
-        //    {
-        //        current.SetFalse();
-        //        timer = Time.realtimeSinceStartup;
-        //    }
-        //}
-        //if(IsOver() != null &&Time.realtimeSinceStartup - timer > 5.0f)
-        //{
-        //    current = IsOver();
-        //    current.SetTrue();
-        //}
     }
 
     void SetUnActive()
@@ -210,16 +120,14 @@ public class Grid : MonoBehaviour {
     public bool  CanDelete(GamePiece obj1,GamePiece obj2,Vector3 poss)
     {
         m_Move = new List<GamePiece>();
-
+        Vector3 oldPos = Vector3.zero;
         if (obj2 == null) return false;
-
         if(obj1.Type == PieceType.Gold)
         {
-            if (obj2.Type == PieceType.Gold && obj2.NumComponent.GetnewType == obj1.NumComponent.GetnewType)
+            if (obj2.Type == PieceType.Gold && obj2.NumComponent.GetCurrentLev == obj1.NumComponent.GetCurrentLev)
             {
-                Destroy(obj1.gameObject);
+                obj1.transform.position = Vector3.zero;
                 GetBool(poss);
-
                 ReSort(obj1, poss);
                 obj2.PlayAnim();
                 //这里可以加入消除的特效
@@ -228,22 +136,21 @@ public class Grid : MonoBehaviour {
         }
         if(obj1.Type == PieceType.My)
         {
-            if (obj2.Type == PieceType.Enemy && obj2.NumComponent.GetnewType <= obj1.NumComponent.GetnewType)
+            if (obj2.Type == PieceType.Enemy && obj2.NumComponent.GetCurrentLev <= obj1.NumComponent.GetCurrentLev)
             {
-                Destroy(obj2.gameObject);
+                oldPos = obj2.transform.position;
+                obj2.transform.position = Vector3.zero;
                 GetBool(poss);
-
                 ReSort(obj2, poss);
                 //这里可以加入消除的特效
-                Instantiate(EnemyEffect, obj2.transform.position, Quaternion.identity);
+                Instantiate(EnemyEffect, oldPos, Quaternion.identity);
                 return true;
             }
-            if (obj2.Type == PieceType.My && obj2.NumComponent.GetnewType == obj1.NumComponent.GetnewType)
+            if (obj2.Type == PieceType.My && obj2.NumComponent.GetCurrentLev == obj1.NumComponent.GetCurrentLev)
             {
-                Destroy(obj1.gameObject);
+                obj1.transform.position = Vector3.zero;
                 GetBool(poss);
-
-                if(obj2.NumComponent.GetnewType >= (NumType)(HighDex-1))
+                if(obj2.NumComponent.GetCurrentLev >= (HighDex-1))
                     HighDex ++;
 
                 ReSort(obj1, poss);
@@ -251,20 +158,20 @@ public class Grid : MonoBehaviour {
                 //这里可以加入消除的特效
                 return true;
             }
-            if (obj2.Type == PieceType.Gold && obj2.NumComponent.GetnewType <= obj1.NumComponent.GetnewType)
+            if (obj2.Type == PieceType.Gold && obj2.NumComponent.GetCurrentLev <= obj1.NumComponent.GetCurrentLev)
             {
-                Destroy(obj2.gameObject);
+                oldPos = obj2.transform.position;
+                obj2.transform.position = Vector3.zero;
                 GetBool(poss);
-
-                int scor = (int)(obj2.NumComponent.GetnewType + 1) * 3;
+                int scor = (int)(obj2.NumComponent.GetCurrentLev + 1) * 3;
 
                 text_Score.GetComponent<ScoreAnim>().AddScores(scor);
 
-                //text_Score.text = ((int)(obj2.NumComponent.GetnewType + 1) * 3 + scor).ToString();
+                //text_Score.text = ((int)(obj2.NumComponent.GetCurrentLev + 1) * 3 + scor).ToString();
 
                 ReSort(obj2, poss);
                 //这里可以加入消除的特效，同时加分
-                Instantiate(GoldEffect, obj2.transform.position, Quaternion.identity);
+                Instantiate(GoldEffect, oldPos, Quaternion.identity);
 
                 return true;
             }
@@ -297,22 +204,22 @@ public class Grid : MonoBehaviour {
 
         if (obj1.Type == PieceType.Gold)
         {
-            if (obj2.Type == PieceType.Gold && obj2.NumComponent.GetnewType == obj1.NumComponent.GetnewType)
+            if (obj2.Type == PieceType.Gold && obj2.NumComponent.GetCurrentLev == obj1.NumComponent.GetCurrentLev)
             {
                 return true;
             }
         }
         if (obj1.Type == PieceType.My)
         {
-            if (obj2.Type == PieceType.Enemy && obj2.NumComponent.GetnewType <= obj1.NumComponent.GetnewType)
+            if (obj2.Type == PieceType.Enemy && obj2.NumComponent.GetCurrentLev <= obj1.NumComponent.GetCurrentLev)
             {
                 return true;
             }
-            if (obj2.Type == PieceType.My && obj2.NumComponent.GetnewType == obj1.NumComponent.GetnewType)
+            if (obj2.Type == PieceType.My && obj2.NumComponent.GetCurrentLev == obj1.NumComponent.GetCurrentLev)
             {
                 return true;
             }
-            if (obj2.Type == PieceType.Gold && obj2.NumComponent.GetnewType <= obj1.NumComponent.GetnewType)
+            if (obj2.Type == PieceType.Gold && obj2.NumComponent.GetCurrentLev <= obj1.NumComponent.GetCurrentLev)
             {
                 return true;
             }
@@ -334,7 +241,7 @@ public class Grid : MonoBehaviour {
         {
             IsMoveDown = true;
         }
-        if(poss.y == -5.8f)
+        if(poss.y == -5.0f)
         {
             IsMoveUp = true;
         }
@@ -349,54 +256,17 @@ public class Grid : MonoBehaviour {
     {
         return pieces[y, x];
     }
-    /// <summary>
-    /// 根据当前物体随机获取其他颜色的物体，红色的最大为当前最高的记录
-    /// </summary>
-    /// <param name="obj"></param>
-    void GetCurrenNum(GameObject obj)
-    {
-        if(obj.GetComponent<GamePiece>().Type == PieceType.Gold || obj.GetComponent<GamePiece>().Type == PieceType.My)
-        {
-            obj.transform.GetComponent<PieceNum>().Setsprite(NumType.num0001);
-        }
-        if(obj.GetComponent<GamePiece>().Type == PieceType.Enemy)
-        {
-            if(HighDex >=3)
-            {
-                int dex = Random.Range(0, HighDex);
-
-                //红色高等级物体出现的概率
-                //if(dex>=1 && dex<=10)
-                //{
-                //    obj.transform.GetComponent<PieceNum>().Setsprite((NumType)(HighDex - 1));
-                //    Debug.Log(111);
-                //}
-                //else
-                //{
-                obj.transform.GetComponent<PieceNum>().Setsprite((NumType)dex);
-                //obj.transform.GetComponent<PieceNum>().Setsprite(NumType.num0008);
-                // }
-            }
-            else
-            {
-                obj.transform.GetComponent<PieceNum>().Setsprite(NumType.num0001);
-            }
-
-        }
-    }
-
+    
     //排序
-    public void ReSort(GamePiece ob,Vector3 pos)
+    public void ReSort(GamePiece deleteObj, Vector3 pos)
     {
-        int x = ob.X;
-        int y = ob.Y;
+        int x = deleteObj.X;
+        int y = deleteObj.Y;
         int id0 = Random.Range(0, 9);
-        int ty = lstCreat[id0];
-        GameObject newobj = Instantiate(m_Prefabs[(PieceType)ty], pos, Quaternion.identity);
-        GamePiece newob = newobj.GetComponent<GamePiece>();
-        newob.Init(0,0, this, (PieceType)ty);
-        GetCurrenNum(newobj);
-        newob.transform.parent = transform;
+        int ty = LoadDataClass.lstCreat[id0];
+        deleteObj.transform.position = pos;
+        deleteObj.Init(0, 0, this, (PieceType)ty);
+        LoadDataClass.Instace.InitCreatElement(deleteObj.gameObject, id0, HighDex, control);
         if(IsMoveLeft)
         {
             for (int i = y; i < colCount; i++)
@@ -410,11 +280,10 @@ public class Grid : MonoBehaviour {
 
                 if (i == colCount - 1)
                 {
-                    pieces[x, i] = newob;
-                    newob.Init(x, i + 1, this, (PieceType)ty);
+                    pieces[x, i] = deleteObj;
+                    deleteObj.Init(x, i + 1, this, (PieceType)ty);
                     m_Move.Add(pieces[x, i]);
                 }
-
             }
         }
         if (IsMoveRight)
@@ -430,8 +299,8 @@ public class Grid : MonoBehaviour {
 
                 if (i == 0)
                 {
-                    pieces[x, i] = newob;
-                    newob.Init(x, i - 1, this, (PieceType)ty);
+                    pieces[x, i] = deleteObj;
+                    deleteObj.Init(x, i - 1, this, (PieceType)ty);
                     m_Move.Add(pieces[x, i]);
                 }
 
@@ -450,8 +319,8 @@ public class Grid : MonoBehaviour {
 
                 if (i == rowCount - 1)
                 {
-                    pieces[i, y] = newob;
-                    newob.Init(i+1, y, this, (PieceType)ty);
+                    pieces[i, y] = deleteObj;
+                    deleteObj.Init(i+1, y, this, (PieceType)ty);
                     m_Move.Add(pieces[i, y]);
                 }
 
@@ -470,14 +339,12 @@ public class Grid : MonoBehaviour {
 
                 if (i == 0)
                 {
-                    pieces[i, y] = newob;
-                    newob.Init(i - 1, y, this, (PieceType)ty);
+                    pieces[i, y] = deleteObj;
+                    deleteObj.Init(i - 1, y, this, (PieceType)ty);
                     m_Move.Add(pieces[i, y]);
                 }
-
             }
         }
-
     }
 
     public void MoveLeft()
@@ -613,9 +480,3 @@ public class Grid : MonoBehaviour {
 
 }
 
-public enum PieceType
-{
-    My,
-    Gold,
-    Enemy,
-}

@@ -21,24 +21,30 @@ AnimatorController:
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
   - m_Name: IsLeft
-    m_Type: 4
+    m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
   - m_Name: IsRight
-    m_Type: 4
+    m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
   - m_Name: IsUp
-    m_Type: 4
+    m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
   - m_Name: IsDown
+    m_Type: 9
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 0}
+  - m_Name: IsTrue
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -89,7 +95,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: IsDown
+    m_ConditionEvent: IsTrue
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 1102021077854023002}
@@ -137,7 +143,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: IsRight
+    m_ConditionEvent: IsTrue
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 1102021077854023002}
@@ -233,7 +239,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: IsUp
+    m_ConditionEvent: IsTrue
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 1102021077854023002}
@@ -281,7 +287,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: IsLeft
+    m_ConditionEvent: IsTrue
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 1102021077854023002}
@@ -525,16 +531,16 @@ AnimatorStateMachine:
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: 1102846442633782336}
-    m_Position: {x: 564, y: 0, z: 0}
+    m_Position: {x: 528, y: 12, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1102351626415980082}
-    m_Position: {x: 576, y: 84, z: 0}
+    m_Position: {x: 540, y: 84, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1102672933768580446}
-    m_Position: {x: 600, y: 156, z: 0}
+    m_Position: {x: 552, y: 156, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1102418888460726522}
-    m_Position: {x: 492, y: 252, z: 0}
+    m_Position: {x: 540, y: 240, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1102021077854023002}
     m_Position: {x: 264, y: 132, z: 0}
