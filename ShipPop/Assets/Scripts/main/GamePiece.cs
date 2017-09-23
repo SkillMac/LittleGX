@@ -15,7 +15,6 @@ public class GamePiece : MonoBehaviour {
         get { return y; }
         set { y = value; }
     }
-
     public PieceType Type
     {
         get { return numComponent.Type; }
@@ -61,13 +60,14 @@ public class GamePiece : MonoBehaviour {
     
     private void OnMouseDown()
     {
+        if (grid.IsOver()) return;
         oldPos = Input.mousePosition;
     }
 
     private void OnMouseUp()
     {
         if (m_Anim == null) return;
-        
+        if (grid.IsOver()) return;
         Vector3 dir = Input.mousePosition - oldPos;
         
         if (Mathf.Abs(dir.normalized.x) > Mathf.Abs(dir.normalized.y) && dir.x < 0)

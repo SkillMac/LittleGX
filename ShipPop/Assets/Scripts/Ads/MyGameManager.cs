@@ -20,10 +20,7 @@ public class MyGameManager : MonoBehaviour
         #else
             adUnitId = "unexpected_platform";
         #endif
-    }
-    // Use this for initialization
-    void Start()
-    {
+
         ad = new InterstitialAd(adUnitId);
         AdRequest request = new AdRequest.Builder().Build();
         ad.LoadAd(request);

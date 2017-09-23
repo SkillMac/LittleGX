@@ -68,15 +68,21 @@ public class Grid : MonoBehaviour {
         if (IsMoveRight) {MoveRight(); }
         if (IsMoveDown) {MoveDown(); }
         if (IsMoveUp) {MoveUp(); }
-        if(IsOver() == null && !window_over.activeSelf)
+        if(IsOver() && !window_over.activeSelf)
         {
-            MyGameManager.Instance.ShowInterAD();
             window_over.SetActive(true);
             SetUnActive();
+            StartCoroutine(waitForAds());
         }
     }
 
-    void SetUnActive()
+    private IEnumerator waitForAds()
+    {
+        yield return new WaitForSeconds(0.5f);
+        MyGameManager.Instance.ShowInterAD();//防止格子还没移动到位置，就播放广告
+    }
+
+    private void SetUnActive()
     {
         for (int i = 0; i < rowCount; i++)
         {
@@ -171,8 +177,6 @@ public class Grid : MonoBehaviour {
 
                 text_Score.GetComponent<ScoreAnim>().AddScores(scor);
 
-                //text_Score.text = ((int)(obj2.NumComponent.GetCurrentLev + 1) * 3 + scor).ToString();
-
                 ReSort(obj2, poss);
                 //这里可以加入消除的特效，同时加分
                 Instantiate(GoldEffect, oldPos, Quaternion.identity);
@@ -183,7 +187,7 @@ public class Grid : MonoBehaviour {
         return false;
     }
 
-    public GamePiece IsOver()
+    public bool IsOver()
     {
         for (int i = 0; i < rowCount; i++)
         {
@@ -193,13 +197,13 @@ public class Grid : MonoBehaviour {
                 {
                     if((j>0&&EnDelete(pieces[i,j],pieces[i,j-1])) || (j<colCount-1&& EnDelete(pieces[i, j], pieces[i, j + 1]) )|| (i < rowCount -1 && EnDelete(pieces[i, j], pieces[i + 1, j]) ) || ( i>0 &&EnDelete(pieces[i, j], pieces[i - 1, j])))
                     {
-                        return pieces[i, j];
+                        //return pieces[i, j];
+                        return false;
                     }
                 }
             }
         }
-        return null;
-       
+        return true;
     }
 
      bool EnDelete(GamePiece obj1, GamePiece obj2)
@@ -282,7 +286,7 @@ public class Grid : MonoBehaviour {
                         //红色高等级物体出现的概率
                         if (rangenum >= 1 && rangenum <= 20)
                         {
-                            return HighDex - 1;
+                            return HighDex-1;
                         }
                         else {return dex; }
                     }

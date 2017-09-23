@@ -5,7 +5,8 @@ using UnityEngine.UI;
 public class ScoreAnim : MonoBehaviour{
 
     private Text text;
-    private int temp, number;
+    private int temp;
+    private static int number =0;
 
     void Start()
     {
@@ -24,7 +25,6 @@ public class ScoreAnim : MonoBehaviour{
     
     private IEnumerator AddScore(int num)
     {
-        number = int.Parse(text.text);
         temp = number;
         number += num;
         Vector3 off = Vector3.one * 0.1f;
@@ -41,7 +41,6 @@ public class ScoreAnim : MonoBehaviour{
 
     private IEnumerator InitScoreAnim()
     {
-        number = int.Parse(text.text);
         temp = number;
         number = 0;
         for (int i = 0; i < 10; i++)

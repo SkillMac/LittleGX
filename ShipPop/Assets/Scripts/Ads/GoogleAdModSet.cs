@@ -18,9 +18,6 @@ public class GoogleAdModSet : MonoBehaviour
              adUnitId = "unexpected_platform";
         #endif
 
-    }
-    void Start()
-    {
         banner = new BannerView(adUnitId, AdSize.Banner, AdPosition.Bottom);
         AdRequest request = new AdRequest.Builder().Build();
         banner.LoadAd(request);
@@ -31,12 +28,6 @@ public class GoogleAdModSet : MonoBehaviour
     {
         AdRequest request = new AdRequest.Builder().Build();
         banner.LoadAd(request);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 
     private void OnDestroy()
