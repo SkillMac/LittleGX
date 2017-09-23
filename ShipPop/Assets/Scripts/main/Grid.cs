@@ -70,6 +70,7 @@ public class Grid : MonoBehaviour {
         if (IsMoveUp) {MoveUp(); }
         if(IsOver() == null && !window_over.activeSelf)
         {
+            MyGameManager.Instance.ShowInterAD();
             window_over.SetActive(true);
             SetUnActive();
         }

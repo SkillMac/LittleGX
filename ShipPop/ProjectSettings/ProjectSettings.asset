@@ -6,11 +6,11 @@ PlayerSettings:
   serializedVersion: 12
   productGUID: 3638a545dcee8334f8555d5f91a5ab7c
   AndroidProfiler: 0
-  defaultScreenOrientation: 4
+  defaultScreenOrientation: 0
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
-  companyName: DefaultCompany
+  companyName: Bjfnyf
   productName: ShipPop
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
@@ -121,7 +121,7 @@ PlayerSettings:
     16:10: 1
     16:9: 1
     Others: 1
-  bundleVersion: 1.0
+  bundleVersion: 1.0.1
   preloadedAssets: []
   metroInputSource: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -141,7 +141,7 @@ PlayerSettings:
   targetPixelDensity: 200
   resolutionScalingMode: 0
   applicationIdentifier:
-    Android: com.Test.test02
+    Android: com.barn.shippop
   buildNumber: {}
   AndroidBundleVersionCode: 1
   AndroidMinSdkVersion: 16
@@ -217,8 +217,8 @@ PlayerSettings:
   AndroidTargetDevice: 0
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
-  AndroidKeystoreName: 
-  AndroidKeyaliasName: 
+  AndroidKeystoreName: D:/MyPro/hex/keystores/galaxycasino.keystore
+  AndroidKeyaliasName: galaxy
   AndroidTVCompatibility: 1
   AndroidIsGame: 1
   androidEnableBanner: 1
