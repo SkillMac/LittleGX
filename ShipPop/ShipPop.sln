@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2017
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShipPop", "ShipPop.csproj", "{450ADB3F-21F3-A91E-5168-1DC1DED5E457}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShipPop.Editor", "ShipPop.Editor.csproj", "{4526D0E6-0328-39B6-A4F6-C4D10E286CD9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +15,10 @@ Global
 		{450ADB3F-21F3-A91E-5168-1DC1DED5E457}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{450ADB3F-21F3-A91E-5168-1DC1DED5E457}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{450ADB3F-21F3-A91E-5168-1DC1DED5E457}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4526D0E6-0328-39B6-A4F6-C4D10E286CD9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4526D0E6-0328-39B6-A4F6-C4D10E286CD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4526D0E6-0328-39B6-A4F6-C4D10E286CD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4526D0E6-0328-39B6-A4F6-C4D10E286CD9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
