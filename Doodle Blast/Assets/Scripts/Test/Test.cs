@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DrawLines : MonoBehaviour {
+public class Test : MonoBehaviour
+{
     public GameObject prefabs;
-    public MyPigment m_Pigment;
     private LineRenderer lineRenderer;
     private EdgeCollider2D edgeCollider;
     private bool isBeginDraw = false;
@@ -18,7 +18,8 @@ public class DrawLines : MonoBehaviour {
     [HideInInspector]
     public int maxPigmentLength;
     private List<Vector3> allTest;
-    
+    public Testcup m_TestCup;
+    private bool canDrawLine = true;
     void OnEnable()
     {
         isBeginDraw = false;
@@ -28,10 +29,15 @@ public class DrawLines : MonoBehaviour {
     {
         ProduceLines();
     }
-    // Update is called once per frame
-    void Update ()
+
+    public void SetBool()
     {
-        if (Input.GetMouseButtonDown(0) && CanDrawLine())
+        canDrawLine = true; 
+    }
+    // Update is called once per frame
+    void Update()
+    {
+        if (Input.GetMouseButtonDown(0) && canDrawLine)
         {
             oldLength = currentLength;
             GameObject obj = Instantiate(prefabs);
@@ -45,18 +51,22 @@ public class DrawLines : MonoBehaviour {
             isBeginDraw = true;
             allVertices = new List<Vector2>();
         }
-        if (Input.GetMouseButton(0) && isBeginDraw && CanDrawLine())
+        if (Input.GetMouseButton(0) && isBeginDraw && canDrawLine)
         {
-            allMousePoint.Add(Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10)));
+            Vector3 temp = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10));
+            if (m_TestCup.IsInCup(temp))
+                canDrawLine = false;
+            allMousePoint.Add(temp);
         }
         if (Input.GetMouseButtonUp(0))
         {
+            canDrawLine = true;
             isBeginDraw = false;
             ProduceLines();
         }
         DrawBezierCurve();
     }
-    
+
     private void ProduceLines()
     {
         if (allVertices == null || allVertices.Count <= 5)
@@ -88,10 +98,10 @@ public class DrawLines : MonoBehaviour {
             m_AllLines.Add(current);
         }
     }
-    
+
     private void DrawBezierCurve()
     {
-        if (isBeginDraw && allMousePoint.Count > 5 && currentLength<= maxPigmentLength)
+        if (isBeginDraw && allMousePoint.Count > 5 && currentLength <= maxPigmentLength)
         {
             List<Vector3> bcList = new List<Vector3>();
             BezierPath bc = new BezierPath();
@@ -108,16 +118,15 @@ public class DrawLines : MonoBehaviour {
             }
             float tempLength = oldLength + GetDrawLineDistance(allVertices);
             currentLength = Mathf.Clamp(tempLength, 0, maxPigmentLength);
-            m_Pigment.SetImagePigment(SetPigmentImage());
             Debug.Log(bcList.Count + "**");
         }
     }
-    
+
     public float SetPigmentImage()
     {
         return (1 - currentLength / maxPigmentLength);
     }
-    
+
     public bool CanDrawLine()
     {
         if (currentLength < maxPigmentLength) return true;
@@ -153,7 +162,6 @@ public class DrawLines : MonoBehaviour {
         GameObject obj = m_AllLines[m_AllLines.Count - 1];
         currentLength -= m_AllLinesAndLength[obj];
         currentLength = oldLength = Mathf.Clamp(currentLength, 0, maxPigmentLength);
-        m_Pigment.SetImagePigment(SetPigmentImage());
         m_AllLinesAndLength.Remove(obj);
         m_AllLines.Remove(obj);
         Destroy(obj);
@@ -169,9 +177,8 @@ public class DrawLines : MonoBehaviour {
             Destroy(m_AllLines[i]);
         }
         currentLength = oldLength = 0;
-        m_Pigment.SetImagePigment(1);
         m_AllLines.Clear();
         m_AllLinesAndLength.Clear();
     }
-    
+
 }

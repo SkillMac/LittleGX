@@ -7254,8 +7254,8 @@ GameObject:
   - component: {fileID: 1633230271}
   - component: {fileID: 1633230270}
   - component: {fileID: 1633230275}
-  - component: {fileID: 1633230276}
   - component: {fileID: 1633230277}
+  - component: {fileID: 1633230276}
   m_Layer: 0
   m_Name: Cup
   m_TagString: Cup
