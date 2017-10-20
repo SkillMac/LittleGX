@@ -21,7 +21,6 @@ public class ResetAll : MonoBehaviour {
     private void Onclickbutton()
     {
         CDataMager.canDraw = true;
-        m_Window.m_Mager.m_Draw.enabled = true;
         ResetAllSpheres();
     }
 

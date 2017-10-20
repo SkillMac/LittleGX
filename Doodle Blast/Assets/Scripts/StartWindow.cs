@@ -11,20 +11,19 @@ public class StartWindow : MonoBehaviour {
     void Awake()
     {
         m_LevName.text = PlayerPrefs.GetInt("CurrentLev").ToString();
-        m_UIMager.m_Draw.gameObject.SetActive(false);
         m_Start.onClick.AddListener(OnClickButton);
     }
 
     void OnEnable()
     {
-        m_UIMager.m_Draw.gameObject.SetActive(false);
+        CDataMager.canDraw = false;
         WindowUIMager.hasStartGame = false;
     }
 
     private void OnClickButton()
     {
         gameObject.SetActive(false);
-        m_UIMager.m_Draw.gameObject.SetActive(true);
+        CDataMager.canDraw = true;
     }
 
     public void Init(WindowUIMager m_UIMager)

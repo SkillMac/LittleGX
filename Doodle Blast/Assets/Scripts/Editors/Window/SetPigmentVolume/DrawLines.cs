@@ -5,9 +5,12 @@ using UnityEngine;
 public class DrawLines : MonoBehaviour {
     public GameObject prefabs;
     public MyPigment m_Pigment;
+    public GetSpriteVertexs[] allSpriteRegions;
+    public GetUIVertexs[] allUIRegions;
     private LineRenderer lineRenderer;
     private EdgeCollider2D edgeCollider;
     private bool isBeginDraw = false;
+    private bool canDrawLine = true;
     private List<Vector3> allMousePoint;
     private List<Vector2> allVertices;//存储所有的顶点
     private float currentLength;
@@ -17,22 +20,16 @@ public class DrawLines : MonoBehaviour {
     private List<GameObject> m_AllLines = new List<GameObject>();//存储所有画出的线
     [HideInInspector]
     public int maxPigmentLength;
-    private List<Vector3> allTest;
     
-    void OnEnable()
-    {
-        isBeginDraw = false;
-        oldLength = currentLength;
-    }
-    void OnDisable()
-    {
-        ProduceLines();
-    }
     // Update is called once per frame
     void Update ()
     {
-        if (Input.GetMouseButtonDown(0) && CanDrawLine())
+        if (!CDataMager.canDraw) return;
+        if (Input.GetMouseButtonDown(0) && CanDrawLine() && canDrawLine)
         {
+            Vector3 temp = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10));
+            if (JudgeInObj(temp)) return;
+
             oldLength = currentLength;
             GameObject obj = Instantiate(prefabs);
             obj.transform.parent = transform;
@@ -45,32 +42,43 @@ public class DrawLines : MonoBehaviour {
             isBeginDraw = true;
             allVertices = new List<Vector2>();
         }
-        if (Input.GetMouseButton(0) && isBeginDraw && CanDrawLine())
+        if (Input.GetMouseButton(0) && isBeginDraw && CanDrawLine() && canDrawLine)
         {
-            allMousePoint.Add(Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10)));
+            Vector3 temp = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10));
+            if(allMousePoint.Count >= 5)
+            {
+                if (JudgeInObj(temp))
+                {
+                    canDrawLine = false;
+                    temp = (allMousePoint[allMousePoint.Count - 1] + temp) / 2;
+                }
+            }
+            allMousePoint.Add(temp);
+            DrawBezierCurve();
         }
         if (Input.GetMouseButtonUp(0))
         {
             isBeginDraw = false;
+            canDrawLine = true;
             ProduceLines();
         }
-        DrawBezierCurve();
     }
     
     private void ProduceLines()
     {
         if (allVertices == null || allVertices.Count <= 5)
         {
-            if (currentLength - oldLength < 0.1f)
-            {
-                currentLength = oldLength;
-            }
+            //if (currentLength - oldLength < 0.1f)
+            //{
+            //    currentLength = oldLength;
+            //}
+            currentLength = oldLength;
+            SetPigmentImage();
             Destroy(current);
             return;
         }
         Vector2[] temp = new Vector2[allVertices.Count];
         if (edgeCollider == null) return;
-        Debug.Log(allVertices.Count);
         edgeCollider.points = new Vector2[allVertices.Count];
         for (int i = 0; i < allVertices.Count; i++)
         {
@@ -87,32 +95,48 @@ public class DrawLines : MonoBehaviour {
         {
             m_AllLines.Add(current);
         }
+        allVertices = new List<Vector2>();
+        current = null;
     }
     
     private void DrawBezierCurve()
     {
-        if (isBeginDraw && allMousePoint.Count > 5 && currentLength<= maxPigmentLength)
+        if (allMousePoint.Count < 5) return;
+        lineRenderer.positionCount = allMousePoint.Count;
+        for (int i = 0; i < allMousePoint.Count; i++)
         {
-            List<Vector3> bcList = new List<Vector3>();
-            BezierPath bc = new BezierPath();
-            bcList = bc.CreateCurve(allMousePoint);//  通过贝塞尔曲线 平滑  
-            lineRenderer.positionCount = bcList.Count;
-
-            for (int i = 0; i < bcList.Count; i++)
-            {
-                Vector3 temp = bcList[i];
-                lineRenderer.SetPosition(i, temp);
-                Vector2 pos = new Vector2(temp.x, temp.y);
-                if (!allVertices.Contains(pos))
-                    allVertices.Add(pos);
-            }
-            float tempLength = oldLength + GetDrawLineDistance(allVertices);
-            currentLength = Mathf.Clamp(tempLength, 0, maxPigmentLength);
-            m_Pigment.SetImagePigment(SetPigmentImage());
-            Debug.Log(bcList.Count + "**");
+            Vector3 temp = allMousePoint[i];
+            lineRenderer.SetPosition(i, temp);
+            Vector2 pos = new Vector2(temp.x, temp.y);
+            if (!allVertices.Contains(pos))
+                allVertices.Add(pos);
         }
+        float tempLength = oldLength + GetDrawLineDistance(allVertices);
+        currentLength = Mathf.Clamp(tempLength, 0, maxPigmentLength);
+        m_Pigment.SetImagePigment(SetPigmentImage());
     }
     
+    private bool JudgeInObj(Vector3 pos)
+    {
+        if(allSpriteRegions.Length >0)
+        {
+            for(int i =0; i< allSpriteRegions.Length;i++)
+            {
+                if (allSpriteRegions[i].IsInCup(pos))
+                    return true;
+            }
+        }
+        if(allUIRegions.Length >0)
+        {
+            for(int i=0;i<allUIRegions.Length;i++)
+            {
+                if (allUIRegions[i].IsInUIWindow(pos))
+                    return true;
+            }
+        }
+        return false;
+    }
+
     public float SetPigmentImage()
     {
         return (1 - currentLength / maxPigmentLength);
@@ -148,6 +172,7 @@ public class DrawLines : MonoBehaviour {
         if (m_AllLines.Count == 0)
         {
             currentLength = oldLength = 0;
+            m_Pigment.SetImagePigment(1);
             return;
         }
         GameObject obj = m_AllLines[m_AllLines.Count - 1];
@@ -155,9 +180,15 @@ public class DrawLines : MonoBehaviour {
         currentLength = oldLength = Mathf.Clamp(currentLength, 0, maxPigmentLength);
         m_Pigment.SetImagePigment(SetPigmentImage());
         m_AllLinesAndLength.Remove(obj);
+        Debug.Log(m_AllLines.Count);
         m_AllLines.Remove(obj);
+        Debug.Log(m_AllLines.Count+"*");
         Destroy(obj);
-        if (m_AllLines.Count == 0) currentLength = oldLength = 0;
+        if (m_AllLines.Count == 0)
+        {
+            currentLength = oldLength = 0;
+            m_Pigment.SetImagePigment(1);
+        }
     }
 
     //清除所有的线条

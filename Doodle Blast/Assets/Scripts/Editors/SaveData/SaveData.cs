@@ -29,6 +29,5 @@ public class SaveData : MonoBehaviour {
     {
         gameObject.SetActive(false);
         CDataMager.canDraw = true;
-        m_Window.m_Mager.m_Draw.enabled = true;
     }
 }

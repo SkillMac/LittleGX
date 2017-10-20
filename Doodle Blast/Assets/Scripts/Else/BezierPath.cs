@@ -61,7 +61,7 @@ public class BezierPath  {
                 pathPoints.Add(point);
             }
         }
-        pathPoints.Add(controlPoints[pointCount - 1]);
+        //pathPoints.Add(controlPoints[pointCount - 1]);
         return pathPoints;
     }
 }

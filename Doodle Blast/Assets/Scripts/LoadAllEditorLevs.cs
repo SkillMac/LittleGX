@@ -115,6 +115,8 @@ public class LoadAllEditorLevs : MonoBehaviour {
                 lbw.m_Text.text = lbw.m_Count.ToString();
                 lbw.Init(this);
             }
+            else
+                lbw.gameObject.SetActive(false);
         }
     }
 

@@ -14,6 +14,7 @@ public class PigmentWindow : MonoBehaviour {
     public SaveData m_SaveData;
     [HideInInspector]
     public PigmentMager m_Mager;
+    private GetUIVertexs m_Vertexs;
 
     public void Init(PigmentMager mager)
     {
@@ -21,6 +22,7 @@ public class PigmentWindow : MonoBehaviour {
     }
     
 	void Start () {
+        m_Vertexs = GetComponent<GetUIVertexs>();
         m_Add.Init(this);
         m_Reduce.Init(this);
         m_Before.Init(this);
@@ -28,5 +30,5 @@ public class PigmentWindow : MonoBehaviour {
         m_Reset.Init(this);
         m_Test.Init(this);
         m_SaveData.Init(this);
-	}
+    }
 }

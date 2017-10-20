@@ -6,9 +6,6 @@ using UnityEngine.UI;
 public class JudgeCanWin : MonoBehaviour {
     public GameObject windowWin;
     public GameObject windowLose;
-    public Transform leftUp;
-    public Transform rightUp;
-    public Transform leftDown;
     public SetWaterValue water;
     public GameObject waterLevel;
     public GameObject winLine;
@@ -19,6 +16,7 @@ public class JudgeCanWin : MonoBehaviour {
     private List<Vector3> allSpheresPos;
     private float myWinLine;
     private bool IsBegin;
+    private GetSpriteVertexs m_Vertexs;
 
     void Awake()
     {
@@ -26,6 +24,7 @@ public class JudgeCanWin : MonoBehaviour {
         waterHeigth = water.GetComponent<SpriteRenderer>().sprite.rect.height / 100;
         allSpheres = new List<Transform>();
         allSpheresPos = new List<Vector3>();
+        m_Vertexs = GetComponent<GetSpriteVertexs>();
     }
 
     void OnEnable()
@@ -79,20 +78,13 @@ public class JudgeCanWin : MonoBehaviour {
         windowLose.SetActive(false);
         this.enabled = false;
     }
-
-    public bool IsInCup(Vector3 pos)
-    {
-        if (pos.x >= leftUp.position.x && pos.x <= rightUp.position.x
-            && pos.y >= leftDown.position.y && pos.y <= leftUp.position.y) return true;
-        return false;
-    }
-
+    
     private float MaxSphereHeigth()
     {
         allSphereY = new List<float>();
         for(int i =0;i< tempLst.Count; i++)
         {
-            if(IsInCup(tempLst[i].transform.position))
+            if(m_Vertexs.IsInCup(tempLst[i].transform.position))
             {
                 float radius = tempLst[i].transform.lossyScale.x * tempLst[i].transform.GetComponent<CircleCollider2D>().radius;
                 allSphereY.Add(tempLst[i].transform.position.y + radius);

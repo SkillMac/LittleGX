@@ -14,7 +14,6 @@ public class WindowUIMager : MonoBehaviour {
     public Image m_Pigment;
     public PlayEffectAnimation m_Effect;
     public LoadFileData m_ObjMager;
-    public DrawLines m_Draw;
     public Text m_LevName;
     public StartWindow m_Start;
     
@@ -42,7 +41,6 @@ public class WindowUIMager : MonoBehaviour {
         SetRestartButton(true);
         m_ObjMager.m_Draw.DeleteAllLines();
         m_Effect.InitScale();
-        m_Draw.enabled = true;
         CDataMager.canDraw = true;
         m_Start.gameObject.SetActive(true);
     }

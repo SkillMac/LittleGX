@@ -1,12 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.EventSystems;
-using System;
 
-public class ButtonBottle : MonoBehaviour ,IPointerDownHandler{
+public class ButtonBottle : MonoBehaviour{
     private Button m_Bottle;
+    [HideInInspector]
     public Window_Editor m_EditorWindow;
     private PigmentMager m_Mager;
 
@@ -19,7 +16,6 @@ public class ButtonBottle : MonoBehaviour ,IPointerDownHandler{
         m_Bottle = GetComponent<Button>();
         m_Bottle.onClick.AddListener(onclick_Bottle);
         m_Mager = GetComponent<PigmentMager>();
-        m_Mager.m_Draw.enabled = false;
         m_Mager.m_Window.gameObject.SetActive(false);
     }
 
@@ -31,7 +27,6 @@ public class ButtonBottle : MonoBehaviour ,IPointerDownHandler{
             m_EditorWindow.mask.transform.SetAsLastSibling();
             m_Bottle.transform.SetAsLastSibling();
             m_EditorWindow.mask.SetActive(true);
-            m_Mager.m_Draw.enabled = true;
             m_Mager.m_Window.gameObject.SetActive(true);
         }
         else
@@ -39,7 +34,6 @@ public class ButtonBottle : MonoBehaviour ,IPointerDownHandler{
             CDataMager.canDraw = false;
             m_EditorWindow.mask.SetActive(false);
             m_EditorWindow.mask.transform.SetAsFirstSibling();
-            m_Mager.m_Draw.enabled = false;
             m_Mager.m_Window.gameObject.SetActive(false);
             m_Mager.m_Window.m_Reset.ResetAllSpheres();
         }
@@ -49,9 +43,4 @@ public class ButtonBottle : MonoBehaviour ,IPointerDownHandler{
     void Update () {
 		
 	}
-
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        m_Mager.m_Draw.enabled = false;
-    }
 }
