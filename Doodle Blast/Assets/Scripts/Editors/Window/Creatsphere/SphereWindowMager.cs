@@ -9,8 +9,10 @@ public class SphereWindowMager : MonoBehaviour {
     public Smaller m_smaller;
     public Deleter m_deleter;
     public Text m_Scale;
+    public Button m_Type;
     public ButtonCreat m_CreatMager;
     public SphereMager m_Sphere;
+
     public void Init(SphereMager sphere, ButtonCreat creat)
     {
         m_Sphere = sphere;
