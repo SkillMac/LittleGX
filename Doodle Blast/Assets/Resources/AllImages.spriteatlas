@@ -26,19 +26,22 @@ SpriteAtlas:
       enableTightPacking: 0
     packedHash:
       serializedVersion: 2
-      Hash: 57b088b4e0dd5d2a20b63c00b1faa743
+      Hash: a343690ee403d7cf6585d83426e49c4d
     variantMultiplier: 1
     bindAsDefault: 1
     finalFormat: 47
-    hashString: 57b088b4e0dd5d2a20b63c00b1faa743
-    totalSpriteSurfaceArea: 1258722
+    hashString: a343690ee403d7cf6585d83426e49c4d
+    totalSpriteSurfaceArea: 1953686
     packables:
     - {fileID: 102900000, guid: 5aa9de8d169f7ba4f81b9d8306aaab3c, type: 3}
     packedSpriteRenderDataKeys:
     - aeda2e7e939e7414c8fdf1ecf222254c: 21300000
     - d44d683628f376b43883802d1609f3af: 21300000
+    - 3c45f602a8c722540bb58db366ade9d9: 21300000
+    - cdc6669b2568c134eb803449135e0b86: 21300000
     - f8fb0b27bc518ae468476840fafcfb2c: 21300000
     - 30cba3b7472d6ec499535f48dcff02df: 21300000
+    - 0be4826eb336f6a4faea491a6c9030bb: 21300000
     - d3b15fe420243324d967e3b63e225a43: 21300000
     - 4be353c521fdc9046ae136570d5e1e4d: 21300000
     - 292c463947d60504a98cb2e907bcd99b: 21300000
@@ -55,9 +58,9 @@ SpriteAtlas:
     - 4f64359d126c65c45a65f77d7847a755: 21300000
     - cd9644676b20f114591a46cdb98d62b5: 21300000
     - 6765acaa565f4e94d8e1c8d81d9ed542: 21300000
-    - a52a444294ddad540b09e0a67912eded: 21300000
     - c1a5371b1c5326b45b09214d5331aa17: 21300000
     - c0dc53513a62fa6488e37a8cde00b245: 21300000
+    - a52a444294ddad540b09e0a67912eded: 21300000
     - 3428486bc7cf360419bccbe14e3484f4: 21300000
     - b69149677a8bf9146b40b3695ab3397b: 21300000
     - d02b577cf918d0240b46721ea25c35fc: 21300000
@@ -83,8 +86,11 @@ SpriteAtlas:
   m_PackedSprites:
   - {fileID: 21300000, guid: aeda2e7e939e7414c8fdf1ecf222254c, type: 3}
   - {fileID: 21300000, guid: d44d683628f376b43883802d1609f3af, type: 3}
+  - {fileID: 21300000, guid: 3c45f602a8c722540bb58db366ade9d9, type: 3}
+  - {fileID: 21300000, guid: cdc6669b2568c134eb803449135e0b86, type: 3}
   - {fileID: 21300000, guid: f8fb0b27bc518ae468476840fafcfb2c, type: 3}
   - {fileID: 21300000, guid: 30cba3b7472d6ec499535f48dcff02df, type: 3}
+  - {fileID: 21300000, guid: 0be4826eb336f6a4faea491a6c9030bb, type: 3}
   - {fileID: 21300000, guid: d3b15fe420243324d967e3b63e225a43, type: 3}
   - {fileID: 21300000, guid: 4be353c521fdc9046ae136570d5e1e4d, type: 3}
   - {fileID: 21300000, guid: 292c463947d60504a98cb2e907bcd99b, type: 3}
@@ -101,9 +107,9 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 4f64359d126c65c45a65f77d7847a755, type: 3}
   - {fileID: 21300000, guid: cd9644676b20f114591a46cdb98d62b5, type: 3}
   - {fileID: 21300000, guid: 6765acaa565f4e94d8e1c8d81d9ed542, type: 3}
-  - {fileID: 21300000, guid: a52a444294ddad540b09e0a67912eded, type: 3}
   - {fileID: 21300000, guid: c1a5371b1c5326b45b09214d5331aa17, type: 3}
   - {fileID: 21300000, guid: c0dc53513a62fa6488e37a8cde00b245, type: 3}
+  - {fileID: 21300000, guid: a52a444294ddad540b09e0a67912eded, type: 3}
   - {fileID: 21300000, guid: 3428486bc7cf360419bccbe14e3484f4, type: 3}
   - {fileID: 21300000, guid: b69149677a8bf9146b40b3695ab3397b, type: 3}
   - {fileID: 21300000, guid: d02b577cf918d0240b46721ea25c35fc, type: 3}
@@ -128,8 +134,11 @@ SpriteAtlas:
   m_PackedSpriteNamesToIndex:
   - bg
   - SelectBG
+  - LevBG
+  - LevBG1
   - xxx
   - bg1
+  - 1
   - oops
   - Win
   - startwin
@@ -146,9 +155,9 @@ SpriteAtlas:
   - ufo
   - more1
   - startk
-  - score
   - LevIcon
   - Locked
+  - score
   - word
   - bottle
   - start1

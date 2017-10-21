@@ -6,13 +6,13 @@ using UnityEngine.UI;
 public class ButtonCube : MonoBehaviour{
     public CreatCubeButton m_CreatButton;
     public CubeEditorWindow m_CubeEditorWindow;
-    public HideEditorWindow m_Back;
+    //public HideEditorWindow m_Back;
     private Button m_Cube;
     private Window_Editor m_EditorWindow;
     public void Init(Window_Editor editor)
     {
         m_EditorWindow = editor;
-        m_Back.gameObject.SetActive(false);
+        //m_Back.gameObject.SetActive(false);
     }
 	// Use this for initialization
 	void Start () {
@@ -29,7 +29,7 @@ public class ButtonCube : MonoBehaviour{
             m_EditorWindow.mask.SetActive(true);
             m_CreatButton.gameObject.SetActive(true);
             m_CubeEditorWindow.gameObject.SetActive(true);
-            m_Back.gameObject.SetActive(true);
+            //m_Back.gameObject.SetActive(true);
 
             if (CDataMager.getInstance.allCubes.Count >0)
             {
@@ -45,7 +45,7 @@ public class ButtonCube : MonoBehaviour{
             m_EditorWindow.mask.transform.SetAsFirstSibling();
             m_CreatButton.gameObject.SetActive(false);
             m_CubeEditorWindow.gameObject.SetActive(false);
-            m_Back.gameObject.SetActive(false);
+            //m_Back.gameObject.SetActive(false);
 
             if (CDataMager.getInstance.allCubes.Count > 0)
             {

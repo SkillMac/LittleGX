@@ -16,6 +16,8 @@ public class LoadAllEditorLevs : MonoBehaviour {
     private List<LevButtonWindow> allButtons;
     private int lstCount;
     private int currentPage;
+    private bool isPlayAnimation = false;
+
     void Awake()
     {
         allButtons = new List<LevButtonWindow>();
@@ -37,6 +39,8 @@ public class LoadAllEditorLevs : MonoBehaviour {
 	
     private void OnClickLeft()
     {
+        if (isPlayAnimation)
+            OnClickBack();
         if (currentPage > 1)
         {
             currentPage--;
@@ -48,6 +52,8 @@ public class LoadAllEditorLevs : MonoBehaviour {
 
     private void OnClickRight()
     {
+        if (isPlayAnimation)
+            OnClickBack();
         int max = lstCount / MAXCOUNTLEVS + 1;
         if (currentPage < max)
         {
@@ -60,6 +66,7 @@ public class LoadAllEditorLevs : MonoBehaviour {
 
     private void OnClickBack()
     {
+        isPlayAnimation = false;
         m_Delete.gameObject.SetActive(true);
         m_Back.gameObject.SetActive(false);
         EnableDelete(false);
@@ -67,6 +74,7 @@ public class LoadAllEditorLevs : MonoBehaviour {
 
     private void OnClickDelete()
     {
+        isPlayAnimation = true;
         m_Delete.gameObject.SetActive(false);
         m_Back.gameObject.SetActive(true);
         EnableDelete(true);

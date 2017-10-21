@@ -68,12 +68,10 @@ public class DrawLines : MonoBehaviour {
     {
         if (allVertices == null || allVertices.Count <= 5)
         {
-            //if (currentLength - oldLength < 0.1f)
-            //{
-            //    currentLength = oldLength;
-            //}
-            currentLength = oldLength;
-            SetPigmentImage();
+            if (currentLength - oldLength < 0.1f)
+            {
+                currentLength = oldLength;
+            }
             Destroy(current);
             return;
         }
