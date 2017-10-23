@@ -22,7 +22,6 @@ public class CubeMager : MonoBehaviour
 
     public void Init(CreatCubeButton window)
     {
-        //m_WindowMager = window;
         top = window.top;
         cup = window.cup;
         m_EditorWindow = window.m_EditorWindow;

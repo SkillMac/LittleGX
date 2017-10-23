@@ -28,20 +28,14 @@ public class Window_Editor : MonoBehaviour {
         {
             CDataMager.screenWidth = width * CDataMager.scaleWidth;
         }
+
+        if(CDataMager.getInstance.allSphereSprite ==null)
+        {
+            CDataMager.getInstance.allSphereSprite = Resources.LoadAll<Sprite>("Images/Spheres");
+        }
+        if(CDataMager.getInstance.allCubeSprite == null)
+        {
+            CDataMager.getInstance.allCubeSprite = Resources.LoadAll<Sprite>("Images/Cubes");
+        }
     }
-    // Use this for initialization
-    void Start () {
-
-    }
-
-
-    
-  
-
-    // Update is called once per frame
-    void Update () {
-		
-	}
-
-  
 }

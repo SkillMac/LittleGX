@@ -8,10 +8,11 @@ public class ButtonCreat : MonoBehaviour {
     public Transform rootSphereWindow;
     public SphereMager prefabSphere;
     public SphereWindowMager prefabSphereWindow;
+    public AllSphereType m_SpheresType;
+    public SphereWindowMager m_CurrentWindow;
     private SphereMager m_Sphere;
     private SphereWindowMager m_SphereWindow;
     private Button creatSphere;
-
     private List<Vector2> m_Pos = new List<Vector2>();
     private const float OFFSETX = 0.5f;
     private const int MAXSPHERES = 20;
@@ -24,6 +25,15 @@ public class ButtonCreat : MonoBehaviour {
         CDataMager.getInstance.mySpheres = this;
     }
 
+    void OnEnable()
+    {
+        if(m_CurrentWindow != null)
+        {
+            m_CurrentWindow.m_Type.SetColor(Color.white);
+            m_CurrentWindow = null;
+        }
+    }
+
     private void onclick_CreatSphere()
     {
         if (CDataMager.getInstance.allSpheres.Count > MAXSPHERES) return;
@@ -34,7 +44,7 @@ public class ButtonCreat : MonoBehaviour {
         m_Sphere.transform.parent = rootSphere;
         m_SphereWindow = Instantiate(prefabSphereWindow, rootSphereWindow);
         m_Sphere.Init(m_SphereWindow,this);
-        m_SphereWindow.Init(m_Sphere,this);
+        m_SphereWindow.Init(m_Sphere,this,m_SpheresType);
         CDataMager.getInstance.allSpheres.Add(m_Sphere);
         CDataMager.getInstance.allSphereWindows.Add(m_SphereWindow);
     }

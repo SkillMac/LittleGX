@@ -31,23 +31,10 @@ public class CFileMager {
         return cld;
     }
 
-    public void WriteFiles(CAllLevsData cld,CLevel lev,string path)
-    {
-        cld.allEditorLevs.Add(lev);
-        cld.allEditorLevCount++;
-        string strSave = JsonUtility.ToJson(cld);
-        FileStream fs = new FileStream(path, FileMode.Open);
-        StreamWriter sw = new StreamWriter(fs);
-        sw.WriteLine(strSave);
-        sw.Close();
-        sw.Dispose();
-        Debug.Log("Save Success!!!");
-    }
-
-    public void WriteFiles(CAllLevsData cld,string path)
+    public void WriteFiles(object cld,string path)
     {
         string strSave = JsonUtility.ToJson(cld);
-        FileStream fs = new FileStream(path, FileMode.Open);
+        FileStream fs = new FileStream(path, FileMode.OpenOrCreate);
         StreamWriter sw = new StreamWriter(fs);
         sw.WriteLine(strSave);
         sw.Close();

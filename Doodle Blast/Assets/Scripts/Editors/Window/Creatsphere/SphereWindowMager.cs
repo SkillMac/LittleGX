@@ -9,14 +9,16 @@ public class SphereWindowMager : MonoBehaviour {
     public Smaller m_smaller;
     public Deleter m_deleter;
     public Text m_Scale;
-    public Button m_Type;
+    public ImageType m_Type;
     public ButtonCreat m_CreatMager;
     public SphereMager m_Sphere;
+    public AllSphereType m_SpheresType;
 
-    public void Init(SphereMager sphere, ButtonCreat creat)
+    public void Init(SphereMager sphere, ButtonCreat creat,AllSphereType type)
     {
         m_Sphere = sphere;
         m_CreatMager = creat;
+        m_SpheresType = type;
     }
 
     void Awake()
@@ -25,14 +27,6 @@ public class SphereWindowMager : MonoBehaviour {
         m_bigger.Init(this);
         m_smaller.Init(this);
         m_deleter.Init(this);
+        m_Type.Init(this);
     }
-    // Use this for initialization
-    void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 }

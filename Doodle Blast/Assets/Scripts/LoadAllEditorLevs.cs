@@ -26,6 +26,15 @@ public class LoadAllEditorLevs : MonoBehaviour {
         m_Delete.gameObject.SetActive(true);
         m_Back.gameObject.SetActive(false);
 
+        if (CDataMager.getInstance.allSphereSprite == null)
+        {
+            CDataMager.getInstance.allSphereSprite = Resources.LoadAll<Sprite>("Images/Spheres");
+        }
+        if (CDataMager.getInstance.allCubeSprite == null)
+        {
+            CDataMager.getInstance.allCubeSprite = Resources.LoadAll<Sprite>("Images/Cubes");
+        }
+
         LoadDataCreatLev();
         CreatLevButton();
     }
@@ -36,7 +45,12 @@ public class LoadAllEditorLevs : MonoBehaviour {
         m_LeftButton.onClick.AddListener(OnClickLeft);
         m_RightButton.onClick.AddListener(OnClickRight);
 	}
-	
+
+    private void OnEnable()
+    {
+        CAllFixedLev.isFixedLev = false;
+    }
+
     private void OnClickLeft()
     {
         if (isPlayAnimation)

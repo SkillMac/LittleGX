@@ -10,8 +10,12 @@ public class StartWindow : MonoBehaviour {
 
     void Awake()
     {
-        m_LevName.text = PlayerPrefs.GetInt("CurrentLev").ToString();
         m_Start.onClick.AddListener(OnClickButton);
+    }
+
+    void Start()
+    {
+        m_LevName.text = m_UIMager.m_ObjMager.myLevIndex.ToString();
     }
 
     void OnEnable()

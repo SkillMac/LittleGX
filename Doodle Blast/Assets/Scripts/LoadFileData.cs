@@ -9,9 +9,10 @@ public class LoadFileData : MonoBehaviour {
     public Transform m_CubeRoot;
     public GameObject m_SpherePrefab;
     public Transform m_SphereRoot;
+    public int myLevIndex;
     private List<Transform> allSpheres = new List<Transform>();
 
-    void Start()
+    void Awake()
     {
         LoadDataCreatLev();
     }
@@ -47,7 +48,15 @@ public class LoadFileData : MonoBehaviour {
         {
             Vector3 pos = spheres[i].position;
             Vector3 scal = spheres[i].scale;
+            string spriteName = spheres[i].spriteName;
             GameObject obj = Instantiate(m_SpherePrefab, m_SphereRoot);
+            for(int j =0;j<CDataMager.getInstance.allSphereSprite.Length;j++)
+            {
+                if(CDataMager.getInstance.allSphereSprite[j].name == spriteName)
+                {
+                    obj.GetComponent<SpriteRenderer>().sprite = CDataMager.getInstance.allSphereSprite[j];
+                }
+            }
             obj.transform.position = pos;
             obj.transform.localScale = scal;
             allSpheres.Add(obj.transform);
@@ -56,7 +65,17 @@ public class LoadFileData : MonoBehaviour {
 
     private void LoadDataCreatLev()
     {
-        CLevel myLev = CAllEditorLevs.GetInstance.allEditorLevs[PlayerPrefs.GetInt("CurrentLev")];
+        CLevel myLev = new CLevel();
+        if (!CAllFixedLev.isFixedLev)
+        {
+            myLevIndex = PlayerPrefs.GetInt("CurrentLev");
+            myLev = CAllEditorLevs.GetInstance.allEditorLevs[PlayerPrefs.GetInt("CurrentLev")];
+        }
+        else
+        {
+            myLevIndex = PlayerPrefs.GetInt("CurrentFixLev");
+            myLev = CAllFixedLev.GetInstance.allFixedLevs[PlayerPrefs.GetInt("CurrentFixLev")];
+        }
         SetCup(myLev.m_cup);
         SetBottleValue(myLev.m_pigment);
         SetCubes(myLev.m_barriers);

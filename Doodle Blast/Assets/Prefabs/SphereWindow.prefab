@@ -250,6 +250,7 @@ GameObject:
   - component: {fileID: 222838250709666960}
   - component: {fileID: 114806855069878886}
   - component: {fileID: 114554130365272718}
+  - component: {fileID: 114507477884291360}
   m_Layer: 5
   m_Name: ImageType
   m_TagString: Untagged
@@ -571,6 +572,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 449ee09d5abc69447ae893cf1b31d648, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114507477884291360
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1996970945960846}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf9e13e6c8bb51f4ebae759fe552b9ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114523829239544924
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -639,9 +651,10 @@ MonoBehaviour:
   m_smaller: {fileID: 114214149500846846}
   m_deleter: {fileID: 114355842884465120}
   m_Scale: {fileID: 114209067123530274}
-  m_Type: {fileID: 114554130365272718}
+  m_Type: {fileID: 114507477884291360}
   m_CreatMager: {fileID: 0}
   m_Sphere: {fileID: 0}
+  m_SpheresType: {fileID: 0}
 --- !u!114 &114755821589035114
 MonoBehaviour:
   m_ObjectHideFlags: 1

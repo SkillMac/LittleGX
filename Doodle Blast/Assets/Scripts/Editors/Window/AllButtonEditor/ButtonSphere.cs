@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class ButtonSphere : MonoBehaviour {
     public GameObject m_CreatWindow;
+    public AllSphereType m_AllType;
     private Button m_Sphere;
     private Window_Editor m_EditorWindow;
     public void Init(Window_Editor editor)
@@ -14,6 +15,7 @@ public class ButtonSphere : MonoBehaviour {
     // Use this for initialization
     void Start () {
         m_CreatWindow.SetActive(false);
+        m_AllType.gameObject.SetActive(false);
         m_Sphere = GetComponent<Button>();
         m_Sphere.onClick.AddListener(onclick_Sphere);
     }
@@ -25,8 +27,9 @@ public class ButtonSphere : MonoBehaviour {
             m_EditorWindow.mask.transform.SetAsLastSibling();
             m_Sphere.transform.SetAsLastSibling();
             m_EditorWindow.mask.SetActive(true);
+            m_AllType.gameObject.SetActive(false);
 
-            if(CDataMager.getInstance.allSpheres.Count >0)
+            if (CDataMager.getInstance.allSpheres.Count >0)
             {
                 for(int i =0;i < CDataMager.getInstance.allSpheres.Count;i++)
                 {
@@ -40,6 +43,7 @@ public class ButtonSphere : MonoBehaviour {
             m_CreatWindow.SetActive(false);
             m_EditorWindow.mask.SetActive(false);
             m_EditorWindow.mask.transform.SetAsFirstSibling();
+            m_AllType.gameObject.SetActive(false);
 
             if (CDataMager.getInstance.allSpheres.Count > 0)
             {

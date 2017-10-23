@@ -25,9 +25,13 @@ public class WindowUIMager : MonoBehaviour {
         m_Clear.Init(this);
         m_ReStart.Init(this);
         m_Start.Init(this);
-        m_LevName.text = (PlayerPrefs.GetInt("CurrentLev")).ToString();
 	}
-	
+
+    void Start()
+    {
+        m_LevName.text = m_ObjMager.myLevIndex.ToString();
+    }
+
     public void SetRestartButton(bool istrue)
     {
         m_Undo.gameObject.SetActive(istrue);

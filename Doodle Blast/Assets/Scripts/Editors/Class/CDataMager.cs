@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CDataMager
 {
@@ -20,6 +21,8 @@ public class CDataMager
     public CupMager myCup;
     public PigmentMager myPigment;
     public ButtonCreat mySpheres;
+    public Sprite[] allSphereSprite;
+    public Sprite[] allCubeSprite;
 
     private CDataMager() { }
    

@@ -20,7 +20,10 @@ public class LevButtonScript : MonoBehaviour {
 	
     private void OnClickButton()
     {
-        PlayerPrefs.SetInt("CurrentLev", m_ButtonWindow.m_Count);
+        if (m_ButtonWindow.m_Window != null)
+            PlayerPrefs.SetInt("CurrentLev", m_ButtonWindow.m_Count);
+        else
+            PlayerPrefs.SetInt("CurrentFixLev", m_ButtonWindow.m_Count);
         SceneManager.LoadScene("PlayEditor");
     }
 

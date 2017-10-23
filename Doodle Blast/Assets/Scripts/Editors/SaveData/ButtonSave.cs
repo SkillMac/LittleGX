@@ -1,8 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
-using System.IO;
 
 public class ButtonSave : MonoBehaviour {
     private Button m_Button;
@@ -34,9 +31,11 @@ public class ButtonSave : MonoBehaviour {
     private void SaveDataToJson()
     {
         CAllLevsData cld = CFileMager.GetInstance.ReadFiles(Application.persistentDataPath + "/levelConfig.txt");
+        //int count = Resources.LoadAll("Data/EditorData").Length;
 
         CLevel lev = new CLevel();
         lev.currentLevID = cld.allEditorLevCount +1;
+        //lev.currentLevID = count + 1;
         lev.m_pigment = new CPigment(CDataMager.getInstance.myPigmentVolume);
         Vector3 cupPos = new Vector3(CDataMager.getInstance.cupPositionX, CDataMager.cupPositionY, 0);
         Vector3 winLine = new Vector3(CDataMager.getInstance.cupPositionX, CDataMager.getInstance.winLinePositionY, 0);
@@ -48,7 +47,8 @@ public class ButtonSave : MonoBehaviour {
             {
                 Vector3 spherePos = CDataMager.getInstance.allSpheres[i].transform.position;
                 Vector3 sphereScale = CDataMager.getInstance.allSpheres[i].transform.localScale;
-                lev.m_spheres[i] = new CSphere(spherePos, sphereScale);
+                string spriteName = CDataMager.getInstance.allSpheres[i].transform.GetComponent<SpriteRenderer>().sprite.name;
+                lev.m_spheres[i] = new CSphere(spherePos, sphereScale,spriteName);
             }
         }
         lev.m_barriers = new CBarrier[CDataMager.getInstance.allCubes.Count];
@@ -64,8 +64,10 @@ public class ButtonSave : MonoBehaviour {
         }
         CAllEditorLevs.GetInstance.allEditorLevs.Add(lev.currentLevID,lev);
         CAllEditorLevs.GetInstance.allLevID.Add(lev.currentLevID);
-        CFileMager.GetInstance.WriteFiles(cld,lev, Application.persistentDataPath + "/levelConfig.txt");
-
+        cld.allEditorLevs.Add(lev);
+        cld.allEditorLevCount++;
+        CFileMager.GetInstance.WriteFiles(cld, Application.persistentDataPath + "/levelConfig.txt");
+        //CFileMager.GetInstance.WriteFiles(lev, Application.dataPath + "/Resources/Data/EditorData/" + lev.currentLevID + ".txt");
         m_Winodw.m_Success.SetActive(true);
     }
 }

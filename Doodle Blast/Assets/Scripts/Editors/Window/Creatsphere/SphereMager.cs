@@ -1,6 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class SphereMager : MonoBehaviour {
     private SphereWindowMager m_Window;
@@ -75,5 +74,10 @@ public class SphereMager : MonoBehaviour {
     public void SetRigidbody2D(RigidbodyType2D type)
     {
         transform.GetComponent<Rigidbody2D>().bodyType = type;
+    }
+
+    public void SetButtonImage(Sprite spr)
+    {
+        transform.GetComponent<SpriteRenderer>().sprite = spr;
     }
 }

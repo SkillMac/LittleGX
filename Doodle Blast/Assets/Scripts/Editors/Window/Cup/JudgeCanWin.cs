@@ -11,7 +11,7 @@ public class JudgeCanWin : MonoBehaviour {
     public GameObject winLine;
     public float waterHeigth;
     private List<float> allSphereY;
-    private List<Transform> allSpheres;
+    private List<Transform> allSpheres = new List<Transform>();
     private List<Transform> tempLst;
     private List<Vector3> allSpheresPos;
     private float myWinLine;
@@ -22,8 +22,6 @@ public class JudgeCanWin : MonoBehaviour {
     {
         water.Init(this);
         waterHeigth = water.GetComponent<SpriteRenderer>().sprite.rect.height / 100;
-        allSpheres = new List<Transform>();
-        allSpheresPos = new List<Vector3>();
         m_Vertexs = GetComponent<GetSpriteVertexs>();
     }
 
