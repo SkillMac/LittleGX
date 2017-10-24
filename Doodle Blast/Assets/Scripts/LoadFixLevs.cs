@@ -29,24 +29,29 @@ public class LoadFixLevs : MonoBehaviour {
     void OnEnable()
     {
         CAllFixedLev.isFixedLev = true;
+        currentLev = PlayerPrefs.GetInt("MaxFixLev") - 1;
         for (int i = 0; i < count; i++)
         {
-            if (i <= currentLev)
+            if (i <= currentLev || i ==0)
+            {
                 allLevButtons[i].m_Lock.SetActive(false);
+                allLevButtons[i].m_LevButton.m_Button.interactable = true;
+            }
+            else
+            {
+                allLevButtons[i].m_Lock.SetActive(true);
+                allLevButtons[i].m_LevButton.m_Button.interactable = false;
+            }
         }
     }
 
     private void CreatButton()
     {
         count = Resources.LoadAll("Data/EditorData").Length;
-        currentLev = PlayerPrefs.GetInt("CurrentFixLev");
         for (int i = 0; i < count; i++)
         {
             LevButtonWindow lbw = Instantiate(prefabButton, rootButton.transform);
             lbw.m_Text.text = (i + 1).ToString();
-            if (i <= currentLev)
-                lbw.m_Lock.SetActive(false);
-            lbw.m_Lock.SetActive(true);
             lbw.m_Delete.gameObject.SetActive(false);
             allLevButtons.Add(lbw);
         }
