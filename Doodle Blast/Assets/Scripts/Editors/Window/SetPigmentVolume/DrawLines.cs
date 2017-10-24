@@ -10,7 +10,6 @@ public class DrawLines : MonoBehaviour {
     private LineRenderer lineRenderer;
     private EdgeCollider2D edgeCollider;
     private bool isBeginDraw = false;
-    private bool canDrawLine = true;
     private List<Vector3> allMousePoint;
     private List<Vector2> allVertices;//存储所有的顶点
     private float currentLength;
@@ -25,11 +24,8 @@ public class DrawLines : MonoBehaviour {
     void Update ()
     {
         if (!CDataMager.canDraw) return;
-        if (Input.GetMouseButtonDown(0) && CanDrawLine() && canDrawLine)
+        if (Input.GetMouseButtonDown(0) && CanDrawLine())
         {
-            Vector3 temp = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10));
-            if (JudgeInObj(temp)) return;
-
             oldLength = currentLength;
             GameObject obj = Instantiate(prefabs);
             obj.transform.parent = transform;
@@ -42,36 +38,63 @@ public class DrawLines : MonoBehaviour {
             isBeginDraw = true;
             allVertices = new List<Vector2>();
         }
-        if (Input.GetMouseButton(0) && isBeginDraw && CanDrawLine() && canDrawLine)
+        if (Input.GetMouseButton(0) && isBeginDraw && CanDrawLine())
         {
             Vector3 temp = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10));
-            if(allMousePoint.Count >= 5)
-            {
-                if (JudgeInObj(temp))
-                {
-                    canDrawLine = false;
-                    temp = (allMousePoint[allMousePoint.Count - 1] + temp) / 2;
-                }
-            }
-            allMousePoint.Add(temp);
+            if(!allMousePoint.Contains(temp))
+                allMousePoint.Add(temp);
             DrawBezierCurve();
         }
-        if (Input.GetMouseButtonUp(0))
+        if (Input.GetMouseButtonUp(0) && isBeginDraw)
         {
             isBeginDraw = false;
-            canDrawLine = true;
+            DeleteUnUsePoints();
+            DrawBezierCurve();
             ProduceLines();
         }
     }
     
+    private void DeleteUnUsePoints()
+    {
+        currentLength = oldLength;
+        m_Pigment.SetImagePigment(SetPigmentImage());
+        allVertices = new List<Vector2>();
+        if (allMousePoint.Count>0)
+        {
+            if(JudgeInObj(allMousePoint[0]))
+            {
+                for(int i = 0;i <allMousePoint.Count;i++)
+                {
+                    if(!JudgeInObj(allMousePoint[i]))
+                    {
+                        Vector3 tempPos = (allMousePoint[i - 1] + allMousePoint[i]) / 2f;
+                        allMousePoint.RemoveRange(0, i);
+                        allMousePoint.Insert(0, tempPos);
+                        return;
+                    }
+                }
+                allMousePoint.Clear();
+            }
+            else
+            {
+                for (int i = 0; i < allMousePoint.Count; i++)
+                {
+                    if (JudgeInObj(allMousePoint[i]))
+                    {
+                        Vector3 tempPos = (allMousePoint[i - 1] + allMousePoint[i]) / 2f;
+                        allMousePoint.RemoveRange(i, allMousePoint.Count - i);
+                        allMousePoint.Add(tempPos);
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
     private void ProduceLines()
     {
-        if (allVertices == null || allVertices.Count <= 5)
+        if (allVertices == null || allVertices.Count <= 2)
         {
-            if (currentLength - oldLength < 0.1f)
-            {
-                currentLength = oldLength;
-            }
             Destroy(current);
             return;
         }
@@ -99,7 +122,7 @@ public class DrawLines : MonoBehaviour {
     
     private void DrawBezierCurve()
     {
-        if (allMousePoint.Count < 5) return;
+        if (allMousePoint.Count < 2) return;
         lineRenderer.positionCount = allMousePoint.Count;
         for (int i = 0; i < allMousePoint.Count; i++)
         {
