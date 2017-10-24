@@ -11,11 +11,11 @@ public class WindowUIMager : MonoBehaviour {
     public ButtonUndoControl m_Undo;
     public ButtonClearConrol m_Clear;
     public ButtonReStart m_ReStart;
-    public Image m_Pigment;
     public PlayEffectAnimation m_Effect;
     public LoadFileData m_ObjMager;
     public Text m_LevName;
     public StartWindow m_Start;
+    public Image m_Tip;
     
 	void Awake () {
         SetRestartButton(true);
@@ -25,6 +25,7 @@ public class WindowUIMager : MonoBehaviour {
         m_Clear.Init(this);
         m_ReStart.Init(this);
         m_Start.Init(this);
+        m_Tip.gameObject.SetActive(false);
 	}
 
     void Start()

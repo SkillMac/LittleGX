@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class DrawLines : MonoBehaviour {
@@ -10,6 +9,8 @@ public class DrawLines : MonoBehaviour {
     private LineRenderer lineRenderer;
     private EdgeCollider2D edgeCollider;
     private bool isBeginDraw = false;
+    private bool mayDrawLine = true;
+    private bool isBeginInObj = false;
     private List<Vector3> allMousePoint;
     private List<Vector2> allVertices;//存储所有的顶点
     private float currentLength;
@@ -19,13 +20,25 @@ public class DrawLines : MonoBehaviour {
     private List<GameObject> m_AllLines = new List<GameObject>();//存储所有画出的线
     [HideInInspector]
     public int maxPigmentLength;
-    
+    public Transform m_Tip;
+
     // Update is called once per frame
     void Update ()
     {
         if (!CDataMager.canDraw) return;
-        if (Input.GetMouseButtonDown(0) && CanDrawLine())
+        if (Input.GetMouseButtonDown(0) && mayDrawLine)
         {
+            Vector3 temp = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10));
+            if (JudgeInObj(temp))
+                isBeginInObj = true;
+            else
+                isBeginInObj = false;
+            if (!CanDrawLine() && !isBeginInObj)
+            {
+                if(!m_Tip.GetComponent<Animation>().isPlaying)
+                    m_Tip.gameObject.SetActive(true);
+                return;
+            }
             oldLength = currentLength;
             GameObject obj = Instantiate(prefabs);
             obj.transform.parent = transform;
@@ -38,63 +51,81 @@ public class DrawLines : MonoBehaviour {
             isBeginDraw = true;
             allVertices = new List<Vector2>();
         }
-        if (Input.GetMouseButton(0) && isBeginDraw && CanDrawLine())
+        if (Input.GetMouseButton(0) && isBeginDraw && CanDrawLine() && mayDrawLine)
         {
             Vector3 temp = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10));
-            if(!allMousePoint.Contains(temp))
-                allMousePoint.Add(temp);
+            if (JudgeInObj(temp))
+            {
+                if (!isBeginInObj)
+                {
+                    mayDrawLine = false;
+                    Vector3 tempPos = (allMousePoint[allMousePoint.Count - 1] + temp) / 2f;
+                    allMousePoint.Add(tempPos);
+                }
+            }
+            else
+            {
+                if (!allMousePoint.Contains(temp))
+                    allMousePoint.Add(temp);
+            }
+            
             DrawBezierCurve();
         }
         if (Input.GetMouseButtonUp(0) && isBeginDraw)
         {
             isBeginDraw = false;
-            DeleteUnUsePoints();
-            DrawBezierCurve();
+            mayDrawLine = true;
+            //DeleteUnUsePoints();
+            //DrawBezierCurve();
             ProduceLines();
         }
     }
     
-    private void DeleteUnUsePoints()
-    {
-        currentLength = oldLength;
-        m_Pigment.SetImagePigment(SetPigmentImage());
-        allVertices = new List<Vector2>();
-        if (allMousePoint.Count>0)
-        {
-            if(JudgeInObj(allMousePoint[0]))
-            {
-                for(int i = 0;i <allMousePoint.Count;i++)
-                {
-                    if(!JudgeInObj(allMousePoint[i]))
-                    {
-                        Vector3 tempPos = (allMousePoint[i - 1] + allMousePoint[i]) / 2f;
-                        allMousePoint.RemoveRange(0, i);
-                        allMousePoint.Insert(0, tempPos);
-                        return;
-                    }
-                }
-                allMousePoint.Clear();
-            }
-            else
-            {
-                for (int i = 0; i < allMousePoint.Count; i++)
-                {
-                    if (JudgeInObj(allMousePoint[i]))
-                    {
-                        Vector3 tempPos = (allMousePoint[i - 1] + allMousePoint[i]) / 2f;
-                        allMousePoint.RemoveRange(i, allMousePoint.Count - i);
-                        allMousePoint.Add(tempPos);
-                        return;
-                    }
-                }
-            }
-        }
-    }
+    //private void DeleteUnUsePoints()
+    //{
+    //    currentLength = oldLength;
+    //    m_Pigment.SetImagePigment(SetPigmentImage());
+    //    allVertices = new List<Vector2>();
+    //    if (allMousePoint.Count>0)
+    //    {
+    //        if(JudgeInObj(allMousePoint[0]))
+    //        {
+    //            for(int i = 0;i <allMousePoint.Count;i++)
+    //            {
+    //                if(!JudgeInObj(allMousePoint[i]))
+    //                {
+    //                    Vector3 tempPos = (allMousePoint[i - 1] + allMousePoint[i]) / 2f;
+    //                    allMousePoint.RemoveRange(0, i);
+    //                    allMousePoint.Insert(0, tempPos);
+    //                    return;
+    //                }
+    //            }
+    //            allMousePoint.Clear();
+    //        }
+    //        else
+    //        {
+    //            for (int i = 0; i < allMousePoint.Count; i++)
+    //            {
+    //                if (JudgeInObj(allMousePoint[i]))
+    //                {
+    //                    Vector3 tempPos = (allMousePoint[i - 1] + allMousePoint[i]) / 2f;
+    //                    allMousePoint.RemoveRange(i, allMousePoint.Count - i);
+    //                    allMousePoint.Add(tempPos);
+    //                    return;
+    //                }
+    //            }
+    //        }
+    //    }
+    //}
 
     private void ProduceLines()
     {
         if (allVertices == null || allVertices.Count <= 2)
         {
+            if (currentLength - oldLength < 0.1f)
+            {
+                currentLength = oldLength;
+            }
             Destroy(current);
             return;
         }

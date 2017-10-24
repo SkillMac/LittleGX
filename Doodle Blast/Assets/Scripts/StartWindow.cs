@@ -33,5 +33,6 @@ public class StartWindow : MonoBehaviour {
     public void Init(WindowUIMager m_UIMager)
     {
         this.m_UIMager = m_UIMager;
+        gameObject.SetActive(true);
     }
 }
