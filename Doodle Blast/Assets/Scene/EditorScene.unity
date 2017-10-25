@@ -433,7 +433,6 @@ MonoBehaviour:
     type: 2}
   m_SpheresType: {fileID: 1845097843}
   m_CurrentWindow: {fileID: 0}
-  m_Judge: {fileID: 1633230275}
 --- !u!1 &97354452
 GameObject:
   m_ObjectHideFlags: 0
@@ -4316,7 +4315,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &822896099
 RectTransform:
   m_ObjectHideFlags: 0
