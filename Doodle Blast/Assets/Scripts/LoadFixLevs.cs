@@ -1,18 +1,25 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class LoadFixLevs : MonoBehaviour {
+public class LoadFixLevs : MonoBehaviour
+{
+    private const int MAXCOUNTLEVS = 15;
     public GameObject rootButton;
     public LevButtonWindow prefabButton;
+    public Text m_CurrentPage;
+    public Text m_AllPages;
+    public Button m_LeftButton;
+    public Button m_RightButton;
     private int count;
     private int currentLev;
     private List<LevButtonWindow> allLevButtons;
+    private int currentPage;
 
     void Awake()
     {
         allLevButtons = new List<LevButtonWindow>();
-
+        currentPage = 1;
         if (CDataMager.getInstance.allSphereSprite == null)
         {
             CDataMager.getInstance.allSphereSprite = Resources.LoadAll<Sprite>("Images/Spheres");
@@ -24,6 +31,7 @@ public class LoadFixLevs : MonoBehaviour {
 
         CreatButton();
         LoadAllFixLevs();
+        SetButtonText();
     }
 
     void OnEnable()
@@ -32,7 +40,7 @@ public class LoadFixLevs : MonoBehaviour {
         currentLev = PlayerPrefs.GetInt("MaxFixLev") - 1;
         for (int i = 0; i < count; i++)
         {
-            if (i <= currentLev || i ==0)
+            if (i <= currentLev || i == 0)
             {
                 allLevButtons[i].m_Lock.SetActive(false);
                 allLevButtons[i].m_LevButton.m_Button.interactable = true;
@@ -42,6 +50,53 @@ public class LoadFixLevs : MonoBehaviour {
                 allLevButtons[i].m_Lock.SetActive(true);
                 allLevButtons[i].m_LevButton.m_Button.interactable = false;
             }
+        }
+    }
+
+    void Start()
+    {
+        m_LeftButton.onClick.AddListener(OnClickLeft);
+        m_RightButton.onClick.AddListener(OnClickRight);
+    }
+
+    private void OnClickLeft()
+    {
+        if (currentPage > 1)
+        {
+            currentPage--;
+            SetButtonText();
+        }
+        else
+            currentPage = 1;
+    }
+
+    private void OnClickRight()
+    {
+        int max = count / MAXCOUNTLEVS + 1;
+        if (currentPage < max)
+        {
+            currentPage++;
+            SetButtonText();
+        }
+        else
+            currentPage = max;
+    }
+    
+    private void SetButtonText()
+    {
+        m_CurrentPage.text = currentPage.ToString();
+        int temp = count / MAXCOUNTLEVS;
+        m_AllPages.text = (temp + 1).ToString();
+        for (int i = 0; i < MAXCOUNTLEVS; i++)
+        {
+            int index = i + (currentPage - 1) * MAXCOUNTLEVS;
+            LevButtonWindow lbw = allLevButtons[i];
+            if (index < count)
+            {
+                lbw.gameObject.SetActive(true);
+            }
+            else
+                lbw.gameObject.SetActive(false);
         }
     }
 

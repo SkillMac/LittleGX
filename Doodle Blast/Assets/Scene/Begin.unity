@@ -2549,6 +2549,10 @@ MonoBehaviour:
   rootButton: {fileID: 1023586115}
   prefabButton: {fileID: 114087413445205530, guid: fcb9b4eb9b2ccc44195af8e75204882f,
     type: 2}
+  m_CurrentPage: {fileID: 1604974837}
+  m_AllPages: {fileID: 194750463}
+  m_LeftButton: {fileID: 775297140}
+  m_RightButton: {fileID: 1541629627}
 --- !u!1 &1481243419
 GameObject:
   m_ObjectHideFlags: 0
@@ -3053,7 +3057,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1776904403
 RectTransform:
   m_ObjectHideFlags: 0
