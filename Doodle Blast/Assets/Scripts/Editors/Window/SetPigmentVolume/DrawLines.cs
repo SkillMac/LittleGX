@@ -165,7 +165,7 @@ public class DrawLines : MonoBehaviour {
         }
         float tempLength = oldLength + GetDrawLineDistance(allVertices);
         currentLength = Mathf.Clamp(tempLength, 0, maxPigmentLength);
-        m_Pigment.SetImagePigment(SetPigmentImage());
+        m_Pigment.SetImageValue(SetPigmentImage());
     }
     
     private bool JudgeInObj(Vector3 pos)
@@ -224,13 +224,13 @@ public class DrawLines : MonoBehaviour {
         if (m_AllLines.Count == 0)
         {
             currentLength = oldLength = 0;
-            m_Pigment.SetImagePigment(1);
+            m_Pigment.SetImageValue(1);
             return;
         }
         GameObject obj = m_AllLines[m_AllLines.Count - 1];
         currentLength -= m_AllLinesAndLength[obj];
         currentLength = oldLength = Mathf.Clamp(currentLength, 0, maxPigmentLength);
-        m_Pigment.SetImagePigment(SetPigmentImage());
+        m_Pigment.SetImageValue(SetPigmentImage());
         m_AllLinesAndLength.Remove(obj);
         Debug.Log(m_AllLines.Count);
         m_AllLines.Remove(obj);
@@ -239,7 +239,7 @@ public class DrawLines : MonoBehaviour {
         if (m_AllLines.Count == 0)
         {
             currentLength = oldLength = 0;
-            m_Pigment.SetImagePigment(1);
+            m_Pigment.SetImageValue(1);
         }
     }
 
@@ -252,7 +252,7 @@ public class DrawLines : MonoBehaviour {
             Destroy(m_AllLines[i]);
         }
         currentLength = oldLength = 0;
-        m_Pigment.SetImagePigment(1);
+        m_Pigment.SetImageValue(1);
         m_AllLines.Clear();
         m_AllLinesAndLength.Clear();
     }

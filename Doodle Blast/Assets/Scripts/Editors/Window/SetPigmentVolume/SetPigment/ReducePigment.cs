@@ -31,6 +31,6 @@ public class ReducePigment : MonoBehaviour {
         }
         m_Window.m_Volume.text = CDataMager.getInstance.myPigmentVolume.ToString();
         float temp = m_Window.m_Mager.m_Draw.SetPigmentImage();
-        m_Window.m_Mager.m_Draw.m_Pigment.SetImagePigment(temp);
+        m_Window.m_Mager.m_Draw.m_Pigment.SetImageValue(temp);
     }
 }
