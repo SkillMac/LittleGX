@@ -9,9 +9,6 @@ EditorBuildSettings:
     path: Assets/Scene/Begin.unity
     guid: 2b6499dcf44e6884dafbd94df63c9a0c
   - enabled: 1
-    path: Assets/Scene/Play.unity
-    guid: 65b6feebdc6fe4b48a81135be66ae8fd
-  - enabled: 1
     path: Assets/Scene/PlayEditor.unity
     guid: 2cf0fbb421b78fb499bf72c5d65e4fa7
   - enabled: 1

@@ -433,6 +433,7 @@ MonoBehaviour:
     type: 2}
   m_SpheresType: {fileID: 1845097843}
   m_CurrentWindow: {fileID: 0}
+  m_Judge: {fileID: 1633230275}
 --- !u!1 &97354452
 GameObject:
   m_ObjectHideFlags: 0

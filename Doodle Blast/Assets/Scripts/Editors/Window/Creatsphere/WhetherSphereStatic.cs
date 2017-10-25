@@ -44,7 +44,7 @@ public class WhetherSphereStatic : MonoBehaviour {
             gameObject.SetActive(false);
         }
     }
-
+    
     public void SetRigidbody2D(RigidbodyType2D type)
     {
         transform.GetComponent<Rigidbody2D>().bodyType = type;
