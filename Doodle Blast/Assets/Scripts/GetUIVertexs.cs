@@ -1,11 +1,9 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 
 public class GetUIVertexs : MonoBehaviour
 {
     private Vector3 leftUp;
     private Vector3 rightDown;
-    private Image tts;
     void Awake()
     {
         
@@ -18,7 +16,7 @@ public class GetUIVertexs : MonoBehaviour
     {
         RectTransform rect = GetComponent<RectTransform>();
         float tempSize = Camera.main.orthographicSize;
-        if (tempSize > 4)
+        if (tempSize >= 4)
             tempSize = 4;
         float scale = (Screen.height / 200f) /tempSize;
         Debug.Log(rect.position * scale);
