@@ -232,9 +232,7 @@ public class DrawLines : MonoBehaviour {
         currentLength = oldLength = Mathf.Clamp(currentLength, 0, maxPigmentLength);
         m_Pigment.SetImageValue(SetPigmentImage());
         m_AllLinesAndLength.Remove(obj);
-        Debug.Log(m_AllLines.Count);
         m_AllLines.Remove(obj);
-        Debug.Log(m_AllLines.Count+"*");
         Destroy(obj);
         if (m_AllLines.Count == 0)
         {

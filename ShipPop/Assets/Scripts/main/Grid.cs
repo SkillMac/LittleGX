@@ -153,7 +153,7 @@ public class Grid : MonoBehaviour {
                 GetBool(poss);
                 ReSort(obj2, poss);
                 //这里可以加入消除的特效
-                Instantiate(EnemyEffect, oldPos, Quaternion.identity);
+                //Instantiate(EnemyEffect, oldPos, Quaternion.identity);
                 return true;
             }
             if (obj2.Type == PieceType.My && obj2.NumComponent.GetCurrentLev == obj1.NumComponent.GetCurrentLev)
@@ -179,7 +179,7 @@ public class Grid : MonoBehaviour {
 
                 ReSort(obj2, poss);
                 //这里可以加入消除的特效，同时加分
-                Instantiate(GoldEffect, oldPos, Quaternion.identity);
+                //Instantiate(GoldEffect, oldPos, Quaternion.identity);
 
                 return true;
             }

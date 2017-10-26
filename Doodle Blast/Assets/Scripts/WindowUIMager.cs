@@ -47,6 +47,7 @@ public class WindowUIMager : MonoBehaviour {
         m_ObjMager.m_Draw.DeleteAllLines();
         m_Effect.InitScale();
         CDataMager.canDraw = true;
-        m_Start.gameObject.SetActive(true);
+        m_Start.gameObject.SetActive(false);
+        WindowUIMager.hasStartGame = false;
     }
 }
