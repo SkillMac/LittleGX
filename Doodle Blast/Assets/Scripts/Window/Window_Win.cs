@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class Window_Win : MonoBehaviour {
     public Button m_next;
+    public GameObject midStar;
+    public GameObject rightStar;
     private int current;
     
     // Use this for initialization

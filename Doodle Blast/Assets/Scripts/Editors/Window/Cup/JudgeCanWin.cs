@@ -17,6 +17,8 @@ public class JudgeCanWin : MonoBehaviour {
     private float myWinLine;
     private bool IsBegin;
     private GetSpriteVertexs m_Vertexs;
+    private DrawLines m_Draw;
+    private int starCount;
 
     void Awake()
     {
@@ -34,6 +36,11 @@ public class JudgeCanWin : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         JudgeWin();
+    }
+
+    public void InitDraw(DrawLines m_Draw)
+    {
+        this.m_Draw = m_Draw;
     }
 
     public void InitData(List<SphereMager> lst,float winline)
@@ -137,7 +144,11 @@ public class JudgeCanWin : MonoBehaviour {
                 if (temp != 0)
                 {
                     if (temp >= myWinLine)
+                    {
+                        JudgeStarsNum();
+                        SetStarsNum();
                         windowWin.SetActive(true);
+                    }                     
                     else
                         windowLose.SetActive(true);
                     water.MoveToWaterLevel(temp);
@@ -146,6 +157,63 @@ public class JudgeCanWin : MonoBehaviour {
                     windowLose.SetActive(true);
                 IsBegin = false;
             }
+        }
+    }
+
+    private void JudgeStarsNum()
+    {
+        Window_Win tempWin = windowWin.GetComponent<Window_Win>();
+        if (tempWin == null) return;
+        
+        if (allSpheres.Count == 1)
+        {
+            if(m_Draw.SetPigmentImage() >= 1f/6f)
+            {
+                starCount = 3;
+                tempWin.midStar.SetActive(true);
+                tempWin.rightStar.SetActive(true);
+            }
+            else
+            {
+                starCount = 2;
+                tempWin.midStar.SetActive(true);
+                tempWin.rightStar.SetActive(false);
+            }
+            return;
+        }
+        if(allSphereY.Count == allSpheres.Count)
+        {
+            starCount = 3;
+            tempWin.midStar.SetActive(true);
+            tempWin.rightStar.SetActive(true);
+            return;
+        }
+        else
+        {
+            starCount = 2;
+            tempWin.midStar.SetActive(true);
+            tempWin.rightStar.SetActive(false);
+            return;
+        }
+    }
+
+    private void SetStarsNum()
+    {
+        int myLevIndex;
+        int tempCount;
+        if (!CAllFixedLev.isFixedLev)
+        {
+            myLevIndex = PlayerPrefs.GetInt("CurrentLev");
+            tempCount = PlayerPrefs.GetInt("CurrentLev" + myLevIndex);
+            if (starCount > tempCount)
+                PlayerPrefs.SetInt("CurrentLev" + myLevIndex, starCount);
+        }
+        else
+        {
+            myLevIndex = PlayerPrefs.GetInt("CurrentFixLev");
+            tempCount = PlayerPrefs.GetInt("CurrentFixLev" + myLevIndex);
+            if (starCount > tempCount)
+                PlayerPrefs.SetInt("CurrentFixLev" + myLevIndex, starCount);
         }
     }
 }

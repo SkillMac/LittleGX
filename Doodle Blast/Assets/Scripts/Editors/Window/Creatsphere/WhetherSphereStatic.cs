@@ -6,6 +6,7 @@ public class WhetherSphereStatic : MonoBehaviour {
     private Vector3 tempPosition;
     private float tempTimer;
     private bool isStatic;
+    private bool tempIsStatic;
 
     public bool IsStatic
     {
@@ -15,6 +16,7 @@ public class WhetherSphereStatic : MonoBehaviour {
     void OnEnable()
     {
         isStatic = false;
+        tempIsStatic = false;
         tempTimer = 0;
         tempPosition = Vector3.zero;
     }
@@ -31,9 +33,18 @@ public class WhetherSphereStatic : MonoBehaviour {
         {
             tempTimer = 0;
             if (Mathf.Abs(Vector3.Distance(transform.position, tempPosition)) < 0.1f)
-                isStatic = true;
+                tempIsStatic = true;
             else
                 tempPosition = transform.position;
+        }
+        if(tempIsStatic)
+        {
+            if(tempTimer > 0.5f)
+            {
+                if (Mathf.Abs(Vector3.Distance(transform.position, tempPosition)) < 0.1f)
+                    isStatic = true;
+                tempIsStatic = false;
+            }
         }
     }
 

@@ -26,12 +26,12 @@ SpriteAtlas:
       enableTightPacking: 0
     packedHash:
       serializedVersion: 2
-      Hash: 37705c84943d75bd17a50cb13a725883
+      Hash: b8170c3124eb0d0ac9eb20d2e4c3d824
     variantMultiplier: 1
     bindAsDefault: 1
     finalFormat: 47
-    hashString: 37705c84943d75bd17a50cb13a725883
-    totalSpriteSurfaceArea: 1910530
+    hashString: b8170c3124eb0d0ac9eb20d2e4c3d824
+    totalSpriteSurfaceArea: 1916819
     packables:
     - {fileID: 102900000, guid: 5aa9de8d169f7ba4f81b9d8306aaab3c, type: 3}
     packedSpriteRenderDataKeys:
@@ -63,6 +63,7 @@ SpriteAtlas:
     - 3428486bc7cf360419bccbe14e3484f4: 21300000
     - b69149677a8bf9146b40b3695ab3397b: 21300000
     - d02b577cf918d0240b46721ea25c35fc: 21300000
+    - 8c626775260e2f74aa99b751eb687254: 21300000
     - ce76b038ef2bb4e4b8581b6a9073a742: 21300000
     - 662ef8e457a0c974bbe3245e3f7d1686: 21300000
     - 187bef77b8401e846821c60b8b4d92cb: 21300000
@@ -87,8 +88,11 @@ SpriteAtlas:
     - e783783b3405d104eadd543839fc2132: 21300000
     - 17102ea0f49ed724b94e6bdd26a1f926: 21300000
     - 5368f062f66edd840bc13a432ba53895: 21300000
+    - 43a8c5413cddeb34ab89d1608823aa00: 21300000
+    - 4a06dbbbbd9492648b7f7091f53a8c6a: 21300000
     - 20a692c18cdd3c44da6034a4d72d1e67: 21300000
     - 37ccd18776803c348ba2ef54f1552e0a: 21300000
+    - 2001ad4440fbf5b4b82d69658b9ff154: 21300000
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
   - {fileID: 21300000, guid: aeda2e7e939e7414c8fdf1ecf222254c, type: 3}
@@ -119,6 +123,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 3428486bc7cf360419bccbe14e3484f4, type: 3}
   - {fileID: 21300000, guid: b69149677a8bf9146b40b3695ab3397b, type: 3}
   - {fileID: 21300000, guid: d02b577cf918d0240b46721ea25c35fc, type: 3}
+  - {fileID: 21300000, guid: 8c626775260e2f74aa99b751eb687254, type: 3}
   - {fileID: 21300000, guid: ce76b038ef2bb4e4b8581b6a9073a742, type: 3}
   - {fileID: 21300000, guid: 662ef8e457a0c974bbe3245e3f7d1686, type: 3}
   - {fileID: 21300000, guid: 187bef77b8401e846821c60b8b4d92cb, type: 3}
@@ -143,8 +148,11 @@ SpriteAtlas:
   - {fileID: 21300000, guid: e783783b3405d104eadd543839fc2132, type: 3}
   - {fileID: 21300000, guid: 17102ea0f49ed724b94e6bdd26a1f926, type: 3}
   - {fileID: 21300000, guid: 5368f062f66edd840bc13a432ba53895, type: 3}
+  - {fileID: 21300000, guid: 43a8c5413cddeb34ab89d1608823aa00, type: 3}
+  - {fileID: 21300000, guid: 4a06dbbbbd9492648b7f7091f53a8c6a, type: 3}
   - {fileID: 21300000, guid: 20a692c18cdd3c44da6034a4d72d1e67, type: 3}
   - {fileID: 21300000, guid: 37ccd18776803c348ba2ef54f1552e0a, type: 3}
+  - {fileID: 21300000, guid: 2001ad4440fbf5b4b82d69658b9ff154, type: 3}
   m_PackedSpriteNamesToIndex:
   - bg
   - SelectBG
@@ -174,6 +182,7 @@ SpriteAtlas:
   - word
   - bottle
   - start1
+  - stars
   - 4
   - Begin
   - Lev
@@ -198,7 +207,10 @@ SpriteAtlas:
   - 1
   - back 1
   - Star
+  - midStar
+  - rightStar
   - Line
   - sound1
+  - LeftStar
   m_Tag: AllImages
   m_IsVariant: 0

@@ -37,6 +37,7 @@ public class LoadFixLevs : MonoBehaviour
     void OnEnable()
     {
         CAllFixedLev.isFixedLev = true;
+        //PlayerPrefs.SetInt("MaxFixLev", 5);
         currentLev = PlayerPrefs.GetInt("MaxFixLev") - 1;
         for (int i = 0; i < count; i++)
         {
@@ -105,7 +106,9 @@ public class LoadFixLevs : MonoBehaviour
         count = Resources.LoadAll("Data/EditorData").Length;
         for (int i = 0; i < count; i++)
         {
+            int tempCount = PlayerPrefs.GetInt("CurrentFixLev" + (i + 1));
             LevButtonWindow lbw = Instantiate(prefabButton, rootButton.transform);
+            lbw.SetStarsNum(tempCount);
             lbw.m_Text.text = (i + 1).ToString();
             lbw.m_Delete.gameObject.SetActive(false);
             allLevButtons.Add(lbw);
