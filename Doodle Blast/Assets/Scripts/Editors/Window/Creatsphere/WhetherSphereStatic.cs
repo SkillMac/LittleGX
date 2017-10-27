@@ -44,6 +44,7 @@ public class WhetherSphereStatic : MonoBehaviour {
                 if (Mathf.Abs(Vector3.Distance(transform.position, tempPosition)) < 0.1f)
                     isStatic = true;
                 tempIsStatic = false;
+                tempTimer = 0;
             }
         }
     }

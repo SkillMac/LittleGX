@@ -26,12 +26,12 @@ SpriteAtlas:
       enableTightPacking: 0
     packedHash:
       serializedVersion: 2
-      Hash: b8170c3124eb0d0ac9eb20d2e4c3d824
+      Hash: b1aa32732b0c780154a6c4f3f69cecf8
     variantMultiplier: 1
     bindAsDefault: 1
     finalFormat: 47
-    hashString: b8170c3124eb0d0ac9eb20d2e4c3d824
-    totalSpriteSurfaceArea: 1916819
+    hashString: b1aa32732b0c780154a6c4f3f69cecf8
+    totalSpriteSurfaceArea: 1851278
     packables:
     - {fileID: 102900000, guid: 5aa9de8d169f7ba4f81b9d8306aaab3c, type: 3}
     packedSpriteRenderDataKeys:
@@ -43,7 +43,6 @@ SpriteAtlas:
     - 30cba3b7472d6ec499535f48dcff02df: 21300000
     - d3b15fe420243324d967e3b63e225a43: 21300000
     - 4be353c521fdc9046ae136570d5e1e4d: 21300000
-    - 292c463947d60504a98cb2e907bcd99b: 21300000
     - 0479ef16975338c448f7cb49ada23c54: 21300000
     - 3f5c35f22b940cd48a299851cfb1635e: 21300000
     - abd53631cd454374da3918d4709e3405: 21300000
@@ -53,8 +52,7 @@ SpriteAtlas:
     - 50ca4e818cc309d428ab298dd24346f4: 21300000
     - 95f3045f53031e44bb037cf46eac7de5: 21300000
     - 81c6b37a1b29b4545bdab4beb0303917: 21300000
-    - 3a7e0e305649e7c438313f3a120a45c0: 21300000
-    - 4f64359d126c65c45a65f77d7847a755: 21300000
+    - 5dc24589906295943be47cff11f177ba: 21300000
     - cd9644676b20f114591a46cdb98d62b5: 21300000
     - 6765acaa565f4e94d8e1c8d81d9ed542: 21300000
     - c1a5371b1c5326b45b09214d5331aa17: 21300000
@@ -103,7 +101,6 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 30cba3b7472d6ec499535f48dcff02df, type: 3}
   - {fileID: 21300000, guid: d3b15fe420243324d967e3b63e225a43, type: 3}
   - {fileID: 21300000, guid: 4be353c521fdc9046ae136570d5e1e4d, type: 3}
-  - {fileID: 21300000, guid: 292c463947d60504a98cb2e907bcd99b, type: 3}
   - {fileID: 21300000, guid: 0479ef16975338c448f7cb49ada23c54, type: 3}
   - {fileID: 21300000, guid: 3f5c35f22b940cd48a299851cfb1635e, type: 3}
   - {fileID: 21300000, guid: abd53631cd454374da3918d4709e3405, type: 3}
@@ -113,8 +110,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 50ca4e818cc309d428ab298dd24346f4, type: 3}
   - {fileID: 21300000, guid: 95f3045f53031e44bb037cf46eac7de5, type: 3}
   - {fileID: 21300000, guid: 81c6b37a1b29b4545bdab4beb0303917, type: 3}
-  - {fileID: 21300000, guid: 3a7e0e305649e7c438313f3a120a45c0, type: 3}
-  - {fileID: 21300000, guid: 4f64359d126c65c45a65f77d7847a755, type: 3}
+  - {fileID: 21300000, guid: 5dc24589906295943be47cff11f177ba, type: 3}
   - {fileID: 21300000, guid: cd9644676b20f114591a46cdb98d62b5, type: 3}
   - {fileID: 21300000, guid: 6765acaa565f4e94d8e1c8d81d9ed542, type: 3}
   - {fileID: 21300000, guid: c1a5371b1c5326b45b09214d5331aa17, type: 3}
@@ -162,7 +158,6 @@ SpriteAtlas:
   - bg1
   - oops
   - Win
-  - startwin
   - delete
   - more
   - effect
@@ -172,8 +167,7 @@ SpriteAtlas:
   - addgames
   - startbg
   - addgames1
-  - ufo1
-  - ufo
+  - Png
   - more1
   - startk
   - LevIcon

@@ -14,6 +14,7 @@ public class LoadFileData : MonoBehaviour {
 
     void Awake()
     {
+        CDataMager.canDraw = true;
         m_Cup.InitDraw(m_Draw);
         LoadDataCreatLev();
     }

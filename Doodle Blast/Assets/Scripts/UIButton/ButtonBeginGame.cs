@@ -20,8 +20,6 @@ public class ButtonBeginGame : MonoBehaviour {
 
     private void OnClickButton()
     {
-        if (WindowUIMager.hasStartGame) return;
-        WindowUIMager.hasStartGame = true;
         m_UIMager.SetRestartButton(false);
         CDataMager.canDraw = false;
         m_UIMager.m_Effect.PlayAnimation();

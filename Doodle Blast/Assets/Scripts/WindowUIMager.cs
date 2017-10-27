@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class WindowUIMager : MonoBehaviour {
-    public static bool hasStartGame = false;
     public ButtonSoundControl m_Sound;
     public ButtonHomeControl m_Home;
     public ButtonBeginGame m_BeginGame;
@@ -14,7 +13,6 @@ public class WindowUIMager : MonoBehaviour {
     public PlayEffectAnimation m_Effect;
     public LoadFileData m_ObjMager;
     public Text m_LevName;
-    public StartWindow m_Start;
     public Image m_Tip;
     
 	void Awake () {
@@ -24,7 +22,6 @@ public class WindowUIMager : MonoBehaviour {
         m_Undo.Init(this);
         m_Clear.Init(this);
         m_ReStart.Init(this);
-        m_Start.Init(this);
         m_Tip.gameObject.SetActive(false);
 	}
 
@@ -47,7 +44,5 @@ public class WindowUIMager : MonoBehaviour {
         m_ObjMager.m_Draw.DeleteAllLines();
         m_Effect.InitScale();
         CDataMager.canDraw = true;
-        m_Start.gameObject.SetActive(false);
-        WindowUIMager.hasStartGame = false;
     }
 }

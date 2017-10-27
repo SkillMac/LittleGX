@@ -21,6 +21,14 @@ public class DrawLines : MonoBehaviour {
     [HideInInspector]
     public int maxPigmentLength;
     public Transform m_Tip;
+    public GameObject m_Png;
+    private Vector3 offsetPos;
+
+    void Start()
+    {
+        offsetPos = m_Png.transform.GetChild(0).position;
+        Debug.Log(offsetPos);
+    }
 
     // Update is called once per frame
     void Update ()
@@ -28,17 +36,23 @@ public class DrawLines : MonoBehaviour {
         if (!CDataMager.canDraw) return;
         if (Input.GetMouseButtonDown(0) && mayDrawLine)
         {
-            Vector3 temp = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10));
+            m_Png.SetActive(false);
+            Vector3 temp = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10)) + offsetPos;
             if (JudgeInObj(temp))
+            {
                 isBeginInObj = true;
+            }
             else
+            {
                 isBeginInObj = false;
+            }
             if (!CanDrawLine() && !isBeginInObj)
             {
                 if(!m_Tip.GetComponent<Animation>().isPlaying)
                     m_Tip.gameObject.SetActive(true);
                 return;
             }
+            m_Png.transform.position = temp - offsetPos;
             oldLength = currentLength;
             GameObject obj = Instantiate(prefabs);
             obj.transform.parent = transform;
@@ -54,25 +68,29 @@ public class DrawLines : MonoBehaviour {
         if (Input.GetMouseButton(0) && isBeginDraw && CanDrawLine() && mayDrawLine)
         {
             Vector3 temp = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10));
-            if (JudgeInObj(temp))
+            m_Png.transform.position = temp;
+            if (JudgeInObj(temp + offsetPos))
             {
                 if (!isBeginInObj)
                 {
                     mayDrawLine = false;
                     Vector3 tempPos = (allMousePoint[allMousePoint.Count - 1] + temp) / 2f;
-                    allMousePoint.Add(tempPos);
+                    //allMousePoint.Add(tempPos + offsetPos);
                 }
+                m_Png.SetActive(false);
             }
             else
             {
-                if (!allMousePoint.Contains(temp))
-                    allMousePoint.Add(temp);
+                if (!allMousePoint.Contains(temp + offsetPos))
+                    allMousePoint.Add(temp + offsetPos);
+                m_Png.SetActive(true);
             }
             
             DrawBezierCurve();
         }
         if (Input.GetMouseButtonUp(0) && isBeginDraw)
         {
+            m_Png.SetActive(false);
             isBeginDraw = false;
             mayDrawLine = true;
             //DeleteUnUsePoints();
@@ -197,7 +215,11 @@ public class DrawLines : MonoBehaviour {
     public bool CanDrawLine()
     {
         if (currentLength < maxPigmentLength) return true;
-        else return false;
+        else
+        {
+            m_Png.SetActive(false);
+            return false;
+        }
     }
 
     /// <summary>
