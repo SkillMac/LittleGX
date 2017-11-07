@@ -120,7 +120,7 @@ public class Prefabs : MonoBehaviour,IBaseWindowHandler{
 	public void CheckEndAndCreateShape() {
 		if (!CanContinue()) {
             MusicManager.Instance.MusicOff();
-            SoundManager.Instance.Lose();
+            SoundManager.Instance.Lose(true);
 			m_bGameOver = true;
             Window_Creat.IsGameOver = true;
 			m_fGameOverTime = Time.realtimeSinceStartup;

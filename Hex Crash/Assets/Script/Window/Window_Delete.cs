@@ -29,7 +29,7 @@ public class Window_Delete : MonoBehaviour {
 				GetScoreWithNum(0, m_listDelLine[0][m_listDelLine[0].Count / 2].transform.position, m_GoldMove);
 			} else {
 				Effect(m_listDelLine[0], m_GoldMove);
-                SoundManager.Instance.ClearLines();
+                SoundManager.Instance.ClearLines(0);
             }
 			m_GoldMove.SetActive(true);
 			m_bBeginDelete = false;
@@ -91,13 +91,13 @@ public class Window_Delete : MonoBehaviour {
 		if (m_fDeleteTime * 2 > m_uRewardIndex) {
 			if (m_uRewardIndex < m_listDelLine.Count) {
 				OnDeleteLine(m_uRewardIndex);
-				m_uRewardIndex++;
+                SoundManager.Instance.ClearLines(m_uRewardIndex);
+                m_uRewardIndex++;
 			} else {
 				SetSprite(m_listDelLine.Count - 2);
 				m_Gold.SetActive(false);
 				m_bBeginDelete = false;
 				GameMgr.instance.CheckEndAndCreateShape();
-                SoundManager.Instance.ClearLines();
             }
 		}
     }

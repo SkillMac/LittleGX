@@ -9,57 +9,75 @@ public class Window_Over : MonoBehaviour {
     public Button m_Share;
     public Button m_RePlay;
     private int number, tempnum;
+    private bool isBegin = false;
+    private float m_Speed;
+    private float audioTimer;
 
     void OnEnable()
     {
         Init();
     }
   
-    void Start() {
+    void Awake()
+    {
+        audioTimer = SoundManager.Instance.GetAudioClipLength();
         m_Share.onClick.AddListener(ClickShare);
         m_RePlay.onClick.AddListener(ClickPlay);
     }
-	
+
+    void Update()
+    {
+        if(isBegin)
+        {
+            tempnum += (int)(m_Speed * Time.deltaTime);
+            m_Current.text = HummerString.FormatNum(tempnum);
+        }
+    }
+
     private void ClickShare() {
         //待处理
     }
 
-	private void ClickPlay() {
+	private void ClickPlay()
+    {
+        SoundManager.Instance.Lose(false);
         gameObject.SetActive(false);
         GameMgr.instance.ReStartGame();
         MusicManager.Instance.PlayMusic();
     }
 
-	private void AddScores(int num) {
-        StartCoroutine(AddScore(num));
+	private void AddScores() {
+        StartCoroutine(AddScore());
     }
 
-	private IEnumerator AddScore(int num) {
-        number += num;
-        for (int i = 0; i < 50; i++) {
-            tempnum += num / 50;
-            m_Current.text = HummerString.FormatNum(tempnum);
-			yield return new WaitForEndOfFrame();
-        }
+	private IEnumerator AddScore() {
+        SoundManager.Instance.HighScore();
+        yield return new WaitForSeconds(audioTimer);
+        isBegin = false;
+        SoundManager.Instance.Ding();
         m_Current.text = HummerString.FormatNum(number);
     }
 
     private void Init()
     {
-        number = 0;
         tempnum = 0;
-        int hight;
-        if (PlayerPrefs.GetInt("CurrentScore") > PlayerPrefs.GetInt("Highscore"))
+        int hightScore;
+        int tempScore = PlayerPrefs.GetInt("CurrentScore");
+        int tempHightScore = PlayerPrefs.GetInt("Highscore");
+        number = tempScore;
+        if (tempScore > tempHightScore)
         {
-            hight = PlayerPrefs.GetInt("CurrentScore");
-            m_Hight.text = HummerString.FormatNum(hight);
+            hightScore = tempScore;
+            m_Hight.text = HummerString.FormatNum(hightScore);
         }
         else
         {
-            hight = PlayerPrefs.GetInt("Highscore");
-            m_Hight.text = HummerString.FormatNum(hight);
+            hightScore = tempHightScore;
+            m_Hight.text = HummerString.FormatNum(hightScore);
         }
-        PlayerPrefs.SetInt("Highscore", hight);
-        AddScores(PlayerPrefs.GetInt("CurrentScore"));
+        PlayerPrefs.SetInt("Highscore", hightScore);
+        m_Speed = tempScore / audioTimer;
+        isBegin = true;
+        AddScores();
     }
 }

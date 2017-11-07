@@ -11,6 +11,7 @@ public class Disapper : MonoBehaviour {
     public void Enable(int dex) {
         reder = GetComponent<SpriteRenderer>();
         reder.sprite = allSprite[dex];
+        SoundManager.Instance.Cheers(dex);
     }
 
     public void Dis() {

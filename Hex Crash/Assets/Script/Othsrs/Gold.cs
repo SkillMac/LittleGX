@@ -63,6 +63,7 @@ public class Gold : MonoBehaviour {
 	public bool CheckOnMouseDown(Vector3 vec3ClickPos) {
 		if (Mathf.Abs(Vector3.Distance(_transMoveGold.transform.position, vec3ClickPos)) < 1.0f) {
 			m_bMoved = true;
+            SoundManager.Instance.ClickCoin();
 			GameMgr.instance.AddScore();
 			_goGold.transform.position = _transMoveGold.transform.position;
 			_goGold.SetActive(true);

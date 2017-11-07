@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class SoundManager : MonoBehaviour {
     public static SoundManager Instance;
+    public AudioClip[] m_DeleteVoice;
     public AudioClip[] m_Clips;
+    public AudioClip[] m_Cheers;
+    public GameObject m_GameOver;
     private AudioSource m_Audio;
 
     void Awake(){
@@ -31,10 +34,35 @@ public class SoundManager : MonoBehaviour {
     public void DMatchPrefabs(){
         PlaySound(m_Clips[2]);
     }
-    public void ClearLines(){
+    public void Lose(bool isActive){
+        m_GameOver.SetActive(isActive);
+    }
+    public void ClickCoin() {
         PlaySound(m_Clips[3]);
     }
-    public void Lose(){
+    public void HighScore()
+    {
         PlaySound(m_Clips[4]);
+    }
+    public void Ding()
+    {
+        PlaySound(m_Clips[5]);
+    }
+
+    public float GetAudioClipLength()
+    {
+        return m_Clips[4].length;
+    }
+
+    public void ClearLines(int index)
+    {
+        if (index > m_DeleteVoice.Length) return;
+        PlaySound(m_DeleteVoice[index]);
+    }
+
+    public void Cheers(int index)
+    {
+        if (index > m_Cheers.Length) return;
+        PlaySound(m_Cheers[index]);
     }
 }
