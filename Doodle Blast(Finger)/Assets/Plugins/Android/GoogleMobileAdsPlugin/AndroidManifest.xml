@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This Google Mobile Ads plugin library manifest will get merged with your
+application's manifest, adding the necessary activity and permissions
+required for displaying ads.
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.google.unity.ads"
+    android:versionName="1.0"
+    android:versionCode="1">
+  <uses-sdk android:minSdkVersion="14"
+      android:targetSdkVersion="19" />
+  <application>
+    <activity android:name="com.adcolony.sdk.AdColonyInterstitialActivity"
+    android:configChanges="keyboardHidden|orientation|screenSize"
+    android:hardwareAccelerated="true"/>
+    <activity android:name="com.adcolony.sdk.AdColonyAdViewActivity"
+        android:configChanges="keyboardHidden|orientation|screenSize"
+        android:hardwareAccelerated="true"/>
+    <activity android:name="com.applovin.adview.AppLovinInterstitialActivity"
+          android:configChanges="orientation|screenSize"/>
+
+    <activity android:name="com.applovin.adview.AppLovinConfirmationActivity"
+              android:configChanges="orientation|screenSize"/>
+  </application>
+  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+  <uses-permission android:name="android.permission.VIBRATE" />
+  <uses-permission android:name="android.permission.INTERNET" />
+</manifest>
